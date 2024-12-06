@@ -89,7 +89,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    background: #ffffff;
+    background-color: #ffffff;
     flex-direction: column;
     min-height: 100vh;
 }
@@ -134,5 +134,5 @@ body {
 .web-app-version {
     font-size: 12px;
     color: #666;
-    margin-left: auto;
+    margin-left: 95%;
 }
