@@ -11,14 +11,9 @@ dp = Dispatcher()
 
 
 def get_webapp_button():
-    web_app_button = KeyboardButton(
-        text="🌐 Открыть WebApp",
-        web_app=WebAppInfo(url=MINI_APP_URL)
-    )
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[[web_app_button]],
-        resize_keyboard=True
-    )
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Open App", web_app=WebAppInfo(url=MINI_APP_URL))]
+    ])
     return keyboard
 
 @dp.message(Command("start"))
