@@ -1,23 +1,32 @@
 import asyncio
 
 from aiogram import Bot, Dispatcher, types
-from aiogram.filters import CommandStart
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.filters import CommandStart, Command
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, WebAppInfo, ReplyKeyboardMarkup
 
-API_TOKEN = '7943409440:AAHjA5acGp59nvloeuxE4kZ_3jwCyr01e1o'
-MINI_APP_URL = "t.me/TGVladBot1_bot/TGVladBot1"
+from Config import API_TOKEN, MINI_APP_URL
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
 
-@dp.message(CommandStart())
-async def send_welcome(message: types.Message):
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="Открыть мини-приложение",url=MINI_APP_URL)]]
+def get_webapp_button():
+    web_app_button = KeyboardButton(
+        text="🌐 Открыть WebApp",
+        web_app=WebAppInfo(url=MINI_APP_URL)
     )
-    await message.answer("Привет! Нажмите на кнопку ниже, чтобы открыть мини-приложение:",reply_markup=keyboard)
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[web_app_button]],
+        resize_keyboard=True
+    )
+    return keyboard
+
+@dp.message(Command("start"))
+async def start(message: types.Message):
+    await message.answer(
+        "Привет! Нажми на кнопку ниже, чтобы открыть веб-приложение.",
+        reply_markup=get_webapp_button()
+    )
 
 async def main():
     await dp.start_polling(bot)
