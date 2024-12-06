@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading and Popup Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="coin-animation"></div>
+        <span>Loading</span>
+    </div>
+
+    <div id="content" class="fade-in">
+        <h1>Велкоме</h1>
+        <button id="show-popup">Показать Попап</button>
+        <div class="wallet-container">
+            <div class="wallet-info">
+                <div class="wallet-address-title">Wallet Address:</div>
+                <div class="wallet-address">GDUZAK42IY56CH6RD5F4ONG7DH53K5GZIMKNWQ6RU2WYCNVVSKIY34G3</div>
+            </div>
+            <div class="web-app-version">v.1</div>
+       </div>
+    </div>
+
+    <div id="popup-module" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" id="popup-close">&times;</span>
+            <h2>Это модульный попап!</h2>
+            <p>Вызываем этот попап в любое время.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
