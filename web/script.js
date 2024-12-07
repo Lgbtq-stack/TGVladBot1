@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
             loadingScreen.style.display = "none";
             content.classList.add("show");
         }, 500);
-    }, 2000);
+    }, 999999);
 
     showPopupButton.addEventListener("click", () => togglePopup(true));
     closePopupButton.addEventListener("click", () => togglePopup(false));
@@ -40,10 +40,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     lottie.loadAnimation({
-        container: document.getElementById('lottie-animation'),
+        container: document.getElementById('mining-animation'),
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: 'web/Content/MiningAnimation.json',
+        path: 'web/Content/Mining_Animation.json',
+    });
+
+    lottie.loadAnimation({
+        container: document.getElementById('loading-animation'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'web/Content/Loading_Animation.json',
     });
 });
