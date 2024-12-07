@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
             loadingScreen.style.display = "none";
             content.classList.add("show");
         }, 500);
-    }, 999999);
+    }, 2000);
 
     showPopupButton.addEventListener("click", () => togglePopup(true));
     closePopupButton.addEventListener("click", () => togglePopup(false));
