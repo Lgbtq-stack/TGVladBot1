@@ -135,18 +135,14 @@ body {
     text-align: center;
     font-weight: bold;
     font-size: 14px;
-    transform: scale(0); /* Начальное состояние для масштабирования */
-    transition: transform 0.3s ease; /* Только масштабирование */
     width: 75px;
     position: absolute;
-}
-
-.dynamic-popup.show {
-    transform: scale(1); /* Увеличение до реального размера */
+    transform: scale(0);
+    transition: transform 0.3s ease, background 0.5s ease;
 }
 
 .dynamic-popup.hide {
-    transform: scale(0); /* Уменьшение до нуля */
+    transform: scale(0);
 }
 
 .mining-content {

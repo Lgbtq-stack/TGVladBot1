@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         do {
             top = Math.floor(Math.random() * (containerHeight - popupHeight));
             left = Math.floor(Math.random() * (containerWidth - popupWidth));
-            position = { top, left };
+            position = {top, left};
             attempts++;
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
@@ -125,17 +125,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function addPopups(container, usedPositions) {
         const numPopups = Math.floor(Math.random() * 3) + 1;
+
         for (let i = 0; i < numPopups; i++) {
             setTimeout(() => {
                 const popup = createPopup(container, usedPositions);
+
                 if (popup) {
                     container.appendChild(popup);
-                    requestAnimationFrame(() => {
-                        popup.classList.add("show"); // Анимация увеличения
-                    });
+
+                    // Начальное состояние
+                    popup.style.transform = "scale(0)";
+
+                    // Добавляем анимацию появления
                     setTimeout(() => {
-                        popup.classList.remove("show");
-                        popup.classList.add("hide");
+                        popup.style.transition = "transform 0.3s ease";
+                        popup.style.transform = "scale(1)";
+                    }, 10);
+
+                    // Удаляем попап через 5 секунд
+                    setTimeout(() => {
+                        popup.style.transform = "scale(0)";
+
+                        // Удаление из DOM после завершения анимации
                         setTimeout(() => {
                             container.removeChild(popup);
                             const index = usedPositions.findIndex(
@@ -144,13 +155,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                     parseInt(popup.style.left) === pos.left
                             );
                             if (index !== -1) usedPositions.splice(index, 1);
-                        }, 300);
+                        }, 300); // Длительность анимации скрытия
                     }, 5000);
                 }
-            }, Math.random() * 3000);
+            }, Math.random() * 3000); // Случайная задержка для каждого попапа
         }
     }
-
 
     function updatePopups() {
         addPopups(topPopupsContainer, usedPositionsTop);
