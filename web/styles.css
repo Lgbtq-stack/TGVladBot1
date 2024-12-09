@@ -35,6 +35,40 @@
     -webkit-text-fill-color: transparent;
 }
 
+.wallet-address-title, .wallet-address, .web-app-version {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.wallet-container {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    padding: 10px 20px;
+    background: linear-gradient(180deg, rgba(255, 253, 0, 0.6), rgba(255, 184, 0, 1));
+    border: 1px solid #ccc;
+    border-radius: 40px;
+    z-index: 1000;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.wallet-info {
+    text-align: center;
+}
+
+.wallet-address-title {
+    font-weight: bold;
+    margin: 0;
+}
+
+.wallet-address {
+    margin: 0;
+    white-space: nowrap;
+}
+
 .popup {
     position: fixed;
     top: 0;
@@ -71,7 +105,6 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    background-color: #ffffff;
     flex-direction: column;
     min-height: 100vh;
 }
@@ -85,48 +118,38 @@ body {
     text-align: center;
 }
 
+#top-popups, #bottom-popups {
+    position: relative;
+    height: 75px;
+    width: 100%;
+    overflow: hidden;
+    padding: 10px 10px;
+    margin: -20px 0;
+}
+
+.dynamic-popup {
+    background: linear-gradient(180deg, rgba(255, 253, 0, 0.6), rgba(255, 184, 0, 1));
+    border: 1px solid #ccc;
+    border-radius: 40px;
+    padding: 10px 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    transform: scale(0); /* Начальное состояние для масштабирования */
+    transition: transform 0.3s ease; /* Только масштабирование */
+    width: 75px;
+    position: absolute;
+}
+
+.dynamic-popup.show {
+    transform: scale(1); /* Увеличение до реального размера */
+}
+
+.dynamic-popup.hide {
+    transform: scale(0); /* Уменьшение до нуля */
+}
+
 .mining-content {
-    margin: 20px 0;
     display: flex;
     justify-content: center;
-}
-
-.wallet-address-title, .wallet-address, .web-app-version {
-    font-size: 10px;
-    font-weight: bold;
-}
-
-.wallet-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px 20px;
-    background-color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid #ccc;
-    box-sizing: border-box;
-    z-index: 1000;
-}
-
-.wallet-info {
-    text-align: left;
-    flex-grow: 1;
-}
-
-.wallet-address-title {
-    font-weight: bold;
-    margin: 0;
-}
-
-.wallet-address {
-    margin: 0;
-}
-
-.web-app-version {
-    font-size: 14px;
-    color: #666;
-    text-align: right;
 }
