@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         do {
             top = Math.floor(Math.random() * (containerHeight - popupHeight));
             left = Math.floor(Math.random() * (containerWidth - popupWidth));
-            position = {top, left};
+            position = { top, left };
             attempts++;
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
@@ -104,10 +104,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let currentIndex = 0;
         const position = getRandomPosition(container, usedPositions);
         if (!position) return null;
+
         popup.style.position = "absolute";
         popup.style.top = `${position.top}px`;
         popup.style.left = `${position.left}px`;
-        const interval = setInterval(() => {
+
+        function revealText() {
             if (currentIndex < visibleLength) {
                 maskedHash =
                     maskedHash.substring(0, currentIndex) +
@@ -115,11 +117,43 @@ document.addEventListener("DOMContentLoaded", function () {
                     maskedHash.substring(currentIndex + 1);
                 popup.textContent = maskedHash;
                 currentIndex++;
+                setTimeout(revealText, 100);
             } else {
-                clearInterval(interval);
+                setTimeout(() => {
+                    popup.style.background = "linear-gradient(180deg, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 1))";
+
+                    setTimeout(() => {
+                        popup.classList.add("shake");
+                        setTimeout(() => {
+                            popup.classList.remove("shake");
+
+                            popup.style.transform = "scale(0)";
+                            setTimeout(() => {
+                                container.removeChild(popup);
+                                const index = usedPositions.findIndex(
+                                    pos =>
+                                        parseInt(popup.style.top) === pos.top &&
+                                        parseInt(popup.style.left) === pos.left
+                                );
+                                if (index !== -1) usedPositions.splice(index, 1);
+                            }, 300);
+                        }, 300);
+                    }, 300);
+                }, 300);
             }
-        }, 250);
+        }
+
         popup.textContent = maskedHash;
+        popup.style.background = "linear-gradient(180deg, rgba(255, 253, 0, 0.6), rgba(255, 184, 0, 1))";
+        popup.style.transform = "scale(0)";
+        popup.style.transition = "transform 0.3s ease, background 1s ease";
+
+        setTimeout(() => {
+            popup.style.transition = "transform 0.3s ease, background 1s ease";
+            popup.style.transform = "scale(1)";
+            revealText();
+        }, 10);
+
         return popup;
     }
 
@@ -132,31 +166,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (popup) {
                     container.appendChild(popup);
-
-                    // Начальное состояние
-                    popup.style.transform = "scale(0)";
-
-                    // Добавляем анимацию появления
-                    setTimeout(() => {
-                        popup.style.transition = "transform 0.3s ease";
-                        popup.style.transform = "scale(1)";
-                    }, 10);
-
-                    // Удаляем попап через 5 секунд
-                    setTimeout(() => {
-                        popup.style.transform = "scale(0)";
-
-                        // Удаление из DOM после завершения анимации
-                        setTimeout(() => {
-                            container.removeChild(popup);
-                            const index = usedPositions.findIndex(
-                                pos =>
-                                    parseInt(popup.style.top) === pos.top &&
-                                    parseInt(popup.style.left) === pos.left
-                            );
-                            if (index !== -1) usedPositions.splice(index, 1);
-                        }, 300); // Длительность анимации скрытия
-                    }, 5000);
                 }
             }, Math.random() * 3000); // Случайная задержка для каждого попапа
         }
