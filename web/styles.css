@@ -314,47 +314,50 @@ body {
 }
 
 .history-container {
-    width: 85%;
-    margin: 0 auto;
+    width: 90%;
+    margin: 20px auto;
     border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    position: relative;
     background: white;
-    padding-top: 40px;
+    padding-top: 10px;
+    position: relative;
+    border: 1px solid #ccc;
 }
 
 .history-header {
     position: absolute;
-    top: 5px;
+    top: -35px;
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(90deg, rgba(255, 215, 0, 1), rgba(255, 253, 150, 1));
-    padding: 5px 20px;
+    padding: 5px 35px;
     border: 1px solid #ccc;
     border-radius: 20px 20px 0 0;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
+    z-index: 10;
 }
 
 .history-body {
     padding: 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Расстояние между панелями */
+    gap: 15px;
 }
 
 .history-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: white;
-    border: 1px solid #ccc;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 15px 20px;
+    transition: all 0.2s ease;
+}
+
+.history-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .history-item-icon {
@@ -368,6 +371,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     color: #555;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .history-item-text {
@@ -376,7 +380,10 @@ body {
     font-size: 16px;
     font-weight: bold;
     color: #333;
-    text-align: center;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .history-item-time {
@@ -385,6 +392,5 @@ body {
     background: #f0f0f0;
     border-radius: 5px;
     padding: 5px 10px;
+    white-space: nowrap;
 }
-
-

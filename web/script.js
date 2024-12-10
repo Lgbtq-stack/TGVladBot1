@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         do {
             top = Math.floor(Math.random() * (containerHeight - popupHeight));
             left = Math.floor(Math.random() * (containerWidth - popupWidth));
-            position = { top, left };
+            position = {top, left};
             attempts++;
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
@@ -210,34 +210,46 @@ document.addEventListener("DOMContentLoaded", function () {
     animateDots();
     updateProgressBar();
 
-//History
-    function addHistoryItem(icon, message, targetTime) {
+    function addHistoryItem(iconText, description, time) {
         const historyBody = document.getElementById("history-body");
 
+        // Проверяем, существует ли контейнер
+        if (!historyBody) {
+            console.error("History body not found");
+            return;
+        }
+
+        // Создаём элемент .history-item
         const historyItem = document.createElement("div");
         historyItem.className = "history-item";
 
-        const historyIcon = document.createElement("div");
-        historyIcon.className = "history-item-icon";
-        historyIcon.textContent = icon; // Здесь можно добавить `<img>` для иконки
+        // Иконка
+        const icon = document.createElement("div");
+        icon.className = "history-item-icon";
+        icon.textContent = iconText;
 
-        const historyContent = document.createElement("div");
-        historyContent.className = "history-item-content";
+        // Описание
+        const text = document.createElement("div");
+        text.className = "history-item-text";
+        text.textContent = description;
 
-        const historyMessage = document.createElement("span");
-        historyMessage.textContent = message;
+        // Время
+        const timeElement = document.createElement("div");
+        timeElement.className = "history-item-time";
+        timeElement.textContent = time;
 
-        const historyTime = document.createElement("div");
-        historyTime.className = "history-item-time";
-        historyTime.textContent = targetTime;
+        // Добавляем иконку, текст и время в элемент history-item
+        historyItem.appendChild(icon);
+        historyItem.appendChild(text);
+        historyItem.appendChild(timeElement);
 
-        historyContent.appendChild(historyMessage);
-        historyItem.appendChild(historyIcon);
-        historyItem.appendChild(historyContent);
-        historyItem.appendChild(historyTime);
-
+        // Добавляем history-item в history-body
         historyBody.appendChild(historyItem);
     }
+    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47 UTC");
+    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47 UTC");
+    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47 UTC");
+
 
     lottie.loadAnimation({
         container: document.getElementById('header-animation'),
