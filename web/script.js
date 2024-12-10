@@ -10,8 +10,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const topPopupsContainer = document.getElementById("top-popups");
     const bottomPopupsContainer = document.getElementById("bottom-popups");
 
-    const popupWidth = 100; // Ширина попапа
-    const popupHeight = 75; // Высота попапа
+    const progressBar = document.getElementById("progress-bar");
+    const dotsElement = document.getElementById("dots");
+    const targetTime = new Date(Date.UTC(2024, 11, 12, 21, 47, 0)); // Целевая дата и время
+
+    const popupWidth = 100;
+    const popupHeight = 75;
 
     const usedPositionsTop = [];
     const usedPositionsBottom = [];
@@ -49,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+//Popups
     function generateRandomHash(length = 20) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let hash = "";
@@ -120,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 setTimeout(revealText, 100);
             } else {
                 setTimeout(() => {
-                    popup.style.background = "linear-gradient(180deg, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 1))";
 
                     setTimeout(() => {
                         popup.classList.add("shake");
@@ -144,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         popup.textContent = maskedHash;
-        popup.style.background = "linear-gradient(180deg, rgba(255, 253, 0, 0.6), rgba(255, 184, 0, 1))";
+        popup.style.background = "linear-gradient(90deg, rgba(255, 215, 0, 1) 0%,  rgba(255, 253, 150, 1) 100%)";
         popup.style.transform = "scale(0)";
         popup.style.transition = "transform 0.3s ease, background 1s ease";
 
@@ -178,6 +182,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setInterval(updatePopups, 5000);
     updatePopups();
+
+//Timer
+    function animateDots() {
+        const dots = ["", ".", "..", "..."];
+        let index = 0;
+
+        setInterval(() => {
+            dotsElement.textContent = dots[index];
+            index = (index + 1) % dots.length;
+        }, 500);
+    }
+
+    function updateProgressBar() {
+        const now = new Date();
+        const totalTime = targetTime.getTime() - new Date().getTime(); // Общее время
+        const elapsedTime = now.getTime() - new Date().getTime(); // Прошло времени
+        const progress = Math.min((elapsedTime / totalTime) * 100, 100);
+
+        progressBar.style.width = `${progress}%`;
+
+        if (progress < 100) {
+            setTimeout(updateProgressBar, 1000);
+        }
+    }
+
+    animateDots();
+    updateProgressBar();
+
+//History
+    function addHistoryItem(icon, message, targetTime) {
+        const historyBody = document.getElementById("history-body");
+
+        const historyItem = document.createElement("div");
+        historyItem.className = "history-item";
+
+        const historyIcon = document.createElement("div");
+        historyIcon.className = "history-item-icon";
+        historyIcon.textContent = icon; // Здесь можно добавить `<img>` для иконки
+
+        const historyContent = document.createElement("div");
+        historyContent.className = "history-item-content";
+
+        const historyMessage = document.createElement("span");
+        historyMessage.textContent = message;
+
+        const historyTime = document.createElement("div");
+        historyTime.className = "history-item-time";
+        historyTime.textContent = targetTime;
+
+        historyContent.appendChild(historyMessage);
+        historyItem.appendChild(historyIcon);
+        historyItem.appendChild(historyContent);
+        historyItem.appendChild(historyTime);
+
+        historyBody.appendChild(historyItem);
+    }
+
+    lottie.loadAnimation({
+        container: document.getElementById('header-animation'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'web/Content/Header_Animation.json',
+    });
 
     lottie.loadAnimation({
         container: document.getElementById('mining-animation'),
