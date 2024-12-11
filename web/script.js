@@ -35,15 +35,18 @@ document.addEventListener("DOMContentLoaded", function () {
     let canClosePopup = true;
 
     // *** Инициализация ***
+    setInterval(() => {
+        console.log("updatePopups called"); // Для отладки
+        updatePopups();
+    }, 2500);
+
     formatWalletAddress();
     setupEventListeners();
     animateDots();
     updateProgressBar();
     populateHistory(historyData);
     initializeLottieAnimations();
-    updatePopups();
     startRemainingTimeCountdown();
-    setInterval(updatePopups, 2500);
 
     // *** Функции ***
 
@@ -156,8 +159,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Создание и обновление динамических попапов
     function updatePopups() {
-        addPopups(topPopupsContainer, usedPositionsTop);
-        addPopups(bottomPopupsContainer, usedPositionsBottom);
+        console.log("updatePopups started"); // Для проверки вызова функции
+
+        try {
+            addPopups(topPopupsContainer, usedPositionsTop);
+            addPopups(bottomPopupsContainer, usedPositionsBottom);
+            console.log("updatePopups completed successfully");
+        } catch (error) {
+            console.error("Error in updatePopups:", error);
+        }
     }
 
     function addPopups(container, usedPositions) {
@@ -170,6 +180,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Создание одного попапа
     function createPopup(container, usedPositions) {
+        console.log(`Creating popup for container: ${container.id}`); // Отладка
+
         const popup = document.createElement("div");
         popup.className = "dynamic-popup";
 
@@ -179,7 +191,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let currentIndex = 0;
 
         const position = getRandomPosition(container, usedPositions);
-        if (!position) return null;
+        if (!position) {
+            console.warn("No suitable position found for popup");
+            return null; // Если позиция не найдена
+        }
 
         popup.style.position = "absolute";
         popup.style.top = `${position.top}px`;
@@ -201,10 +216,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 setTimeout(revealText, 100);
             } else {
                 setTimeout(() => {
-                    popup.classList.add("shake");
+
                     setTimeout(() => {
-                        popup.style.transform = "scale(0)";
-                        setTimeout(() => container.removeChild(popup), 300);
+                        popup.classList.add("shake");
+                        setTimeout(() => {
+                            popup.classList.remove("shake");
+
+                            popup.style.transform = "scale(0)";
+                            setTimeout(() => {
+                                container.removeChild(popup);
+                                const index = usedPositions.findIndex(
+                                    pos =>
+                                        parseInt(popup.style.top) === pos.top &&
+                                        parseInt(popup.style.left) === pos.left
+                                );
+                                if (index !== -1) usedPositions.splice(index, 1);
+                            }, 300);
+                        }, 300);
                     }, 300);
                 }, 300);
             }
@@ -215,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
             revealText();
         }, 10);
 
+        console.log("Popup created successfully");
         return popup;
     }
 
