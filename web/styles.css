@@ -157,10 +157,6 @@ body {
 }
 
 .info-container {
-    position: absolute;
-    bottom: 65%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     justify-content: space-between;
     align-items: flex-start;

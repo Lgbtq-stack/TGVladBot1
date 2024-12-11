@@ -213,37 +213,30 @@ document.addEventListener("DOMContentLoaded", function () {
     function addHistoryItem(iconText, description, time) {
         const historyBody = document.getElementById("history-body");
 
-        // Проверяем, существует ли контейнер
         if (!historyBody) {
             console.error("History body not found");
             return;
         }
 
-        // Создаём элемент .history-item
         const historyItem = document.createElement("div");
         historyItem.className = "history-item";
 
-        // Иконка
         const icon = document.createElement("div");
         icon.className = "history-item-icon";
         icon.textContent = iconText;
 
-        // Описание
         const text = document.createElement("div");
         text.className = "history-item-text";
         text.textContent = description;
 
-        // Время
         const timeElement = document.createElement("div");
         timeElement.className = "history-item-time";
         timeElement.textContent = time;
 
-        // Добавляем иконку, текст и время в элемент history-item
         historyItem.appendChild(icon);
         historyItem.appendChild(text);
         historyItem.appendChild(timeElement);
 
-        // Добавляем history-item в history-body
         historyBody.appendChild(historyItem);
     }
     addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47 UTC");
