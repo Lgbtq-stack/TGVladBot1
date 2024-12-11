@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const popup = document.getElementById("popup-module");
     const showPopupButton = document.getElementById("show-popup");
     const closePopupButton = document.getElementById("popup-close");
+    const historyButton = document.getElementById("history-button");
+    const backButton = document.getElementById("back-button");
     const walletAddressElement = document.querySelector(".wallet-address");
     const rawAddress = walletAddressElement.textContent.trim();
     const formattedAddress = rawAddress.slice(0, 15) + " ..... " + rawAddress.slice(-15);
@@ -60,6 +62,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    if (historyButton) {
+        historyButton.addEventListener("click", () => {
+            // Перенаправляем пользователя на страницу истории
+            window.location.href = "history.html"; // Укажите путь к странице
+        });
+    }
+
+    if (backButton) {
+        backButton.addEventListener("click", () => {
+            // Перенаправление на главную страницу
+            window.location.href = "index.html"; // Укажите правильный путь к главной странице
+        });
+    }
 //Popups
     function generateRandomHash(length = 20) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

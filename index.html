@@ -8,81 +8,74 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
 </head>
 <body>
-    <div id="loading-screen">
-        <div id="loading-animation" style="width: 250px; height: 250px;"></div>
-        <span>Loading</span>
-    </div>
+<div id="loading-screen">
+    <div id="loading-animation" style="width: 250px; height: 250px;"></div>
+    <span>Loading</span>
+</div>
 
-    <div id="header">
-<!--        <div class="animation-container">-->
-<!--            <div class="header-animation" id="header-animation" style="width: 300px; height: 150px; margin: 0 auto;"></div>-->
-<!--        </div>-->
+<div id="header">
+    <!--        <div class="animation-container">-->
+    <!--            <div class="header-animation" id="header-animation" style="width: 300px; height: 150px; margin: 0 auto;"></div>-->
+    <!--        </div>-->
 
-        <div class="wallet-container">
-            <div class="wallet-info">
-                <div class="wallet-address-title">Wallet Address:</div>
-                <div class="wallet-address">GDUZAK42IY56CH6RD5F4ONG7DH53K5GZIMKNWQ6RU2WYCNVVSKIY34G3</div>
-            </div>
+    <div class="wallet-container">
+        <div class="wallet-info">
+            <div class="wallet-address-title">Wallet Address:</div>
+            <div class="wallet-address">GDUZAK42IY56CH6RD5F4ONG7DH53K5GZIMKNWQ6RU2WYCNVVSKIY34G3</div>
         </div>
     </div>
+</div>
 
-    <div id="content" class="fade-in">
+<div id="content" class="fade-in">
 
-        <div class="info-container">
-            <div class="info-panel balance-panel">
-                <div class="title">Balance</div>
-                <div class="child-panel">
-                    <span>$500</span>
-                </div>
-            </div>
-            <div class="info-panel time-panel">
-                <div class="title">Remaining Time</div>
-                <div class="child-panel">
-                    <span>24:00:00</span>
-                </div>
+    <div class="info-container">
+        <div class="info-panel balance-panel">
+            <div class="title">Balance</div>
+            <div class="child-panel">
+                <span>$500</span>
             </div>
         </div>
-        <div id="top-popups"></div>
-
-        <div class="popup-panel top-panel">
-            <span class="hashcode"></span>
-        </div>
-        <div class="mining-content">
-            <div class="mining-icon">
-                <div class="mining-animation" id="mining-animation" style="width: 500px; height: 250px;"></div>
+        <div class="info-panel time-panel">
+            <div class="title">Remaining Time</div>
+            <div class="child-panel">
+                <span>24:00:00</span>
             </div>
         </div>
-        <div id="bottom-popups"></div>
-
-        <div class="progress-container">
-            <div class="progress-header">
-                Progress<span id="dots"></span>
-            </div>
-            <div class="progress-body">
-                <div class="progress-background">
-                    <div id="progress-bar" class="progress-bar"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="history-container">
-            <div class="history-header">History</div>
-            <div id="history-body" class="history-body">
-            </div>
-        </div>
-
-        <button id="show-popup">Показать Попап</button>
-
     </div>
+    <div id="top-popups"></div>
 
-    <div id="popup-module" class="popup">
-        <div class="popup-content">
-            <span class="popup-close" id="popup-close">&times;</span>
-            <h2>Это модульный попап!</h2>
-            <p>Вызываем этот попап в любое время.</p>
+    <div class="popup-panel top-panel">
+        <span class="hashcode"></span>
+    </div>
+    <div class="mining-content">
+        <div class="mining-icon">
+            <div class="mining-animation" id="mining-animation" style="width: 500px; height: 350px;"></div>
+        </div>
+    </div>
+    <div id="bottom-popups"></div>
+
+    <div class="progress-container">
+        <div class="progress-header">
+            Progress<span id="dots"></span>
+        </div>
+        <div class="progress-body">
+            <div class="progress-background">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
         </div>
     </div>
 
-    <script src="web/script.js"></script>
+    <button id="history-button" class="history-button">History</button>
+</div>
+
+<div id="popup-module" class="popup">
+    <div class="popup-content">
+        <span class="popup-close" id="popup-close">&times;</span>
+        <h2>Это модульный попап!</h2>
+        <p>Вызываем этот попап в любое время.</p>
+    </div>
+</div>
+
+<script src="web/script.js"></script>
 </body>
 </html>

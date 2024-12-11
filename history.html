@@ -4,16 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History</title>
-    <link rel="stylesheet" href="web/styles.css"> <!-- Подключение общего CSS -->
+    <link rel="stylesheet" href="web/styles.css">
 </head>
 <body>
-<div class="history-container">
-    <div class="history-header">Full History</div>
-    <div class="history-body" id="history-body">
-        <!-- Динамически добавленные элементы истории -->
+<div id="history-page">
+    <h1>History</h1>
+    <div class="history-container">
+        <p>История транзакций:</p>
+        <ul>
+            <li>Транзакция 1: $100</li>
+            <li>Транзакция 2: $50</li>
+            <li>Транзакция 3: $25</li>
+        </ul>
     </div>
+    <button id="back-button">Back to Main</button>
 </div>
-
-<script src="web/script.js"></script> <!-- Подключение общего JS -->
+<script>
+    document.getElementById("back-button").addEventListener("click", () => {
+        window.location.href = "index.html"; // Путь к главной странице
+    });
+</script>
 </body>
 </html>
