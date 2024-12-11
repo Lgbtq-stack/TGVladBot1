@@ -249,13 +249,13 @@ document.addEventListener("DOMContentLoaded", function () {
         historyItem.appendChild(text);
         historyItem.appendChild(timeElement);
 
-        historyBody.appendChild(historyItem);
+        // historyBody.appendChild(historyItem);
     }
 
     function populateHistory(historyData) {
-        // historyData.forEach(([iconText, description, time]) => {
-        //     addHistoryItem(iconText, description, time);
-        // });
+        historyData.forEach(([iconText, description, time]) => {
+            addHistoryItem(iconText, description, time);
+        });
     }
 
     // Инициализация Lottie-анимаций
