@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
         popup.textContent = maskedHash;
         popup.style.background = "linear-gradient(90deg, rgba(255, 215, 0, 1) 0%,  rgba(255, 253, 150, 1) 100%)";
         popup.style.transform = "scale(0)";
-        popup.style.transition = "transform 0.3s ease";
+        popup.style.transition = "transform 0.3s ease, background 1s ease";
 
         function revealText() {
             if (currentIndex < visibleLength) {
@@ -248,13 +248,14 @@ document.addEventListener("DOMContentLoaded", function () {
         historyItem.appendChild(icon);
         historyItem.appendChild(text);
         historyItem.appendChild(timeElement);
-        // historyBody.appendChild(historyItem);
+
+        historyBody.appendChild(historyItem);
     }
 
     function populateHistory(historyData) {
-        historyData.forEach(([iconText, description, time]) => {
-            addHistoryItem(iconText, description, time);
-        });
+        // historyData.forEach(([iconText, description, time]) => {
+        //     addHistoryItem(iconText, description, time);
+        // });
     }
 
     // Инициализация Lottie-анимаций
