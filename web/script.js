@@ -161,16 +161,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addPopups(container, usedPositions) {
-        const numPopups = Math.floor(Math.random() * 3) + 1;
-
+        const numPopups = Math.floor(Math.random() * 3) + 1; // Случайное количество попапов от 1 до 3
         for (let i = 0; i < numPopups; i++) {
-            setTimeout(() => {
-                const popup = createPopup(container, usedPositions);
-                if (popup) container.appendChild(popup);
-            }, Math.random() * 3000);
+            const popup = createPopup(container, usedPositions);
+            if (popup) container.appendChild(popup);
         }
     }
 
+    // Создание одного попапа
     function createPopup(container, usedPositions) {
         const popup = document.createElement("div");
         popup.className = "dynamic-popup";
@@ -188,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
         popup.style.left = `${position.left}px`;
 
         popup.textContent = maskedHash;
-        popup.style.background = "linear-gradient(90deg, rgba(255, 215, 0, 1) 0%,  rgba(255, 253, 150, 1) 100%)";
+        popup.style.background = "linear-gradient(90deg, rgba(255, 215, 0, 1) 0%, rgba(255, 253, 150, 1) 100%)";
         popup.style.transform = "scale(0)";
         popup.style.transition = "transform 0.3s ease, background 1s ease";
 
@@ -220,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return popup;
     }
 
+    // Генерация случайной позиции для попапа
     function getRandomPosition(container, usedPositions) {
         const containerHeight = container.offsetHeight;
         const containerWidth = container.offsetWidth;
@@ -229,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
         do {
             top = Math.floor(Math.random() * (containerHeight - popupHeight));
             left = Math.floor(Math.random() * (containerWidth - popupWidth));
-            position = { top, left };
+            position = {top, left};
             attempts++;
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
@@ -241,6 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Проверка на перекрытие попапов
     function isOverlapping(newPos, usedPositions) {
         return usedPositions.some(
             pos =>
@@ -251,6 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
+    // Генерация случайного хэша
     function generateRandomHash(length = 20) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let hash = "";
@@ -260,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return hash;
     }
 
+    // Генерация случайного видимого длины хэша
     function getRandomVisibleLength() {
         return Math.floor(Math.random() * (10 - 5 + 1)) + 5;
     }

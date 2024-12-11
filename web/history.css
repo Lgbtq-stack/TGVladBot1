@@ -1,9 +1,13 @@
 * {
     font-family: 'Seravek', sans-serif;
+    box-sizing: border-box;
 }
 
-body {
+html, body {
     margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .back-button {
@@ -111,7 +115,6 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     z-index: 3;
     position: relative;
-    margin-right: 35px;
 }
 
 .history-item-icon {
