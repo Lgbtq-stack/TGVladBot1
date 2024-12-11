@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
         addPopups(bottomPopupsContainer, usedPositionsBottom);
     }
 
-    setInterval(updatePopups, 5000);
+    setInterval(updatePopups, 2500);
     updatePopups();
 
 //Timer
