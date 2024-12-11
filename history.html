@@ -9,20 +9,11 @@
 <body>
 <div id="history-page">
     <h1>History</h1>
-    <div class="history-container">
-        <p>История транзакций:</p>
-        <ul>
-            <li>Транзакция 1: $100</li>
-            <li>Транзакция 2: $50</li>
-            <li>Транзакция 3: $25</li>
-        </ul>
+    <div id="history-body" class="history-body">
+        <!-- Элементы истории будут добавлены здесь -->
     </div>
     <button id="back-button">Back to Main</button>
 </div>
-<script>
-    document.getElementById("back-button").addEventListener("click", () => {
-        window.location.href = "index.html"; // Путь к главной странице
-    });
-</script>
+<script type="module" src="web/script.js"></script>
 </body>
 </html>

@@ -1,81 +1,220 @@
-const wallet_test_config = {
-    wallet: "GB6Z2DZTMXHB7M6ETEXKGDRJCAUTDSIL6AZAHV6K4HEO6ZVH5H5TTVER",
-    balance: 10000,
-    history: ["BTC", "You received 0.001 BTC", "2024-12-11T21:47:00Z"],
-    time_to_end: "2024-12-11T21:47:00Z",
-};
-
 document.addEventListener("DOMContentLoaded", function () {
+    // *** Константы и глобальные переменные ***
     const loadingScreen = document.getElementById("loading-screen");
     const content = document.getElementById("content");
     const popup = document.getElementById("popup-module");
-    const showPopupButton = document.getElementById("show-popup");
     const closePopupButton = document.getElementById("popup-close");
     const historyButton = document.getElementById("history-button");
+    const historyBody = document.getElementById("history-body");
     const backButton = document.getElementById("back-button");
     const walletAddressElement = document.querySelector(".wallet-address");
-    const rawAddress = walletAddressElement.textContent.trim();
-    const formattedAddress = rawAddress.slice(0, 15) + " ..... " + rawAddress.slice(-15);
     const topPopupsContainer = document.getElementById("top-popups");
     const bottomPopupsContainer = document.getElementById("bottom-popups");
-
     const progressBar = document.getElementById("progress-bar");
     const dotsElement = document.getElementById("dots");
     const targetTime = new Date(Date.UTC(2024, 11, 12, 21, 47, 0)); // Целевая дата и время
 
     const popupWidth = 100;
     const popupHeight = 75;
-
     const usedPositionsTop = [];
     const usedPositionsBottom = [];
 
-    walletAddressElement.textContent = formattedAddress;
+    const historyData = [
+        ["BTC", "You received 0.001 BTC", "11/12/2024 21:47"],
+        ["ETH", "You received 0.02 ETH", "11/12/2024 21:48"],
+        ["BTC", "You received 0.005 BTC", "11/12/2024 21:49"]
+    ];
 
     let canClosePopup = true;
 
+    // *** Инициализация ***
+    formatWalletAddress();
+    setupEventListeners();
+    animateDots();
+    updateProgressBar();
+    populateHistory(historyData);
+    initializeLottieAnimations();
+    updatePopups();
+    setInterval(updatePopups, 2500);
+
+    // *** Функции ***
+
+    // Форматирование адреса кошелька
+    function formatWalletAddress() {
+        if (walletAddressElement) {
+            const rawAddress = walletAddressElement.textContent.trim();
+            walletAddressElement.textContent =
+                rawAddress.slice(0, 15) + " ..... " + rawAddress.slice(-15);
+        }
+    }
+
+    // Настройка обработчиков событий
+    function setupEventListeners() {
+        if (closePopupButton) {
+            closePopupButton.addEventListener("click", () => togglePopup(false));
+        }
+
+        if (popup) {
+            popup.addEventListener("click", function (e) {
+                if (e.target.id === "popup-module" && canClosePopup) {
+                    togglePopup(false);
+                }
+            });
+        }
+
+        if (historyButton) {
+            historyButton.addEventListener("click", () => {
+                window.location.href = "history.html";
+            });
+        }
+
+        if (backButton) {
+            backButton.addEventListener("click", () => {
+                window.location.href = "index.html";
+            });
+        }
+
+        setTimeout(() => {
+            loadingScreen.classList.add("hidden");
+            setTimeout(() => {
+                loadingScreen.style.display = "none";
+                content.classList.add("show");
+            }, 500);
+        }, 2000);
+    }
+
+    // Анимация точек
+    function animateDots() {
+        const dots = ["", ".", "..", "..."];
+        let index = 0;
+
+        setInterval(() => {
+            dotsElement.textContent = dots[index];
+            index = (index + 1) % dots.length;
+        }, 500);
+    }
+
+    // Обновление прогресс-бара
+    function updateProgressBar() {
+        const now = new Date().getTime();
+        const totalTime = targetTime.getTime() - now;
+
+        const progress = Math.max(100 - (totalTime / (targetTime.getTime())) * 100, 0);
+
+        progressBar.style.width = `${progress}%`;
+        if (progress < 100) {
+            setTimeout(updateProgressBar, 1000);
+        }
+    }
+
+    // Управление модальным окном (попап)
     function togglePopup(show, canClose = true) {
         canClosePopup = canClose;
         if (show) {
             popup.style.display = "flex";
             closePopupButton.style.display = canClose ? "block" : "none";
-        } else {
-            if (canClosePopup) {
-                popup.style.display = "none";
+        } else if (canClosePopup) {
+            popup.style.display = "none";
+        }
+    }
+
+    // Создание и обновление динамических попапов
+    function updatePopups() {
+        addPopups(topPopupsContainer, usedPositionsTop);
+        addPopups(bottomPopupsContainer, usedPositionsBottom);
+    }
+
+    function addPopups(container, usedPositions) {
+        const numPopups = Math.floor(Math.random() * 3) + 1;
+
+        for (let i = 0; i < numPopups; i++) {
+            setTimeout(() => {
+                const popup = createPopup(container, usedPositions);
+                if (popup) container.appendChild(popup);
+            }, Math.random() * 3000);
+        }
+    }
+
+    function createPopup(container, usedPositions) {
+        const popup = document.createElement("div");
+        popup.className = "dynamic-popup";
+
+        const hash = generateRandomHash();
+        const visibleLength = getRandomVisibleLength();
+        let maskedHash = "*".repeat(visibleLength);
+        let currentIndex = 0;
+
+        const position = getRandomPosition(container, usedPositions);
+        if (!position) return null;
+
+        popup.style.position = "absolute";
+        popup.style.top = `${position.top}px`;
+        popup.style.left = `${position.left}px`;
+
+        popup.textContent = maskedHash;
+        popup.style.background = "linear-gradient(90deg, rgba(255, 215, 0, 1) 0%,  rgba(255, 253, 150, 1) 100%)";
+        popup.style.transform = "scale(0)";
+        popup.style.transition = "transform 0.3s ease";
+
+        function revealText() {
+            if (currentIndex < visibleLength) {
+                maskedHash =
+                    maskedHash.substring(0, currentIndex) +
+                    hash[currentIndex] +
+                    maskedHash.substring(currentIndex + 1);
+                popup.textContent = maskedHash;
+                currentIndex++;
+                setTimeout(revealText, 100);
+            } else {
+                setTimeout(() => {
+                    popup.classList.add("shake");
+                    setTimeout(() => {
+                        popup.style.transform = "scale(0)";
+                        setTimeout(() => container.removeChild(popup), 300);
+                    }, 300);
+                }, 300);
             }
         }
-    }
 
-    setTimeout(() => {
-        loadingScreen.classList.add("hidden");
         setTimeout(() => {
-            loadingScreen.style.display = "none";
-            content.classList.add("show");
-        }, 500);
-    }, 2000);
+            popup.style.transform = "scale(1)";
+            revealText();
+        }, 10);
 
-    showPopupButton.addEventListener("click", () => togglePopup(true));
-    closePopupButton.addEventListener("click", () => togglePopup(false));
+        return popup;
+    }
 
-    popup.addEventListener("click", function (e) {
-        if (e.target.id === "popup-module" && canClosePopup) {
-            togglePopup(false);
+    function getRandomPosition(container, usedPositions) {
+        const containerHeight = container.offsetHeight;
+        const containerWidth = container.offsetWidth;
+        let top, left, position;
+        let attempts = 0;
+
+        do {
+            top = Math.floor(Math.random() * (containerHeight - popupHeight));
+            left = Math.floor(Math.random() * (containerWidth - popupWidth));
+            position = { top, left };
+            attempts++;
+        } while (isOverlapping(position, usedPositions) && attempts < 100);
+
+        if (attempts < 100) {
+            usedPositions.push(position);
+            return position;
+        } else {
+            return null;
         }
-    });
-
-    if (historyButton) {
-        historyButton.addEventListener("click", () => {
-            // Перенаправляем пользователя на страницу истории
-            window.location.href = "history.html"; // Укажите путь к странице
-        });
     }
 
-    if (backButton) {
-        backButton.addEventListener("click", () => {
-            // Перенаправление на главную страницу
-            window.location.href = "index.html"; // Укажите правильный путь к главной странице
-        });
+    function isOverlapping(newPos, usedPositions) {
+        return usedPositions.some(
+            pos =>
+                newPos.left < pos.left + popupWidth &&
+                newPos.left + popupWidth > pos.left &&
+                newPos.top < pos.top + popupHeight &&
+                newPos.top + popupHeight > pos.top
+        );
     }
-//Popups
+
     function generateRandomHash(length = 20) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let hash = "";
@@ -89,158 +228,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return Math.floor(Math.random() * (10 - 5 + 1)) + 5;
     }
 
-    function isOverlapping(newPos, usedPositions) {
-        for (const pos of usedPositions) {
-            const overlapping =
-                newPos.left < pos.left + popupWidth &&
-                newPos.left + popupWidth > pos.left &&
-                newPos.top < pos.top + popupHeight &&
-                newPos.top + popupHeight > pos.top;
-            if (overlapping) return true;
-        }
-        return false;
-    }
-
-    function getRandomPosition(container, usedPositions) {
-        const containerHeight = container.offsetHeight;
-        const containerWidth = container.offsetWidth;
-        let top, left, position;
-        let attempts = 0;
-
-        do {
-            top = Math.floor(Math.random() * (containerHeight - popupHeight));
-            left = Math.floor(Math.random() * (containerWidth - popupWidth));
-            position = {top, left};
-            attempts++;
-        } while (isOverlapping(position, usedPositions) && attempts < 100);
-
-        if (attempts < 100) {
-            usedPositions.push(position);
-            return position;
-        } else {
-            return null;
-        }
-    }
-
-    function createPopup(container, usedPositions) {
-        const popup = document.createElement("div");
-        popup.className = "dynamic-popup";
-        const hash = generateRandomHash();
-        const visibleLength = getRandomVisibleLength();
-        let maskedHash = "*".repeat(visibleLength);
-        let currentIndex = 0;
-        const position = getRandomPosition(container, usedPositions);
-        if (!position) return null;
-
-        popup.style.position = "absolute";
-        popup.style.top = `${position.top}px`;
-        popup.style.left = `${position.left}px`;
-
-        function revealText() {
-            if (currentIndex < visibleLength) {
-                maskedHash =
-                    maskedHash.substring(0, currentIndex) +
-                    hash[currentIndex] +
-                    maskedHash.substring(currentIndex + 1);
-                popup.textContent = maskedHash;
-                currentIndex++;
-                setTimeout(revealText, 100);
-            } else {
-                setTimeout(() => {
-
-                    setTimeout(() => {
-                        popup.classList.add("shake");
-                        setTimeout(() => {
-                            popup.classList.remove("shake");
-
-                            popup.style.transform = "scale(0)";
-                            setTimeout(() => {
-                                container.removeChild(popup);
-                                const index = usedPositions.findIndex(
-                                    pos =>
-                                        parseInt(popup.style.top) === pos.top &&
-                                        parseInt(popup.style.left) === pos.left
-                                );
-                                if (index !== -1) usedPositions.splice(index, 1);
-                            }, 300);
-                        }, 300);
-                    }, 300);
-                }, 300);
-            }
-        }
-
-        popup.textContent = maskedHash;
-        popup.style.background = "linear-gradient(90deg, rgba(255, 215, 0, 1) 0%,  rgba(255, 253, 150, 1) 100%)";
-        popup.style.transform = "scale(0)";
-        popup.style.transition = "transform 0.3s ease, background 1s ease";
-
-        setTimeout(() => {
-            popup.style.transition = "transform 0.3s ease, background 1s ease";
-            popup.style.transform = "scale(1)";
-            revealText();
-        }, 10);
-
-        return popup;
-    }
-
-    function addPopups(container, usedPositions) {
-        const numPopups = Math.floor(Math.random() * 3) + 1;
-
-        for (let i = 0; i < numPopups; i++) {
-            setTimeout(() => {
-                const popup = createPopup(container, usedPositions);
-
-                if (popup) {
-                    container.appendChild(popup);
-                }
-            }, Math.random() * 3000); // Случайная задержка для каждого попапа
-        }
-    }
-
-    function updatePopups() {
-        addPopups(topPopupsContainer, usedPositionsTop);
-        addPopups(bottomPopupsContainer, usedPositionsBottom);
-    }
-
-    setInterval(updatePopups, 2500);
-    updatePopups();
-
-//Timer
-    function animateDots() {
-        const dots = ["", ".", "..", "..."];
-        let index = 0;
-
-        setInterval(() => {
-            dotsElement.textContent = dots[index];
-            index = (index + 1) % dots.length;
-        }, 500);
-    }
-
-    function updateProgressBar() {
-        const now = new Date().getTime();
-        const totalTime = targetTime.getTime() - now; // Общее оставшееся время
-        const elapsedTime = targetTime.getTime() - new Date().getTime(); // Прошло времени
-
-        const progress = Math.max(100 - (totalTime / (targetTime.getTime() - wallet_test_config.time_to_end)) * 100, 0);
-
-        progressBar.style.width = `${progress}%`;
-
-        if (progress < 100) {
-            setTimeout(updateProgressBar, 1000);
-        }
-    }
-
-    animateDots();
-    updateProgressBar();
-
+    // История
     function addHistoryItem(iconText, description, time) {
-        const historyBody = document.getElementById("history-body");
-
-        if (!historyBody) {
-            console.error("History body not found");
-            return;
-        }
-
         const historyItem = document.createElement("div");
         historyItem.className = "history-item";
 
@@ -259,35 +248,39 @@ document.addEventListener("DOMContentLoaded", function () {
         historyItem.appendChild(icon);
         historyItem.appendChild(text);
         historyItem.appendChild(timeElement);
-
-        historyBody.appendChild(historyItem);
+        // historyBody.appendChild(historyItem);
     }
-    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47");
-    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47");
-    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47");
 
+    function populateHistory(historyData) {
+        historyData.forEach(([iconText, description, time]) => {
+            addHistoryItem(iconText, description, time);
+        });
+    }
 
-    lottie.loadAnimation({
-        container: document.getElementById('header-animation'),
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'web/Content/Header_Animation.json',
-    });
+    // Инициализация Lottie-анимаций
+    function initializeLottieAnimations() {
+        lottie.loadAnimation({
+            container: document.getElementById("header-animation"),
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "web/Content/Header_Animation.json",
+        });
 
-    lottie.loadAnimation({
-        container: document.getElementById('mining-animation'),
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'web/Content/Mining_Animation.json',
-    });
+        lottie.loadAnimation({
+            container: document.getElementById("mining-animation"),
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "web/Content/Mining_Animation.json",
+        });
 
-    lottie.loadAnimation({
-        container: document.getElementById('loading-animation'),
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'web/Content/Loading_Animation.json',
-    });
+        lottie.loadAnimation({
+            container: document.getElementById("loading-animation"),
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "web/Content/Loading_Animation.json",
+        });
+    }
 });
