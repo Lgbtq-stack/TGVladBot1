@@ -47,7 +47,7 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 9px 6px rgba(0, 0, 0, 0.1);
-    margin-top: -20px;
+    margin-top: 25px;
     z-index: 10;
     position: relative;
 }
@@ -58,7 +58,6 @@
 
 .wallet-address-title {
     font-weight: bold;
-
 }
 
 .wallet-address {
@@ -133,6 +132,7 @@ body {
     );
     position: relative;
     z-index: 0;
+    margin-bottom: -125px;
 }
 
 #header::after {
@@ -151,17 +151,19 @@ body {
     z-index: 1;
 }
 
-.animation-container {
-    width: 100%;
-    text-align: center;
-    margin: 20px 0;
-}
+/*.animation-container {*/
+/*    width: 100%;*/
+/*    text-align: center;*/
+/*    margin: 20px 0;*/
+/*}*/
 
 .info-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
+    margin-bottom: 100px;
+    z-index: 100;
 }
 
 .info-panel {
@@ -179,13 +181,14 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-weight: bold;
     font-size: 18px;
-    margin: 0 20px;
+    margin: 0 10px;
+
 }
 
 .child-panel {
     position: absolute;
-    bottom: -40px;
     left: 50%;
+    bottom: -42px;
     transform: translateX(-50%);
     background: white;
     border: 1px solid #ccc;
@@ -203,10 +206,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-grow: 1;
     text-align: center;
-    margin-bottom: -50px;
+    margin-top: -30px;
+    padding: 0 20px;
 }
 
 #top-popups, #bottom-popups {
@@ -218,9 +222,9 @@ body {
     z-index: 1;
 }
 
-#top-popups {
-    margin-top: 120px;
-}
+/*#top-popups {*/
+/*    margin-top: 120px;*/
+/*}*/
 
 .dynamic-popup {
     background: linear-gradient(180deg, rgba(255, 253, 0, 0.6), rgba(255, 184, 0, 1));
@@ -261,7 +265,7 @@ body {
 
 .progress-container {
     width: 90%;
-    margin: 50px auto;
+    margin-bottom: 50px;
     text-align: center;
     position: relative;
 }

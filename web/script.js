@@ -1,3 +1,10 @@
+const wallet_test_config = {
+    wallet: "GB6Z2DZTMXHB7M6ETEXKGDRJCAUTDSIL6AZAHV6K4HEO6ZVH5H5TTVER",
+    balance: 10000,
+    history: ["BTC", "You received 0.001 BTC", "2024-12-11T21:47:00Z"],
+    time_to_end: "2024-12-11T21:47:00Z",
+};
+
 document.addEventListener("DOMContentLoaded", function () {
     const loadingScreen = document.getElementById("loading-screen");
     const content = document.getElementById("content");
@@ -195,10 +202,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateProgressBar() {
-        const now = new Date();
-        const totalTime = targetTime.getTime() - new Date().getTime(); // Общее время
-        const elapsedTime = now.getTime() - new Date().getTime(); // Прошло времени
-        const progress = Math.min((elapsedTime / totalTime) * 100, 100);
+        const now = new Date().getTime();
+        const totalTime = targetTime.getTime() - now; // Общее оставшееся время
+        const elapsedTime = targetTime.getTime() - new Date().getTime(); // Прошло времени
+
+        const progress = Math.max(100 - (totalTime / (targetTime.getTime() - wallet_test_config.time_to_end)) * 100, 0);
 
         progressBar.style.width = `${progress}%`;
 
@@ -239,9 +247,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         historyBody.appendChild(historyItem);
     }
-    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47 UTC");
-    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47 UTC");
-    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47 UTC");
+    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47");
+    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47");
+    addHistoryItem("BTC", "You received 0.001 BTC", "11/12/2024 21:47");
 
 
     lottie.loadAnimation({
