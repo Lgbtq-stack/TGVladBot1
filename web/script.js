@@ -9,10 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const backButton = document.getElementById("back-button");
     const walletAddressElement = document.querySelector(".wallet-address");
     const topPopupsContainer = document.getElementById("top-popups");
+    const dotsElement = document.getElementById("dots");
     const bottomPopupsContainer = document.getElementById("bottom-popups");
     const progressBar = document.getElementById("progress-bar");
-    const dotsElement = document.getElementById("dots");
-    const targetTime = new Date(Date.UTC(2024, 11, 12, 21, 47, 0)); // Целевая дата и время
+    const remainingTimeElement = document.querySelector(".time-panel .child-panel span");
+
+    const targetTime = new Date(Date.UTC(2024, 11, 13, 21, 47, 0)); // Целевая дата и время (13 декабря 2024 года 21:47 UTC)
+    const totalDuration = targetTime - new Date(Date.UTC(2024, 11, 13, 0, 0, 0)); // Общая продолжительность в миллисекундах
 
     const popupWidth = 100;
     const popupHeight = 75;
@@ -20,9 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const usedPositionsBottom = [];
 
     const historyData = [
-        ["BTC", "You received 0.001 BTC", "11/12/2024 21:47"],
-        ["ETH", "You received 0.02 ETH", "11/12/2024 21:48"],
-        ["BTC", "You received 0.005 BTC", "11/12/2024 21:49"]
+        ["BTC", "You received 0.001 BTC", "21:47", "11/12/2024"],
+        ["ETH", "You received 0.02 ETH", "21:48", "11/12/2024"],
+        ["BTC", "You received 0.005 BTC", "21:49", "11/12/2024"],
+        ["BTC", "You received 0.005 BTC", "21:49", "11/12/2024"]
     ];
 
     let canClosePopup = true;
@@ -35,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     populateHistory(historyData);
     initializeLottieAnimations();
     updatePopups();
+    startRemainingTimeCountdown();
     setInterval(updatePopups, 2500);
 
     // *** Функции ***
@@ -94,27 +99,55 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 500);
     }
 
+    // Функция отсчёта времени
+    function startRemainingTimeCountdown() {
+        function updateRemainingTime() {
+            const now = new Date();
+            const nowUTC = new Date(now.getTime() + now.getTimezoneOffset() * 60000); // Перевод локального времени в UTC
+            const diff = targetTime - nowUTC; // Разница во времени
+
+            if (diff <= 0) {
+                remainingTimeElement.textContent = "00:00:00"; // Время вышло
+                updateProgressBar(100); // Прогресс-бар заполнен
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            // Расчёт оставшихся часов, минут, секунд
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            // Форматирование времени
+            const formattedTime = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+            remainingTimeElement.textContent = formattedTime;
+
+            // Обновление прогресс-бара
+            const progress = ((totalDuration - diff) / totalDuration) * 100; // Процент завершённости
+            updateProgressBar(progress);
+        }
+
+        updateRemainingTime(); // Обновляем сразу, чтобы не ждать интервал
+        const countdownInterval = setInterval(updateRemainingTime, 1000); // Обновление каждую секунду
+    }
+
     // Обновление прогресс-бара
-    function updateProgressBar() {
-        const now = new Date().getTime();
-        const totalTime = targetTime.getTime() - now;
-
-        const progress = Math.max(100 - (totalTime / (targetTime.getTime())) * 100, 0);
-
-        progressBar.style.width = `${progress}%`;
-        if (progress < 100) {
-            setTimeout(updateProgressBar, 1000);
+    function updateProgressBar(progress) {
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
         }
     }
 
     // Управление модальным окном (попап)
     function togglePopup(show, canClose = true) {
         canClosePopup = canClose;
-        if (show) {
-            popup.style.display = "flex";
-            closePopupButton.style.display = canClose ? "block" : "none";
-        } else if (canClosePopup) {
-            popup.style.display = "none";
+        if (popup) {
+            if (show) {
+                popup.style.display = "flex";
+                closePopupButton.style.display = canClose ? "block" : "none";
+            } else if (canClosePopup) {
+                popup.style.display = "none";
+            }
         }
     }
 
@@ -229,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // История
-    function addHistoryItem(iconText, description, time) {
+    function addHistoryItem(iconText, description, time, date) {
         const historyItem = document.createElement("div");
         historyItem.className = "history-item";
 
@@ -243,18 +276,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const timeElement = document.createElement("div");
         timeElement.className = "history-item-time";
-        timeElement.textContent = time;
+        timeElement.innerHTML = `<div class="time">${time}</div><div class="date">${date}</div>`;
 
         historyItem.appendChild(icon);
         historyItem.appendChild(text);
         historyItem.appendChild(timeElement);
 
-        // historyBody.appendChild(historyItem);
+        if (historyBody) {
+            historyBody.appendChild(historyItem);
+        }
     }
 
     function populateHistory(historyData) {
-        historyData.forEach(([iconText, description, time]) => {
-            addHistoryItem(iconText, description, time);
+        historyData.forEach(([iconText, description, time, date]) => {
+            addHistoryItem(iconText, description, time, date);
         });
     }
 
