@@ -14,8 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const progressBar = document.getElementById("progress-bar");
     const remainingTimeElement = document.querySelector(".time-panel .child-panel span");
 
-    const targetTime = new Date(Date.UTC(2024, 11, 13, 21, 47, 0)); // Целевая дата и время (13 декабря 2024 года 21:47 UTC)
-    const totalDuration = targetTime - new Date(Date.UTC(2024, 11, 13, 0, 0, 0)); // Общая продолжительность в миллисекундах
+    // Установим фиксированную цель времени
+    const targetTime = new Date(Date.UTC(2024, 11, 12, 23, 54)); // 12 декабря 2024 года 23:54 UTC
+
+    const now = new Date();
+    const totalDuration = targetTime - now; // Общая продолжительность в миллисекундах от текущего момента до цели
 
     const popupWidth = 100;
     const popupHeight = 75;
@@ -103,8 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function startRemainingTimeCountdown() {
         function updateRemainingTime() {
             const now = new Date();
-            const nowUTC = new Date(now.getTime() + now.getTimezoneOffset() * 60000); // Перевод локального времени в UTC
-            const diff = targetTime - nowUTC; // Разница во времени
+            const diff = targetTime - now; // Разница во времени
 
             if (diff <= 0) {
                 remainingTimeElement.textContent = "00:00:00"; // Время вышло
@@ -113,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Расчёт оставшихся часов, минут, секунд
+            // Расчёт оставшихся часов, минут и секунд
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
@@ -130,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateRemainingTime(); // Обновляем сразу, чтобы не ждать интервал
         const countdownInterval = setInterval(updateRemainingTime, 1000); // Обновление каждую секунду
     }
+
 
     // Обновление прогресс-бара
     function updateProgressBar(progress) {
