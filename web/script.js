@@ -1,4 +1,4 @@
-// import { get_config } from "web/Core/datacontoller.js"
+import { get_config } from "web/Core/datacontoller.js"
 
 const logo = {
     "USDC": "https://cryptologos.cc/logos/usd-coin-usdc-logo.png",
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const content = document.getElementById("content");
     const popup = document.getElementById("popup-module");
     const closePopupButton = document.getElementById("popup-close");
+    const refreshPopupButton = document.getElementById("popup-refresh");
     const historyButton = document.getElementById("history-button");
     const historyBody = document.getElementById("history-body");
     const backButton = document.getElementById("back-button");
@@ -38,32 +39,21 @@ document.addEventListener("DOMContentLoaded", async function () {
                     "2024-12-11T13:37:50.124Z": 0.5,
                     "2024-12-12T13:37:50.124Z": 0.5
                 },
-                "time_to_mine": "2024-12-12T20:00:00Z"
+                "time_to_mine": "2024-12-13T20:00:00Z"
             }
         }
     };
 
-    // Получение user_id из URL
     // const userId = getUserIdFromURL();
-    // if (!userId) {
-    //     showPopup("Ошибка: user_id отсутствует в URL.", false);
-    //     return;
-    // }
 
-    // Попробуем получить конфиг через get_config
     let wallet_data = null;
 
     try {
-        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        wallet_data = localConfig; // Запрос конфига из datacontroller
+        wallet_data = await get_config(350104566); // Запрос конфига из datacontroller
+        // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
         showPopup("Ошибка загрузки данных. Попробуйте снова.", false);
-        return null;
-    }
-
-    if (!wallet_data) {
-        showPopup("Ошибка: данные не найдены.", false);
         return null;
     }
 
@@ -73,7 +63,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     setInterval(() => {
         updatePopups();
     }, 2500);
-
 
     // *** Инициализация ***
     loadWalletData(wallet_data);
@@ -91,6 +80,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         return urlParams.get("user_id");
     }
 
+    // Получение данных с сервера
+    async function fetchConfigFromServer() {
+        const response = await fetch("/api/get_config"); // Эндпоинт API
+        if (!response.ok) {
+            throw new Error("Ошибка запроса конфигурации");
+        }
+        return response.json();
+    }
+
+    // Сохранение конфигурации в кэш
+    function saveConfigToCache(config) {
+        localStorage.setItem("walletConfig", JSON.stringify(config));
+    }
+
     // Показ всплывающего окна
     function showPopup(message, canClose = true) {
         if (popup) {
@@ -106,6 +109,34 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    function showRefreshPopup(message) {
+        if (popup) {
+            popup.querySelector(".popup-content p").textContent = message;
+
+            closePopupButton.style.display = "none";
+            refreshPopupButton.style.display = "block";
+
+            popup.style.display = "flex";
+        }
+    }
+
+    refreshPopupButton.addEventListener("click", async () => {
+        try {
+            const updatedConfig = await fetchConfigFromServer();
+            saveConfigToCache(updatedConfig); // Сохранение в кэш
+            loadWalletData(updatedConfig); // Обновление интерфейса
+            togglePopup(false);
+        } catch (error) {
+            console.error("Ошибка обновления данных:", error);
+            showPopup("Не удалось обновить данные. Попробуйте позже.", false);
+        }
+    });
+
+
+    function onMiningTimeout() {
+        showRefreshPopup("Время майнинга истекло. Пожалуйста, обновите страницу.");
+    }
+
     function togglePopup(show, canClose = true) {
         canClosePopup = canClose;
         if (popup) {
@@ -118,14 +149,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    // Загрузка данных кошелька
     function loadWalletData(data) {
         if (walletAddressElement) {
-
             const fullWallet = data.wallet;
             if (fullWallet.length > 40) {
-                const formattedWallet = `${fullWallet.slice(0, 20)}...${fullWallet.slice(-20)}`;
-                walletAddressElement.textContent = formattedWallet;
+                walletAddressElement.textContent = `${fullWallet.slice(0, 20)}...${fullWallet.slice(-20)}`;
             } else {
                 walletAddressElement.textContent = fullWallet; // Если адрес короче 40 символов, отображаем полностью
             }
@@ -356,7 +384,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 remainingTimeElement.textContent = "00:00:00";
                 updateProgressBar(100);
                 clearInterval(countdownInterval);
-                showPopup("Время майнинга истекло. Пожалуйста, обновите страницу.", false);
+                onMiningTimeout();
                 return;
             }
 
