@@ -1,4 +1,4 @@
-import { get_config } from "web/Core/datacontoller.js"
+import { get_config } from "./datacontoller.js"
 
 const logo = {
     "USDC": "https://cryptologos.cc/logos/usd-coin-usdc-logo.png",
