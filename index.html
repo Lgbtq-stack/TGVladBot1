@@ -3,41 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading and Popup Example</title>
+    <title>Mining App</title>
     <link rel="stylesheet" href="web/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
 </head>
 <body>
-    <div id="loading-screen">
-        <div class="coin-animation"></div>
-        <span>Loading</span>
-    </div>
+<div id="loading-screen">
+    <div id="loading-animation" style="width: 250px; height: 250px;"></div>
+    <span>Loading</span>
+</div>
 
-    <div id="content" class="fade-in">
-        <h1>Велкоме</h1>
-        <div class="mining-content">
-            <div class="mining-icon">
-                <div id="lottie-animation" style="width: 500px; height: 500px;"></div>
-            </div>
-        </div>
-        <button id="show-popup">Показать Попап</button>
-        <div class="wallet-container">
-            <div class="wallet-info">
-                <div class="wallet-address-title">Wallet Address:</div>
-                <div class="wallet-address">GDUZAK42IY56CH6RD5F4ONG7DH53K5GZIMKNWQ6RU2WYCNVVSKIY34G3</div>
-            </div>
-            <div class="web-app-version">v.1</div>
-       </div>
-    </div>
-
-    <div id="popup-module" class="popup">
-        <div class="popup-content">
-            <span class="popup-close" id="popup-close">&times;</span>
-            <h2>Это модульный попап!</h2>
-            <p>Вызываем этот попап в любое время.</p>
+<div id="header">
+    <div class="wallet-container">
+        <div class="wallet-info">
+            <div class="wallet-address-title">Wallet Address:</div>
+            <div class="wallet-address">GDUZAK42IY56CH6RD5F4ONG7DH53K5GZIMKNWQ6RU2WYCNVVSKIY34G3</div>
         </div>
     </div>
+</div>
 
-    <script src="web/script.js"></script>
+<div id="content" class="fade-in">
+
+    <div class="info-container">
+        <div class="info-panel balance-panel">
+            <div class="title">Balance</div>
+            <div class="child-panel">
+                <span>$500</span>
+            </div>
+        </div>
+        <div class="info-panel time-panel">
+            <div class="title">Remaining Time</div>
+            <div class="child-panel">
+                <span>24:00:00</span>
+            </div>
+        </div>
+    </div>
+    <div id="top-popups"></div>
+
+    <div class="popup-panel top-panel">
+        <span class="hashcode"></span>
+    </div>
+    <div class="mining-content">
+        <div class="mining-icon">
+            <div class="mining-animation" id="mining-animation" style="width: 500px; height: 350px;"></div>
+        </div>
+    </div>
+    <div id="bottom-popups"></div>
+
+    <div class="progress-container">
+        <div class="progress-header">
+            Progress<span id="dots"></span>
+        </div>
+        <div class="progress-body">
+            <div class="progress-background">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <button id="history-button" class="history-button">History</button>
+</div>
+
+<div id="popup-module" class="popup">
+    <div class="popup-content">
+        <span class="popup-close" id="popup-close">&times;</span>
+        <h2>Это модульный попап!</h2>
+        <p>Вызываем этот попап в любое время.</p>
+    </div>
+</div>
+
+<script src="web/script.js"></script>
 </body>
 </html>
