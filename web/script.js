@@ -13,49 +13,73 @@ document.addEventListener("DOMContentLoaded", function () {
     const bottomPopupsContainer = document.getElementById("bottom-popups");
     const progressBar = document.getElementById("progress-bar");
     const remainingTimeElement = document.querySelector(".time-panel .child-panel span");
+    const balanceElement = document.querySelector(".balance-panel .child-panel span");
 
-    // Установим фиксированную цель времени
-    const targetTime = new Date(Date.UTC(2024, 11, 12, 23, 54)); // 12 декабря 2024 года 23:54 UTC
+    // JSON данные
+    const wallet_data = {
+        "wallet": "GDTOJL273O5YKNF3PIG72UZRG6CT4TRLDQK2NT5ZBMN3A56IP4JSYRUQ",
+        "tokens": {
+            "BTC": {
+                "balance": 1.25,
+                "history": {
+                    "2024-12-10T13:37:50.124Z": 0.25,
+                    "2024-12-11T13:37:50.124Z": 0.5,
+                    "2024-12-12T13:37:50.124Z": 0.5
+                },
+                "time_to_mine": "2024-12-12T20:00:00Z"
+            }
+        }
+    };
 
+    const targetTime = new Date(wallet_data.tokens.BTC.time_to_mine);
     const now = new Date();
-    const totalDuration = targetTime - now; // Общая продолжительность в миллисекундах от текущего момента до цели
+    const totalDuration = targetTime - now;
 
     const popupWidth = 100;
     const popupHeight = 75;
     const usedPositionsTop = [];
     const usedPositionsBottom = [];
-
-    const historyData = [
-        ["BTC", "You received 0.001 BTC", "21:47", "11/12/2024"],
-        ["ETH", "You received 0.02 ETH", "21:48", "11/12/2024"],
-        ["BTC", "You received 0.005 BTC", "21:49", "11/12/2024"],
-        ["BTC", "You received 0.005 BTC", "21:49", "11/12/2024"]
-    ];
-
     let canClosePopup = true;
 
     // *** Инициализация ***
-    setInterval(() => {
-        console.log("updatePopups called"); // Для отладки
-        updatePopups();
-    }, 2500);
-
-    formatWalletAddress();
+    setInterval(updatePopups, 2500);
+    loadWalletData(wallet_data);
     setupEventListeners();
     animateDots();
-    updateProgressBar();
-    populateHistory(historyData);
-    initializeLottieAnimations();
     startRemainingTimeCountdown();
+    initializeLottieAnimations();
 
     // *** Функции ***
 
-    // Форматирование адреса кошелька
-    function formatWalletAddress() {
+    // Загрузка данных из JSON
+    function loadWalletData(data) {
         if (walletAddressElement) {
-            const rawAddress = walletAddressElement.textContent.trim();
-            walletAddressElement.textContent =
-                rawAddress.slice(0, 15) + " ..... " + rawAddress.slice(-15);
+            walletAddressElement.textContent = data.wallet;
+        }
+
+        if (balanceElement) {
+            balanceElement.textContent = `${data.tokens.BTC.balance} BTC`;
+        }
+
+        if (historyBody) {
+            const historyEntries = Object.entries(data.tokens.BTC.history)
+                .sort((a, b) => new Date(b[0]) - new Date(a[0]));
+
+            if (historyEntries.length === 0) {
+                const noDataElement = document.createElement("div");
+                noDataElement.className = "no-data";
+                noDataElement.textContent = "No Data";
+                historyBody.appendChild(noDataElement);
+            } else {
+                historyEntries.forEach(([date, amount]) => {
+                    const formattedDate = new Date(date).toLocaleDateString("en-US");
+                    const formattedTime = new Date(date).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    });
+                    addHistoryItem("BTC", `You received ${amount} BTC`, formattedTime, formattedDate);
+                });
+            }
         }
     }
 
@@ -105,37 +129,32 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 500);
     }
 
-    // Функция отсчёта времени
+    // Таймер
     function startRemainingTimeCountdown() {
         function updateRemainingTime() {
             const now = new Date();
-            const diff = targetTime - now; // Разница во времени
+            const diff = targetTime - now;
 
             if (diff <= 0) {
-                remainingTimeElement.textContent = "00:00:00"; // Время вышло
-                updateProgressBar(100); // Прогресс-бар заполнен
+                remainingTimeElement.textContent = "00:00:00";
+                updateProgressBar(100);
                 clearInterval(countdownInterval);
                 return;
             }
 
-            // Расчёт оставшихся часов, минут и секунд
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            // Форматирование времени
-            const formattedTime = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-            remainingTimeElement.textContent = formattedTime;
+            remainingTimeElement.textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-            // Обновление прогресс-бара
-            const progress = ((totalDuration - diff) / totalDuration) * 100; // Процент завершённости
+            const progress = ((totalDuration - diff) / totalDuration) * 100;
             updateProgressBar(progress);
         }
 
-        updateRemainingTime(); // Обновляем сразу, чтобы не ждать интервал
-        const countdownInterval = setInterval(updateRemainingTime, 1000); // Обновление каждую секунду
+        updateRemainingTime();
+        const countdownInterval = setInterval(updateRemainingTime, 1000);
     }
-
 
     // Обновление прогресс-бара
     function updateProgressBar(progress) {
@@ -144,44 +163,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Управление модальным окном (попап)
-    function togglePopup(show, canClose = true) {
-        canClosePopup = canClose;
-        if (popup) {
-            if (show) {
-                popup.style.display = "flex";
-                closePopupButton.style.display = canClose ? "block" : "none";
-            } else if (canClosePopup) {
-                popup.style.display = "none";
-            }
-        }
-    }
-
-    // Создание и обновление динамических попапов
+    // Управление попапами
     function updatePopups() {
-        console.log("updatePopups started"); // Для проверки вызова функции
-
-        try {
-            addPopups(topPopupsContainer, usedPositionsTop);
-            addPopups(bottomPopupsContainer, usedPositionsBottom);
-            console.log("updatePopups completed successfully");
-        } catch (error) {
-            console.error("Error in updatePopups:", error);
-        }
+        addPopups(topPopupsContainer, usedPositionsTop);
+        addPopups(bottomPopupsContainer, usedPositionsBottom);
     }
 
     function addPopups(container, usedPositions) {
-        const numPopups = Math.floor(Math.random() * 3) + 1; // Случайное количество попапов от 1 до 3
+        const numPopups = Math.floor(Math.random() * 3) + 1;
         for (let i = 0; i < numPopups; i++) {
             const popup = createPopup(container, usedPositions);
             if (popup) container.appendChild(popup);
         }
     }
 
-    // Создание одного попапа
     function createPopup(container, usedPositions) {
-        console.log(`Creating popup for container: ${container.id}`); // Отладка
-
         const popup = document.createElement("div");
         popup.className = "dynamic-popup";
 
@@ -191,10 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let currentIndex = 0;
 
         const position = getRandomPosition(container, usedPositions);
-        if (!position) {
-            console.warn("No suitable position found for popup");
-            return null; // Если позиция не найдена
-        }
+        if (!position) return null;
 
         popup.style.position = "absolute";
         popup.style.top = `${position.top}px`;
@@ -216,23 +209,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 setTimeout(revealText, 100);
             } else {
                 setTimeout(() => {
-
+                    popup.classList.add("shake");
                     setTimeout(() => {
-                        popup.classList.add("shake");
-                        setTimeout(() => {
-                            popup.classList.remove("shake");
-
-                            popup.style.transform = "scale(0)";
-                            setTimeout(() => {
-                                container.removeChild(popup);
-                                const index = usedPositions.findIndex(
-                                    pos =>
-                                        parseInt(popup.style.top) === pos.top &&
-                                        parseInt(popup.style.left) === pos.left
-                                );
-                                if (index !== -1) usedPositions.splice(index, 1);
-                            }, 300);
-                        }, 300);
+                        popup.style.transform = "scale(0)";
+                        setTimeout(() => container.removeChild(popup), 300);
                     }, 300);
                 }, 300);
             }
@@ -243,11 +223,9 @@ document.addEventListener("DOMContentLoaded", function () {
             revealText();
         }, 10);
 
-        console.log("Popup created successfully");
         return popup;
     }
 
-    // Генерация случайной позиции для попапа
     function getRandomPosition(container, usedPositions) {
         const containerHeight = container.offsetHeight;
         const containerWidth = container.offsetWidth;
@@ -257,7 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
         do {
             top = Math.floor(Math.random() * (containerHeight - popupHeight));
             left = Math.floor(Math.random() * (containerWidth - popupWidth));
-            position = {top, left};
+            position = { top, left };
             attempts++;
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
@@ -269,7 +247,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Проверка на перекрытие попапов
     function isOverlapping(newPos, usedPositions) {
         return usedPositions.some(
             pos =>
@@ -280,7 +257,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-    // Генерация случайного хэша
     function generateRandomHash(length = 20) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let hash = "";
@@ -290,7 +266,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return hash;
     }
 
-    // Генерация случайного видимого длины хэша
     function getRandomVisibleLength() {
         return Math.floor(Math.random() * (10 - 5 + 1)) + 5;
     }
@@ -316,15 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
         historyItem.appendChild(text);
         historyItem.appendChild(timeElement);
 
-        if (historyBody) {
-            historyBody.appendChild(historyItem);
-        }
-    }
-
-    function populateHistory(historyData) {
-        historyData.forEach(([iconText, description, time, date]) => {
-            addHistoryItem(iconText, description, time, date);
-        });
+        historyBody.appendChild(historyItem);
     }
 
     // Инициализация Lottie-анимаций
