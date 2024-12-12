@@ -8,11 +8,6 @@ export const app = express();
 
 app.use(bodyParser.json());
 
-pool.on('error', (err) => {
-    console.error('Error connect to db:', err);
-});
-
-
 // Обработчик для получения кошелька по адресу
 app.get('/api/wallets/:wallet_address', async (req, res) => {
     const { wallet_address } = req.params;
