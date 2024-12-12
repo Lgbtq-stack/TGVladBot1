@@ -1,4 +1,11 @@
-document.addEventListener("DOMContentLoaded", function () {
+// import { get_config } from "web/Core/datacontoller.js"
+
+const logo = {
+    "USDC": "https://cryptologos.cc/logos/usd-coin-usdc-logo.png",
+    "BTC": "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
+};
+
+document.addEventListener("DOMContentLoaded", async function () {
     // *** Константы и глобальные переменные ***
     const loadingScreen = document.getElementById("loading-screen");
     const content = document.getElementById("content");
@@ -15,8 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const remainingTimeElement = document.querySelector(".time-panel .child-panel span");
     const balanceElement = document.querySelector(".balance-panel .child-panel span");
 
-    // JSON данные
-    const wallet_data = {
+    const popupWidth = 100;
+    const popupHeight = 75;
+    const usedPositionsTop = [];
+    const usedPositionsBottom = [];
+    let canClosePopup = true;
+
+    const localConfig = {
         "wallet": "GDTOJL273O5YKNF3PIG72UZRG6CT4TRLDQK2NT5ZBMN3A56IP4JSYRUQ",
         "tokens": {
             "BTC": {
@@ -31,56 +43,154 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    const targetTime = new Date(wallet_data.tokens.BTC.time_to_mine);
-    const now = new Date();
-    const totalDuration = targetTime - now;
+    // Получение user_id из URL
+    // const userId = getUserIdFromURL();
+    // if (!userId) {
+    //     showPopup("Ошибка: user_id отсутствует в URL.", false);
+    //     return;
+    // }
 
-    const popupWidth = 100;
-    const popupHeight = 75;
-    const usedPositionsTop = [];
-    const usedPositionsBottom = [];
-    let canClosePopup = true;
+    // Попробуем получить конфиг через get_config
+    let wallet_data = null;
+
+    try {
+        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        wallet_data = localConfig; // Запрос конфига из datacontroller
+    } catch (error) {
+        console.error("Ошибка при получении конфигурации:", error);
+        showPopup("Ошибка загрузки данных. Попробуйте снова.", false);
+        return null;
+    }
+
+    if (!wallet_data) {
+        showPopup("Ошибка: данные не найдены.", false);
+        return null;
+    }
+
+    // Получаем целевое время
+    const targetTime = new Date(wallet_data.tokens.BTC.time_to_mine);
+
+    setInterval(() => {
+        updatePopups();
+    }, 2500);
+
 
     // *** Инициализация ***
-    setInterval(updatePopups, 2500);
     loadWalletData(wallet_data);
     setupEventListeners();
+
     animateDots();
     startRemainingTimeCountdown();
     initializeLottieAnimations();
 
     // *** Функции ***
 
-    // Загрузка данных из JSON
-    function loadWalletData(data) {
-        if (walletAddressElement) {
-            walletAddressElement.textContent = data.wallet;
-        }
+    // Получение user_id из URL
+    function getUserIdFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("user_id");
+    }
 
-        if (balanceElement) {
-            balanceElement.textContent = `${data.tokens.BTC.balance} BTC`;
-        }
+    // Показ всплывающего окна
+    function showPopup(message, canClose = true) {
+        if (popup) {
+            popup.querySelector(".popup-content").textContent = message;
+            popup.style.display = "flex";
+            closePopupButton.style.display = canClose ? "block" : "none";
 
-        if (historyBody) {
-            const historyEntries = Object.entries(data.tokens.BTC.history)
-                .sort((a, b) => new Date(b[0]) - new Date(a[0]));
-
-            if (historyEntries.length === 0) {
-                const noDataElement = document.createElement("div");
-                noDataElement.className = "no-data";
-                noDataElement.textContent = "No Data";
-                historyBody.appendChild(noDataElement);
-            } else {
-                historyEntries.forEach(([date, amount]) => {
-                    const formattedDate = new Date(date).toLocaleDateString("en-US");
-                    const formattedTime = new Date(date).toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    });
-                    addHistoryItem("BTC", `You received ${amount} BTC`, formattedTime, formattedDate);
+            if (canClose) {
+                closePopupButton.addEventListener("click", () => {
+                    popup.style.display = "none";
                 });
             }
         }
+    }
+
+    function togglePopup(show, canClose = true) {
+        canClosePopup = canClose;
+        if (popup) {
+            if (show) {
+                popup.style.display = "flex";
+                closePopupButton.style.display = canClose ? "block" : "none";
+            } else if (canClosePopup) {
+                popup.style.display = "none";
+            }
+        }
+    }
+
+    // Загрузка данных кошелька
+    function loadWalletData(data) {
+        if (walletAddressElement) {
+
+            const fullWallet = data.wallet;
+            if (fullWallet.length > 40) {
+                const formattedWallet = `${fullWallet.slice(0, 20)}...${fullWallet.slice(-20)}`;
+                walletAddressElement.textContent = formattedWallet;
+            } else {
+                walletAddressElement.textContent = fullWallet; // Если адрес короче 40 символов, отображаем полностью
+            }
+        }
+
+        if (balanceElement) {
+            balanceElement.textContent = `${data.tokens.BTC.balance || 0} BTC`;
+        }
+
+        if (historyBody) {
+            // Перебираем все токены в объекте tokens
+            Object.keys(data.tokens).forEach(token => {
+                const iconUrl = logo[token] || "https://via.placeholder.com/40"; // Логотип или заглушка
+                const historyEntries = data.tokens[token]?.history
+                    ? Object.entries(data.tokens[token].history).sort((a, b) => new Date(b[0]) - new Date(a[0]))
+                    : [];
+
+                if (historyEntries.length === 0) {
+                    const noDataElement = document.createElement("div");
+                    noDataElement.className = "no-data";
+                    noDataElement.textContent = `No transactions for ${token}`;
+                    historyBody.appendChild(noDataElement);
+                } else {
+                    historyEntries.forEach(([date, amount]) => {
+                        const formattedDate = new Date(date).toLocaleDateString("en-US");
+                        const formattedTime = new Date(date).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        });
+                        addHistoryItem(iconUrl, `You received ${amount} ${token}`, formattedTime, formattedDate);
+                    });
+                }
+            });
+        }
+    }
+
+    // Добавление записи в историю
+    function addHistoryItem(iconUrl, description, time, date) {
+        const historyItem = document.createElement("div");
+        historyItem.className = "history-item";
+
+        const icon = document.createElement("div");
+        icon.className = "history-item-icon";
+
+        const img = document.createElement("img");
+        img.src = iconUrl;
+        img.alt = "Token Icon";
+        img.style.width = "40px";
+        img.style.height = "40px";
+        img.style.objectFit = "contain";
+        icon.appendChild(img);
+
+        const text = document.createElement("div");
+        text.className = "history-item-text";
+        text.textContent = description;
+
+        const timeElement = document.createElement("div");
+        timeElement.className = "history-item-time";
+        timeElement.innerHTML = `<div class="time">${time}</div><div class="date">${date}</div>`;
+
+        historyItem.appendChild(icon);
+        historyItem.appendChild(text);
+        historyItem.appendChild(timeElement);
+
+        historyBody.appendChild(historyItem);
     }
 
     // Настройка обработчиков событий
@@ -116,51 +226,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 content.classList.add("show");
             }, 500);
         }, 2000);
-    }
-
-    // Анимация точек
-    function animateDots() {
-        const dots = ["", ".", "..", "..."];
-        let index = 0;
-
-        setInterval(() => {
-            dotsElement.textContent = dots[index];
-            index = (index + 1) % dots.length;
-        }, 500);
-    }
-
-    // Таймер
-    function startRemainingTimeCountdown() {
-        function updateRemainingTime() {
-            const now = new Date();
-            const diff = targetTime - now;
-
-            if (diff <= 0) {
-                remainingTimeElement.textContent = "00:00:00";
-                updateProgressBar(100);
-                clearInterval(countdownInterval);
-                return;
-            }
-
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            remainingTimeElement.textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-            const progress = ((totalDuration - diff) / totalDuration) * 100;
-            updateProgressBar(progress);
-        }
-
-        updateRemainingTime();
-        const countdownInterval = setInterval(updateRemainingTime, 1000);
-    }
-
-    // Обновление прогресс-бара
-    function updateProgressBar(progress) {
-        if (progressBar) {
-            progressBar.style.width = `${progress}%`;
-        }
     }
 
     // Управление попапами
@@ -235,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
         do {
             top = Math.floor(Math.random() * (containerHeight - popupHeight));
             left = Math.floor(Math.random() * (containerWidth - popupWidth));
-            position = { top, left };
+            position = {top, left};
             attempts++;
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
@@ -270,31 +335,52 @@ document.addEventListener("DOMContentLoaded", function () {
         return Math.floor(Math.random() * (10 - 5 + 1)) + 5;
     }
 
-    // История
-    function addHistoryItem(iconText, description, time, date) {
-        const historyItem = document.createElement("div");
-        historyItem.className = "history-item";
+    function animateDots() {
+        const dots = ["", ".", "..", "..."];
+        let index = 0;
 
-        const icon = document.createElement("div");
-        icon.className = "history-item-icon";
-        icon.textContent = iconText;
-
-        const text = document.createElement("div");
-        text.className = "history-item-text";
-        text.textContent = description;
-
-        const timeElement = document.createElement("div");
-        timeElement.className = "history-item-time";
-        timeElement.innerHTML = `<div class="time">${time}</div><div class="date">${date}</div>`;
-
-        historyItem.appendChild(icon);
-        historyItem.appendChild(text);
-        historyItem.appendChild(timeElement);
-
-        historyBody.appendChild(historyItem);
+        setInterval(() => {
+            dotsElement.textContent = dots[index];
+            index = (index + 1) % dots.length;
+        }, 500);
     }
 
-    // Инициализация Lottie-анимаций
+    function startRemainingTimeCountdown() {
+        const totalDuration = 24 * 60 * 60 * 1000;
+
+        function updateRemainingTime() {
+            const now = new Date();
+            const remainingTime = targetTime - now;
+
+            if (remainingTime <= 0) {
+                remainingTimeElement.textContent = "00:00:00";
+                updateProgressBar(100);
+                clearInterval(countdownInterval);
+                showPopup("Время майнинга истекло. Пожалуйста, обновите страницу.", false);
+                return;
+            }
+
+            const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+            remainingTimeElement.textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+            const elapsedTime = totalDuration - remainingTime;
+            const progress = Math.max(0, Math.min(100, (elapsedTime / totalDuration) * 100));
+            updateProgressBar(progress);
+        }
+
+        updateRemainingTime();
+        const countdownInterval = setInterval(updateRemainingTime, 1000);
+    }
+
+    function updateProgressBar(progress) {
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+    }
+
     function initializeLottieAnimations() {
         lottie.loadAnimation({
             container: document.getElementById("header-animation"),

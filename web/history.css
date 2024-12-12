@@ -76,7 +76,6 @@ html, body {
     padding: 20px;
 }
 
-
 .history-page::after {
     content: "";
     position: absolute;
@@ -95,9 +94,6 @@ html, body {
 
 .history-body {
     width: 100%;
-    /*background: #ffffff;*/
-    /*border-radius: 12px;*/
-    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
     z-index: 2;
     position: relative;
 }
@@ -120,12 +116,7 @@ html, body {
 .history-item-icon {
     width: 40px;
     height: 40px;
-    border-radius: 5px;
-    background: linear-gradient(
-            90deg,
-            rgba(255, 215, 0, 1) 0%,
-            rgb(250, 249, 210) 100%
-    );
+    padding: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -133,6 +124,7 @@ html, body {
     font-weight: bold;
     color: #555;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .history-item-text {
@@ -177,6 +169,4 @@ html, body {
     border-radius: 10px;
     margin: 10px 0;
     border: 1px solid rgba(0, 0, 0, 0.1);
-
-    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
 }
