@@ -25,7 +25,7 @@ async function getWalletsByUserId(user_id) {
     }
 }
 
-async function getActiveWallet(user_id) {
+export async function getActiveWallet(user_id) {
     try {
         const response = await fetch(`http://localhost:3000/api/wallets/active/${user_id}`);
         if (!response.ok) {
@@ -38,5 +38,3 @@ async function getActiveWallet(user_id) {
     }
 }
 
-getActiveWallet(1195034010).then(r => console.log(r)).catch(e => console.error(e));
-//getWalletData("GDTOJL273O5YKNF3PIG72UZRG6CT4TRLDQK2NT5ZBMN3A56IP4JSYRUQ").then(r => console.log(r)).catch(e => console.error(e));
