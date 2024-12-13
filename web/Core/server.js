@@ -1,10 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import db from './db.js'; // Импортируем knex из db.js
+import cors from 'cors';
 
 
 export const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 
 // Обработчик для получения кошелька по адресу

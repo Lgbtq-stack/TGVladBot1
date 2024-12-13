@@ -1,4 +1,4 @@
-import {getActiveWallet} from './database.js';
+import {getActiveWallet} from './Core/database.js';
 
 
 //format
