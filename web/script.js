@@ -49,8 +49,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        wallet_data = localConfig; // Запрос локального конфига
+        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
         showPopup(`Ошибка загрузки данных. Попробуйте снова, error: ${error}`, false);
