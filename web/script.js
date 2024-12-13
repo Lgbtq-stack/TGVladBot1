@@ -50,6 +50,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     try {
         wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+
+        if (!wallet_data.tokens.BTC.time_to_mine || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
+            showPopup(`Miner is under maintenance`, false);
+            return null;
+        }
+
+        if(!wallet_data.wallet || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
+            showPopup(`You don't have active wallet`, false);
+            return null;
+        }
+
         // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
