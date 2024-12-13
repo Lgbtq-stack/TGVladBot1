@@ -1,4 +1,4 @@
-import { get_config } from "./datacontoller.js"
+import {get_config} from "./datacontoller.js"
 
 const logo = {
     "USDC": "https://cryptologos.cc/logos/usd-coin-usdc-logo.png",
@@ -39,26 +39,26 @@ document.addEventListener("DOMContentLoaded", async function () {
                     "2024-12-11T13:37:50.124Z": 0.5,
                     "2024-12-12T13:37:50.124Z": 0.5
                 },
-                "time_to_mine": "2024-12-13T20:00:00Z"
+                "time_to_mine": "20:00:00"
             }
         }
     };
 
-    // const userId = getUserIdFromURL();
+    const userId = getUserIdFromURL();
 
     let wallet_data = null;
 
     try {
-        wallet_data = await get_config(350104566); // Запрос конфига из datacontroller
-        // wallet_data = localConfig; // Запрос локального конфига
+        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`Ошибка загрузки данных. Попробуйте снова,error: ${error}`, false);
+        showPopup(`Ошибка загрузки данных. Попробуйте снова, error: ${error}`, false);
         return null;
     }
 
-    // Получаем целевое время
-    const targetTime = new Date(wallet_data.tokens.BTC.time_to_mine);
+    // Получаем целевое время из конфига
+    const targetTimeConfig = wallet_data.tokens.BTC.time_to_mine; // Формат: HH:mm:ssZ
 
     setInterval(() => {
         updatePopups();
@@ -69,18 +69,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     setupEventListeners();
 
     animateDots();
-    startRemainingTimeCountdown();
+    startDailyCountdown(targetTimeConfig);
     initializeLottieAnimations();
 
     // *** Функции ***
 
-    // Получение user_id из URL
     function getUserIdFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get("user_id");
     }
 
-    // Получение данных с сервера
     async function fetchConfigFromServer() {
         const response = await fetch("/api/get_config"); // Эндпоинт API
         if (!response.ok) {
@@ -89,12 +87,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         return response.json();
     }
 
-    // Сохранение конфигурации в кэш
     function saveConfigToCache(config) {
         localStorage.setItem("walletConfig", JSON.stringify(config));
     }
 
-    // Показ всплывающего окна
     function showPopup(message, canClose = true) {
         if (popup) {
             popup.querySelector(".popup-content").textContent = message;
@@ -120,6 +116,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    if(!refreshPopupButton) return;
+
     refreshPopupButton.addEventListener("click", async () => {
         try {
             const updatedConfig = await fetchConfigFromServer();
@@ -131,7 +129,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             showPopup("Не удалось обновить данные. Попробуйте позже.", false);
         }
     });
-
 
     function onMiningTimeout() {
         showRefreshPopup("Время майнинга истекло. Пожалуйста, обновите страницу.");
@@ -164,9 +161,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (historyBody) {
-            // Перебираем все токены в объекте tokens
             Object.keys(data.tokens).forEach(token => {
-                const iconUrl = logo[token] || "https://via.placeholder.com/40"; // Логотип или заглушка
+                const iconUrl = logo[token] || "https://via.placeholder.com/40";
                 const historyEntries = data.tokens[token]?.history
                     ? Object.entries(data.tokens[token].history).sort((a, b) => new Date(b[0]) - new Date(a[0]))
                     : [];
@@ -190,7 +186,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    // Добавление записи в историю
     function addHistoryItem(iconUrl, description, time, date) {
         const historyItem = document.createElement("div");
         historyItem.className = "history-item";
@@ -221,7 +216,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         historyBody.appendChild(historyItem);
     }
 
-    // Настройка обработчиков событий
     function setupEventListeners() {
         if (closePopupButton) {
             closePopupButton.addEventListener("click", () => togglePopup(false));
@@ -248,6 +242,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         setTimeout(() => {
+            if (!loadingScreen) return;
+
             loadingScreen.classList.add("hidden");
             setTimeout(() => {
                 loadingScreen.style.display = "none";
@@ -256,7 +252,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }, 2000);
     }
 
-    // Управление попапами
     function updatePopups() {
         addPopups(topPopupsContainer, usedPositionsTop);
         addPopups(bottomPopupsContainer, usedPositionsBottom);
@@ -273,6 +268,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     function createPopup(container, usedPositions) {
         const popup = document.createElement("div");
         popup.className = "dynamic-popup";
+
 
         const hash = generateRandomHash();
         const visibleLength = getRandomVisibleLength();
@@ -320,6 +316,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function getRandomPosition(container, usedPositions) {
+        if (!container) return null;
+
         const containerHeight = container.offsetHeight;
         const containerWidth = container.offsetWidth;
         let top, left, position;
@@ -367,40 +365,56 @@ document.addEventListener("DOMContentLoaded", async function () {
         const dots = ["", ".", "..", "..."];
         let index = 0;
 
+        if (!dotsElement) return; // Если элемент не найден, выйти из функции
+
         setInterval(() => {
             dotsElement.textContent = dots[index];
             index = (index + 1) % dots.length;
         }, 500);
     }
 
-    function startRemainingTimeCountdown() {
-        const totalDuration = 24 * 60 * 60 * 1000;
+    function startDailyCountdown(targetTime) {
+        const [hours, minutes, seconds] = targetTime.split(":").map(Number);
 
-        function updateRemainingTime() {
+        if (!remainingTimeElement) return;
+
+        function calculateRemainingTime() {
             const now = new Date();
-            const remainingTime = targetTime - now;
+            const todayTarget = new Date();
 
-            if (remainingTime <= 0) {
+            todayTarget.setHours(hours, minutes, seconds, 0);
+
+            // Если текущее время больше целевого, переносим на следующий день
+            if (now > todayTarget) {
+                todayTarget.setDate(todayTarget.getDate() + 1);
+            }
+
+            const diff = todayTarget - now; // Разница во времени в миллисекундах
+            const totalDuration = 24 * 60 * 60 * 1000; // Продолжительность в миллисекундах (24 часа)
+
+            if (diff <= 0) {
+                // Таймер истёк
                 remainingTimeElement.textContent = "00:00:00";
                 updateProgressBar(100);
-                clearInterval(countdownInterval);
-                onMiningTimeout();
+                clearInterval(countdownInterval); // Остановка интервала
+                onMiningTimeout(); // Выполнение действий по истечении времени
                 return;
             }
 
-            const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            const remainingHours = Math.floor(diff / (1000 * 60 * 60));
+            const remainingMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const remainingSeconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            remainingTimeElement.textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+            remainingTimeElement.textContent = `${String(remainingHours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
 
-            const elapsedTime = totalDuration - remainingTime;
-            const progress = Math.max(0, Math.min(100, (elapsedTime / totalDuration) * 100));
+            // Обновление прогресса
+            const elapsed = totalDuration - diff;
+            const progress = Math.min((elapsed / totalDuration) * 100, 100);
             updateProgressBar(progress);
         }
 
-        updateRemainingTime();
-        const countdownInterval = setInterval(updateRemainingTime, 1000);
+        calculateRemainingTime();
+        const countdownInterval = setInterval(calculateRemainingTime, 1000);
     }
 
     function updateProgressBar(progress) {
@@ -410,28 +424,37 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function initializeLottieAnimations() {
-        lottie.loadAnimation({
-            container: document.getElementById("header-animation"),
-            renderer: "svg",
-            loop: true,
-            autoplay: true,
-            path: "web/Content/Header_Animation.json",
-        });
+        const headerAnimationContainer = document.getElementById("header-animation");
+        const miningAnimationContainer = document.getElementById("mining-animation");
+        const loadingAnimationContainer = document.getElementById("loading-animation");
 
-        lottie.loadAnimation({
-            container: document.getElementById("mining-animation"),
-            renderer: "svg",
-            loop: true,
-            autoplay: true,
-            path: "web/Content/Mining_Animation.json",
-        });
+        if (headerAnimationContainer) {
+            lottie.loadAnimation({
+                container: document.getElementById("header-animation"),
+                renderer: "svg",
+                loop: true,
+                autoplay: true,
+                path: "web/Content/Header_Animation.json",
+            });
+        }
+        if (miningAnimationContainer) {
+            lottie.loadAnimation({
+                container: document.getElementById("mining-animation"),
+                renderer: "svg",
+                loop: true,
+                autoplay: true,
+                path: "web/Content/Mining_Animation.json",
+            });
+        }
 
-        lottie.loadAnimation({
-            container: document.getElementById("loading-animation"),
-            renderer: "svg",
-            loop: true,
-            autoplay: true,
-            path: "web/Content/Loading_Animation.json",
-        });
+        if (loadingAnimationContainer) {
+            lottie.loadAnimation({
+                container: document.getElementById("loading-animation"),
+                renderer: "svg",
+                loop: true,
+                autoplay: true,
+                path: "web/Content/Loading_Animation.json",
+            });
+        }
     }
 });
