@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (walletAddressElement) {
             const fullWallet = data.wallet;
             if (fullWallet.length > 40) {
-                walletAddressElement.textContent = `${fullWallet.slice(0, 20)}...${fullWallet.slice(-20)}`;
+                walletAddressElement.textContent = `${fullWallet.slice(0, 10)}...${fullWallet.slice(-10)}`;
             } else {
                 walletAddressElement.textContent = fullWallet; // Если адрес короче 40 символов, отображаем полностью
             }
