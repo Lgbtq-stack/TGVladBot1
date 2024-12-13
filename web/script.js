@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup("Ошибка загрузки данных. Попробуйте снова.", false);
+        showPopup(`Ошибка загрузки данных. Попробуйте снова,error: ${error}`, false);
         return null;
     }
 
