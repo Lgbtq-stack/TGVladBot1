@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        wallet_data = localConfig; // Запрос конфига из datacontroller
+        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        // wallet_data = localConfig; // Запрос конфига из datacontroller
 
 
         if (!wallet_data.tokens.BTC.time_to_mine || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
