@@ -55,19 +55,19 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
         if (!wallet_data.tokens.BTC.time_to_mine || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
-            showPopup(`Miner is under maintenance`, false);
+            showPopup(`Server is updating. 🛠`, false);
             return null;
         }
 
         if(!wallet_data.wallet || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
-            showPopup(`You don't have active wallet`, false);
+            showPopup(`You don't have active wallet. ⚠️`, false);
             return null;
         }
 
         // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`Server is updating.`, false);
+        showPopup(`Server is updating. 🛠`, false);
         return null;
     }
 
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function onMiningTimeout() {
-        showRefreshPopup("Время майнинга истекло. Пожалуйста, обновите страницу.");
+        showRefreshPopup("Mining completed. \n Open the app again to see the updated balance. ✅");
     }
 
     function togglePopup(show, canClose = true) {
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (historyEntries.length === 0) {
                     const noDataElement = document.createElement("div");
                     noDataElement.className = "no-data";
-                    noDataElement.textContent = `No transactions for ${token}`;
+                    noDataElement.textContent = `No Data`;
                     historyBody.appendChild(noDataElement);
                 } else {
                     historyEntries.forEach(([date, amount]) => {
