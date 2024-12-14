@@ -93,18 +93,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         return urlParams.get("user_id");
     }
 
-    async function fetchConfigFromServer() {
-        const response = await fetch("/api/get_config"); // Эндпоинт API
-        if (!response.ok) {
-            throw new Error("Ошибка запроса конфигурации");
-        }
-        return response.json();
-    }
-
-    function saveConfigToCache(config) {
-        localStorage.setItem("walletConfig", JSON.stringify(config));
-    }
-
     function showPopup(message, canClose = true) {
         if (popup) {
             popup.querySelector(".popup-content").textContent = message;
@@ -124,39 +112,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             popup.querySelector(".popup-content p").textContent = message;
 
             closePopupButton.style.display = "none";
-            refreshPopupButton.style.display = "block";
 
             popup.style.display = "flex";
         }
     }
 
-    if(!refreshPopupButton) return;
-
-    refreshPopupButton.addEventListener("click", async () => {
-        try {
-            togglePopup(false);
-        } catch (error) {
-            console.error("Ошибка обновления данных:", error);
-        }
-    });
-
     function onMiningTimeout() {
         showRefreshPopup("Mining completed.\n " +
-            "Open the app again to see the updated balance. ✅");
+            "Open the miner again to see the updated balance. ✅");
     }
-
-    function togglePopup(show, canClose = true) {
-        canClosePopup = canClose;
-        if (popup) {
-            if (show) {
-                popup.style.display = "flex";
-                closePopupButton.style.display = canClose ? "block" : "none";
-            } else if (canClosePopup) {
-                popup.style.display = "none";
-            }
-        }
-    }
-
+x
     function loadWalletData(data) {
         if (walletAddressElement) {
             const fullWallet = data.wallet;
