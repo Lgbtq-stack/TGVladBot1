@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             return null;
         }
 
-        if(!wallet_data.wallet || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
+        if(!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet`, false);
             return null;
         }
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`Ошибка загрузки данных. Попробуйте снова, error: ${error}`, false);
+        showPopup(`Server is updating.`, false);
         return null;
     }
 
@@ -132,12 +132,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     refreshPopupButton.addEventListener("click", async () => {
         try {
             const updatedConfig = await fetchConfigFromServer();
-            saveConfigToCache(updatedConfig); // Сохранение в кэш
-            loadWalletData(updatedConfig); // Обновление интерфейса
+            saveConfigToCache(updatedConfig);
+            loadWalletData(updatedConfig);
             togglePopup(false);
         } catch (error) {
             console.error("Ошибка обновления данных:", error);
-            showPopup("Не удалось обновить данные. Попробуйте позже.", false);
         }
     });
 
