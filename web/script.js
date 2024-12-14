@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
         if (!wallet_data.tokens.BTC.time_to_mine || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
-            showPopup(`Server is updating. 🛠`, false);
+            showPopup(`Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
             return null;
         }
 
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`Server is updating. 🛠`, false);
+        showPopup(`Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
         return null;
     }
 
