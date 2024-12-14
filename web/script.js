@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        wallet_data = await get_config(350104566); // Запрос конфига из datacontroller
         // wallet_data = localConfig; // Запрос конфига из datacontroller
 
 
@@ -134,9 +134,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     refreshPopupButton.addEventListener("click", async () => {
         try {
-            const updatedConfig = await fetchConfigFromServer();
-            saveConfigToCache(updatedConfig);
-            loadWalletData(updatedConfig);
             togglePopup(false);
         } catch (error) {
             console.error("Ошибка обновления данных:", error);
@@ -170,7 +167,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (balanceElement) {
-            balanceElement.textContent = `${data.tokens.BTC.balance || 0} BTC`;
+
+            const balance = data.tokens.BTC.balance || 0;
+            balanceElement.textContent = `${balance.toFixed(4)} BTC`;
         }
 
         if (historyBody) {
