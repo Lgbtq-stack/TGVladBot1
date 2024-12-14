@@ -13,67 +13,81 @@
     <span>Loading</span>
 </div>
 
-<div id="header">
-    <div class="wallet-container">
-        <div class="wallet-info">
-            <div class="wallet-address-title">Wallet Address:</div>
-            <div class="wallet-address">GDUZAK42IY56CH6RD5F4ONG7DH53K5GZIMKNWQ6RU2WYCNVVSKIY34G3</div>
+<div id="main-container" class="container">
+    <div id="header">
+        <div class="wallet-container">
+            <div class="wallet-info">
+                <div class="wallet-address-title">Wallet Address:</div>
+                <div class="wallet-address"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="content" >
+        <div class="info-container">
+            <div class="info-panel balance-panel">
+                <div class="title">Balance</div>
+                <div class="child-panel">
+                    <span>$500</span>
+                </div>
+            </div>
+            <div class="info-panel time-panel">
+                <div class="title">Remaining Time</div>
+                <div class="child-panel">
+                    <span>24:00:00</span>
+                </div>
+            </div>
+        </div>
+        <div id="top-popups"></div>
+
+        <div class="popup-panel top-panel">
+            <span class="hashcode"></span>
+        </div>
+        <div class="mining-content">
+            <div class="mining-icon">
+                <div class="mining-animation" id="mining-animation" style="width: 500px; height: 350px;"></div>
+            </div>
+        </div>
+        <div id="bottom-popups"></div>
+
+        <div class="progress-container">
+            <div class="progress-header">
+                Progress<span id="dots"></span>
+            </div>
+            <div class="progress-body">
+                <div class="progress-background">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <button id="history-button" class="history-button">
+            History <img src="web/Content/touch.png" alt="icon" class="history-icon">
+        </button>
+    </div>
+
+    <div id="popup-module" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" id="popup-close">&times;</span>
+            <h2>Это модульный попап!</h2>
+            <p>Вызываем этот попап в любое время.</p>
+            <button id="popup-refresh" class="popup-refresh">Refresh Page</button>
         </div>
     </div>
 </div>
 
-<div id="content" class="fade-in">
-
-    <div class="info-container">
-        <div class="info-panel balance-panel">
-            <div class="title">Balance</div>
-            <div class="child-panel">
-                <span>$500</span>
-            </div>
-        </div>
-        <div class="info-panel time-panel">
-            <div class="title">Remaining Time</div>
-            <div class="child-panel">
-                <span>24:00:00</span>
-            </div>
-        </div>
-    </div>
-    <div id="top-popups"></div>
-
-    <div class="popup-panel top-panel">
-        <span class="hashcode"></span>
-    </div>
-    <div class="mining-content">
-        <div class="mining-icon">
-            <div class="mining-animation" id="mining-animation" style="width: 500px; height: 350px;"></div>
-        </div>
-    </div>
-    <div id="bottom-popups"></div>
-
-    <div class="progress-container">
-        <div class="progress-header">
-            Progress<span id="dots"></span>
-        </div>
-        <div class="progress-body">
-            <div class="progress-background">
-                <div id="progress-bar" class="progress-bar"></div>
-            </div>
-        </div>
-    </div>
-
-    <button id="history-button" class="history-button">
-        History <img src="web/Content/touch.png" alt="icon" class="history-icon">
+<div id="history-container" class="container history-page hidden">
+    <!-- Кнопка "Back" -->
+    <button id="back-button" class="back-button">
+        <img src="web/Content/arrow.png" alt="Back" class="back-arrow-icon"> <span class="back-button-text">Back</span>
     </button>
-</div>
 
-<div id="popup-module" class="popup">
-    <div class="popup-content">
-        <span class="popup-close" id="popup-close">&times;</span>
-        <h2>Это модульный попап!</h2>
-        <p>Вызываем этот попап в любое время.</p>
-        <button id="popup-refresh" class="popup-refresh">Refresh Page</button>
+    <h1 class="history-title">📑 History</h1>
+    <div id="history-body" class="history-body">
+        <div id="no-data" class="no-data" style="display: none;">No Data</div>
     </div>
 </div>
+
 
 <script type="module" src="web/script.js"></script>
 </body>

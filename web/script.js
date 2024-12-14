@@ -8,7 +8,8 @@ const logo = {
 document.addEventListener("DOMContentLoaded", async function () {
     // *** Константы и глобальные переменные ***
     const loadingScreen = document.getElementById("loading-screen");
-    const content = document.getElementById("content");
+    const mainContainer = document.getElementById("main-container");
+    const historyContainer = document.getElementById("history-container");
     const popup = document.getElementById("popup-module");
     const closePopupButton = document.getElementById("popup-close");
     const refreshPopupButton = document.getElementById("popup-refresh");
@@ -49,14 +50,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        wallet_data = localConfig; // Запрос конфига из datacontroller
+
 
         if (!wallet_data.tokens.BTC.time_to_mine || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
             showPopup(`Miner is under maintenance`, false);
             return null;
         }
 
-        if(!wallet_data.wallet || wallet_data.wallet.trim() === "") {
+        if(!wallet_data.wallet || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
             showPopup(`You don't have active wallet`, false);
             return null;
         }
@@ -226,42 +229,48 @@ document.addEventListener("DOMContentLoaded", async function () {
         historyBody.appendChild(historyItem);
     }
 
+    function showContainer(container) {
+        container.classList.remove("hidden");
+        container.style.display = "flex"; // Показываем контейнер
+    }
+
+    function hideContainer(container) {
+        container.classList.add("hidden");
+        container.style.display = "none"; // Скрываем контейнер
+    }
+
+    // *** Переключение между контейнерами ***
+    function showMainContainer() {
+        hideContainer(historyContainer); // Скрываем контейнер истории
+        showContainer(mainContainer); // Показываем основной контейнер
+    }
+
+    function showHistoryContainer() {
+        hideContainer(mainContainer); // Скрываем основной контейнер
+        showContainer(historyContainer); // Показываем контейнер истории
+    }
+
+    // *** Настройка обработчиков событий ***
     function setupEventListeners() {
-        if (closePopupButton) {
-            closePopupButton.addEventListener("click", () => togglePopup(false));
-        }
-
-        if (popup) {
-            popup.addEventListener("click", function (e) {
-                if (e.target.id === "popup-module" && canClosePopup) {
-                    togglePopup(false);
-                }
-            });
-        }
-
         if (historyButton) {
             historyButton.addEventListener("click", () => {
-                window.location.href = "history.html";
+                showHistoryContainer(); // Переход к истории
             });
         }
 
         if (backButton) {
             backButton.addEventListener("click", () => {
-                window.location.href = "index.html";
+                showMainContainer(); // Возвращение на основной экран
             });
         }
 
         setTimeout(() => {
             if (!loadingScreen) return;
 
-            loadingScreen.classList.add("hidden");
-            setTimeout(() => {
-                loadingScreen.style.display = "none";
-                content.classList.add("show");
-            }, 500);
-        }, 2000);
+            hideContainer(loadingScreen); // Скрываем экран загрузки
+            showContainer(mainContainer); // Показываем основной контейнер
+        }, 2000); // Делаем паузу для загрузки
     }
-
     function updatePopups() {
         addPopups(topPopupsContainer, usedPositionsTop);
         addPopups(bottomPopupsContainer, usedPositionsBottom);
