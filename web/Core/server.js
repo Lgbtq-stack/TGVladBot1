@@ -37,7 +37,7 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
         `),
                 db.raw(`
             COALESCE(
-                (SELECT TO_CHAR(value::TIME, 'HH24:MI') 
+                (SELECT TO_CHAR(value::TIME, 'HH24:MI:SS') 
                  FROM constants 
                  WHERE key = 'btc_get_time'),
                 ''
@@ -50,6 +50,48 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
 
         if (!activeWallet) {
             return res.status(404).json({error: 'Active wallet not found'});
+        }
+
+        res.json(activeWallet);
+    } catch (err) {
+        console.error('Error executing query', err);
+        res.status(500).json({error: 'Server error'});
+    }
+});
+
+app.get('/api/wallets/data/:wallet_address', async (req, res) => {
+    const {wallet_address} = req.params;
+    console.log('Getting active wallet for wallet', wallet_address);
+    try {
+        const activeWallet = await db('wallets')
+            .where({'wallets.address': wallet_address})
+            .select(
+                'wallets.address',
+                db.raw(`
+                COALESCE((
+            SELECT JSON_OBJECT_AGG(
+                TO_CHAR(btc_bonus.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+                btc_bonus.amount
+            )
+            FROM btc_bonus
+            WHERE btc_bonus.wallet = wallets.address
+        ), '{}') AS history
+        `),
+                db.raw(`
+            COALESCE(
+                (SELECT TO_CHAR(value::TIME, 'HH24:MI:SS') 
+                 FROM constants 
+                 WHERE key = 'btc_get_time'),
+                ''
+            ) AS btc_get_time
+        `)
+            )
+            .first();
+
+        console.log(activeWallet);
+
+        if (!activeWallet) {
+            return res.status(404).json({error: 'Wallet not found'});
         }
 
         res.json(activeWallet);
