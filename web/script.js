@@ -141,7 +141,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function onMiningTimeout() {
-        showRefreshPopup("Mining completed. \n Open the app again to see the updated balance. ✅");
+        showRefreshPopup("Mining completed.\n " +
+            "Open the app again to see the updated balance. ✅");
     }
 
     function togglePopup(show, canClose = true) {
