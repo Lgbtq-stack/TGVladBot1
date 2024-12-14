@@ -2,54 +2,23 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import db from './db.js'; // Импортируем knex из db.js
 import cors from 'cors';
-
+import fs from 'fs';
+import https from 'https';
 
 export const app = express();
-
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Обработчик для получения кошелька по адресу
-app.get('/api/wallets/:wallet_address', async (req, res) => {
-    const {wallet_address} = req.params;
-
-    try {
-        const wallet = await db('wallets').where({address: wallet_address}).first();
-
-        if (!wallet) {
-            return res.status(404).json({error: 'Wallet not found'});
-        }
-
-        res.json(wallet); // Отправка записи в формате JSON
-    } catch (err) {
-        console.error('Error executing query', err);
-        res.status(500).json({error: 'Server error'});
-    }
+app.get('/', (req, res) => {
+    res.send('Hello, Secure World!');
 });
 
-// Обработчик для получения всех кошельков по user_id
-app.get('/api/wallets/get_all/:user_id', async (req, res) => {
-    const {user_id} = req.params;
-
-    try {
-        const wallets = await db('wallets').select('address').where({user_id});
-
-        if (wallets.length === 0) {
-            return res.status(404).json({error: 'User not found'});
-        }
-
-        res.json(wallets); // Отправка списка адресов
-    } catch (err) {
-        console.error('Error executing query', err);
-        res.status(500).json({error: 'Server error'});
-    }
-});
 
 // Обработчик для получения активного кошелька по user_id
 app.get('/api/wallets/active/:user_id', async (req, res) => {
     const {user_id} = req.params;
-
+    console.log('Getting active wallet for user', user_id);
     try {
         const activeWallet = await db('wallets')
             .where({'wallets.user_id': user_id, 'wallets.active': true})
@@ -88,4 +57,15 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
         console.error('Error executing query', err);
         res.status(500).json({error: 'Server error'});
     }
+});
+
+// Загрузка SSL сертификатов
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/miniappserv.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/miniappserv.com/fullchain.pem'),
+};
+
+// Запуск HTTPS сервера
+https.createServer(options, app).listen(443, () => {
+    console.log('HTTPS server running on port 443');
 });
