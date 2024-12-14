@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        wallet_data = await get_config(350104566); // Запрос конфига из datacontroller
-        // wallet_data = localConfig; // Запрос конфига из datacontroller
+        // wallet_data = await get_config(350104566); // Запрос конфига из datacontroller
+        wallet_data = localConfig; // Запрос конфига из datacontroller
 
 
         if (!wallet_data.tokens.BTC.time_to_mine || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (balanceElement) {
 
             const balance = data.tokens.BTC.balance || 0;
-            balanceElement.textContent = `${balance.toFixed(4)} BTC`;
+            balanceElement.textContent = `${balance.toFixed(4)}`;
         }
 
         if (historyBody) {
