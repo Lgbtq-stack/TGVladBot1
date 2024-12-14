@@ -174,6 +174,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (historyBody) {
+            historyBody.innerHTML = ""; // Очищаем содержимое контейнера истории
+
             Object.keys(data.tokens).forEach(token => {
                 const iconUrl = logo[token] || "https://via.placeholder.com/40";
                 const historyEntries = data.tokens[token]?.history

@@ -204,7 +204,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    width: 115%;
+    width: 100%;
     margin-bottom: 100px;
     z-index: 100;
 }
@@ -305,7 +305,7 @@ body {
 }
 
 .progress-container {
-    width: 115%;
+    width: 90%;
     margin-bottom: 50px;
     text-align: center;
     position: relative;
@@ -348,7 +348,7 @@ body {
 }
 
 .progress-bar {
-    height: 115%;
+    height: 100%;
     background: linear-gradient(90deg, rgba(255, 215, 0, 1), rgba(255, 184, 0, 1));
     width: 0%;
     transition: width 0.5s ease;
@@ -368,7 +368,7 @@ body {
     text-align: center;
     color: #000;
     cursor: pointer;
-    width: 115%;
+    width: 90%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     gap: 5px;
 }
