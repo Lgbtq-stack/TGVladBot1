@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         showRefreshPopup("Mining completed.\n " +
             "Open the miner again to see the updated balance. ✅");
     }
-x
+
     function loadWalletData(data) {
         if (walletAddressElement) {
             const fullWallet = data.wallet;
@@ -239,8 +239,12 @@ x
         }, 2000); // Делаем паузу для загрузки
     }
     function updatePopups() {
-        addPopups(topPopupsContainer, usedPositionsTop);
-        addPopups(bottomPopupsContainer, usedPositionsBottom);
+        try {
+            addPopups(topPopupsContainer, usedPositionsTop);
+            addPopups(bottomPopupsContainer, usedPositionsBottom);
+        } catch (error) {
+            console.error("Ошибка в updatePopups:", error);
+        }
     }
 
     function addPopups(container, usedPositions) {
