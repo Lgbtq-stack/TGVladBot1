@@ -320,12 +320,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             attempts++;
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
-        if (attempts < 100) {
+        // if (attempts < 100) {
             usedPositions.push(position);
             return position;
-        } else {
-            return null;
-        }
+        // } else {
+        //     return null;
+        // }
     }
 
     function isOverlapping(newPos, usedPositions) {
