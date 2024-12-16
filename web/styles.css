@@ -76,7 +76,7 @@ html, body {
 }
 
 .wallet-container {
-    width: 90%;
+    width: 92%;
     max-width: 700px;
     padding: 15px 0;
     border-bottom-left-radius: 10px;
@@ -151,7 +151,6 @@ html, body {
 }
 
 
-
 #header {
     display: flex;
     flex-direction: column;
@@ -185,12 +184,6 @@ html, body {
     pointer-events: none;
     z-index: 1;
 }
-
-/*.animation-container {*/
-/*    width: 100%;*/
-/*    text-align: center;*/
-/*    margin: 20px 0;*/
-/*}*/
 
 .info-container {
     display: flex;
@@ -258,6 +251,7 @@ html, body {
     overflow: hidden;
     padding: 0 10px;
     z-index: 1;
+    margin-top: -20px;
 }
 
 .dynamic-popup {
@@ -284,11 +278,21 @@ html, body {
 }
 
 @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 
 .mining-content {
@@ -298,8 +302,8 @@ html, body {
 }
 
 .progress-container {
-    width: 90%;
-    margin-bottom: 50px;
+    width: 100%;
+    margin-bottom: 20px;
     text-align: center;
     position: relative;
 }
@@ -361,7 +365,7 @@ html, body {
     text-align: center;
     color: #000;
     cursor: pointer;
-    width: 90%;
+    width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     gap: 5px;
     margin-bottom: 10px;
@@ -539,4 +543,80 @@ html, body {
     border-radius: 10px;
     margin: 10px 0;
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Общий контейнер */
+.server-card {
+    position: relative; /* Базовый контейнер для позиционирования */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    overflow: visible;
+    z-index: 1;
+}
+
+.server-image {
+    position: absolute;
+    top: 35%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.server-image img {
+    width: 75px;
+    height: auto;
+}
+
+.server-details {
+    flex-grow: 1;
+    text-align: center;
+    color: #555;
+    font-size: 14px;
+    margin: 0 20px;
+    word-wrap: break-word;
+}
+
+.server-text {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    margin-left: 75px;
+}
+
+.server-touch-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 75px;
+
+}
+
+.server-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat {
+    background: linear-gradient(90deg, #fdf177, #fcd32d);
+    border-radius: 8px;
+    padding: 6px 12px; /* Уменьшенные отступы */
+    font-size: 14px; /* Меньший размер шрифта */
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    min-width: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat span.value {
+    margin-left: 10px;
 }
