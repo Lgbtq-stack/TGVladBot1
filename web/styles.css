@@ -699,6 +699,7 @@ html, body {
 /* Иконка и название */
 .server-icon-and-name {
     text-align: center;
+    margin-top: 20px;
 }
 
 .server-icon {
