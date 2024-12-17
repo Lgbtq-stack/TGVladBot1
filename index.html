@@ -8,66 +8,68 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
 </head>
 <body>
-
-<!-- Загрузочный экран -->
 <div id="loading-screen">
     <div id="loading-animation" style="width: 250px; height: 250px;"></div>
     <span>Loading</span>
 </div>
 
-<!-- Основной контейнер -->
 <div id="main-container" class="container">
-    <!-- Верхняя панель (Header) -->
-    <header id="header">
+    <div id="header">
         <div class="wallet-container">
             <div class="wallet-info">
                 <div class="wallet-address-title">Wallet Address:</div>
                 <div class="wallet-address"></div>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- Основной контент -->
-    <main id="content">
-        <!-- Панели информации (Баланс и Время) -->
-        <section class="info-container">
+    <div id="content">
+        <div class="info-container">
             <div class="info-panel balance-panel">
                 <div class="title">Balance</div>
-                <div class="child-panel"><span>$500</span></div>
+                <div class="child-panel">
+                    <span>$500</span>
+                </div>
             </div>
             <div class="info-panel time-panel">
                 <div class="title">Remaining Time</div>
-                <div class="child-panel"><span>24:00:00</span></div>
+                <div class="child-panel">
+                    <span>24:00:00</span>
+                </div>
             </div>
-        </section>
+        </div>
+        <div id="top-popups"></div>
 
-        <!-- Анимация майнинга -->
-        <section class="mining-content">
+        <div class="popup-panel top-panel">
+            <span class="hashcode"></span>
+        </div>
+        <div class="mining-content">
             <div class="mining-icon">
-                <div id="mining-animation" style="width: 450px; height: 350px;"></div>
+                <div class="mining-animation" id="mining-animation" style="width: 450px; height: 350px;"></div>
             </div>
-        </section>
+        </div>
+        <div id="bottom-popups"></div>
 
-        <!-- Прогресс майнинга -->
-        <section class="progress-container">
-            <div class="progress-header">Progress<span id="dots"></span></div>
+        <div class="progress-container">
+            <div class="progress-header">
+                Progress<span id="dots"></span>
+            </div>
             <div class="progress-body">
                 <div class="progress-background">
                     <div id="progress-bar" class="progress-bar"></div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Карточка сервера -->
-        <button class="server-card">
+        <button class="server-card" id="server-card-button">
             <span class="server-image">
                 <img src="web/Content/gold-server.png" alt="Server">
             </span>
-                    <span class="server-details">
+            <span class="server-details">
                 <p class="server-text">Buy more servers to increase your mining power.</p>
                 <img src="web/Content/touch.png" alt="icon" class="server-touch-icon">
             </span>
-                    <span class="server-stats">
+            <span class="server-stats">
                 <span class="stat power">
                     <span>Power:</span><span class="value">500 W</span>
                 </span>
@@ -77,72 +79,137 @@
             </span>
         </button>
 
-        <!-- Кнопка истории -->
+
         <button id="history-button" class="history-button">
             History <img src="web/Content/touch.png" alt="icon" class="history-icon">
         </button>
-    </main>
+    </div>
+
+    <div id="popup-module" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" id="popup-close">&times;</span>
+            <p>Вызываем этот попап в любое время.</p>
+            <button id="popup-refresh" class="popup-refresh">Refresh Page</button>
+        </div>
+    </div>
 </div>
 
-<!-- Панель истории -->
 <div id="history-container" class="container history-page hidden">
+    <!-- Кнопка "Back" -->
     <button id="back-button" class="back-button">
-        ← <span class="back-button-text">Back</span>
+        <img src="web/Content/arrow.png" alt="Back" class="back-arrow-icon"> <span class="back-button-text">Back</span>
     </button>
+
     <h1 class="history-title">📑 History</h1>
     <div id="history-body" class="history-body">
-        <div id="no-data" class="no-data">No Data</div>
+        <div id="no-data" class="no-data" style="display: none;">No Data</div>
     </div>
 </div>
 
-<!-- Панель серверов -->
-<div id="my-servers" class="container my-servers hidden">
-    <div class="header">
-        <button id="back-to-main-button" class="back-to-main-button">
-            ← <span class="back-button-text">Back</span>
-        </button>
-        <h1 class="my-servers-title">My Servers</h1>
-    </div>
-    <div class="server-card">
-        <div class="server-image">
-            <img src="web/Content/server-icon.png" alt="Server">
+
+<div id="my-servers" class="container my-servers-page hidden">
+    <!-- Кнопка Back -->
+    <button id="back-to-main-button" class="my-server-back-button">
+        <img src="web/Content/arrow.png" alt="Back" class="my-server-back-arrow-icon">
+        <span class="back-button-text">Back</span>
+    </button>
+
+    <!-- Заголовок -->
+    <h1 class="my-servers-title">📑 My Servers</h1>
+
+    <!-- Список серверов -->
+    <div id="my-servers-body" class="my-servers-body">
+        <!-- Сервер 1 -->
+        <div class="my-server-card">
+            <div class="server-icon-and-name">
+                <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
+                <h2 class="server-name">Server #1 <span class="server-flag">🇺🇸</span></h2>
+            </div>
+
+            <div class="server-stats">
+                <div class="power-stat">
+                    <div class="power-stat-container">
+                        <span class="power-stat-name">Power:</span>
+                        <span class="power-stat-value">700 W</span>
+                        <div class="power-progress-bar">
+                            <div class="power-progress" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hashrate-stat">
+                    <div class="hashrate-stat-container">
+                        <span class="hashrate-stat-name">Hashrate:</span>
+                        <span class="hashrate-stat-value">200 H/s</span>
+                        <div class="hashrate-progress-bar">
+                            <div class="hashrate-progress" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-stat">
+                    <div class="status-stat-container">
+                        <span class="status-stat-name">Workload:</span>
+                        <span class="status-stat-value"></span>
+                        <div class="status-progress-bar">
+                            <div class="status-progress" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="server-details">
-            <h2>Server: #1</h2>
-            <div class="server-info">
-                <div class="progress-label">Power: 700 W</div>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 70%;"></div>
+        <div class="my-server-card">
+            <div class="server-icon-and-name">
+                <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
+                <h2 class="server-name">Server #1 <span class="server-flag">🇺🇸</span></h2>
+            </div>
+
+            <div class="server-stats">
+                <div class="power-stat">
+                    <div class="power-stat-container">
+                        <span class="power-stat-name">Power:</span>
+                        <span class="power-stat-value">700 W</span>
+                        <div class="power-progress-bar">
+                            <div class="power-progress" style="width: 70%;"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="progress-label">Hashrate: 200 H/s</div>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 90%;"></div>
+
+                <div class="hashrate-stat">
+                    <div class="hashrate-stat-container">
+                        <span class="hashrate-stat-name">Hashrate:</span>
+                        <span class="hashrate-stat-value">200 H/s</span>
+                        <div class="hashrate-progress-bar">
+                            <div class="hashrate-progress" style="width: 90%;"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="progress-label">Status</div>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 50%;"></div>
+
+                <div class="status-stat">
+                    <div class="status-stat-container">
+                        <span class="status-stat-name">Workload:</span>
+                        <span class="status-stat-value"></span>
+                        <div class="status-progress-bar">
+                            <div class="status-progress" style="width: 50%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <button id="server-shop-button" class="server-shop-button">
+        Server Shop <img src="web/Content/touch.png" alt="icon" class="server-shop-icon">
+    </button>
 </div>
 
-<!-- Магазин серверов -->
 <div id="servers-shop" class="container servers-shop hidden">
     <button id="back-to-my-servers" class="back-to-my-servers">
-        ← <span class="back-button-text">Back</span>
+        <img src="web/Content/arrow.png" alt="Back" class="back-arrow-icon"> <span class="back-button-text">Back</span>
     </button>
     <h1 class="servers-shops-title">📑 Server Shop</h1>
-    <div id="servers-shop-body"></div>
-</div>
 
-<!-- Попап -->
-<div id="popup-module" class="popup hidden">
-    <div class="popup-content">
-        <span id="popup-close" class="popup-close">&times;</span>
-        <p>Вызываем этот попап в любое время.</p>
-        <button id="popup-refresh" class="popup-refresh">Refresh Page</button>
-    </div>
+    <div id="servers-shop-body" class="servers-shop-body"></div>
 </div>
 
 <script type="module" src="web/script.js"></script>

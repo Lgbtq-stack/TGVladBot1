@@ -556,13 +556,11 @@ html, body {
     padding: 15px;
     cursor: pointer;
     width: 100%;
-    max-width: 600px;
     text-align: left;
     outline: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin: 30px 0;
+    margin: 25px 0;
 }
-
 
 .server-image {
     position: absolute;
@@ -605,7 +603,7 @@ html, body {
 }
 
 .stat {
-    background: linear-gradient(270deg, #fdf177, #fcd32d);
+    background: linear-gradient(90deg, #fdf177, #fcd32d);
     border-radius: 8px;
     padding: 8px 15px;
     font-size: 14px;
@@ -621,4 +619,177 @@ html, body {
 
 .stat span.value {
     margin-left: 10px;
+}
+
+/* Основной контейнер */
+.container.my-servers-page {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(90deg, #ffdf00 0%, #fff 50%, #faf9d2 100%);
+    padding: 20px;
+    position: relative;
+}
+
+.container.my-servers-page::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 1) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Кнопка Back */
+.my-server-back-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.my-server-back-button img {
+    width: 20px;
+    margin-right: 8px;
+}
+
+/* Заголовок */
+.my-servers-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Список серверов */
+.my-servers-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Автоматическое заполнение */
+    gap: 15px; /* Отступы между карточками */
+    justify-items: center; /* Центрирование карточек по горизонтали */
+    z-index: 3;
+}
+
+.my-server-card {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff; /* Белый фон для карточек */
+    width: 100%; /* Заполнение ячейки сетки */
+    max-width: 300px; /* Максимальная ширина карточки */
+    box-sizing: border-box; /* Включаем padding в ширину */
+    border: 1px solid #e0e0e0;
+
+}
+
+/* Иконка и название */
+.server-icon-and-name {
+    text-align: center;
+}
+
+.server-icon {
+    width: 80px;
+    height: auto;
+}
+
+.server-name {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+}
+
+.server-flag {
+    margin-left: 5px;
+}
+
+/* Статистика сервера */
+.server-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Стиль для статов */
+.power-stat-container,
+.hashrate-stat-container,
+.status-stat-container {
+    background: #ffeb3b;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.power-stat-name,
+.hashrate-stat-name,
+.status-stat-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.power-stat-value,
+.hashrate-stat-value,
+.status-stat-value {
+    color: #555;
+}
+
+.power-progress-bar,
+.hashrate-progress-bar,
+.status-progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.power-progress {
+    height: 100%;
+    background-color: #8bc34a; /* Зелёный */
+}
+
+.hashrate-progress {
+    height: 100%;
+    background-color: #ff9800; /* Оранжевый */
+}
+
+.status-progress {
+    height: 100%;
+    background-color: #2196f3; /* Синий */
+}
+
+.server-shop-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #ffeb3b, #fbc02d);
+    padding: 10px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+    z-index: 3;
+}
+
+.server-shop-icon {
+    width: 25px;
+    height: 25px;
 }
