@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const userId = getUserIdFromURL();
 
+
     let wallet_data = null;
 
     try {
