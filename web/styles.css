@@ -545,27 +545,28 @@ html, body {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Общий контейнер */
 .server-card {
-    position: relative; /* Базовый контейнер для позиционирования */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    margin: 20px auto;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     border: 1px solid #e0e0e0;
-    overflow: visible;
-    z-index: 1;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    outline: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 30px 0;
 }
+
 
 .server-image {
     position: absolute;
-    top: 35%;
-    transform: translateY(-50%);
+    transform: translateY(-10%);
     z-index: 2;
 }
 
@@ -604,17 +605,18 @@ html, body {
 }
 
 .stat {
-    background: linear-gradient(90deg, #fdf177, #fcd32d);
+    background: linear-gradient(270deg, #fdf177, #fcd32d);
     border-radius: 8px;
-    padding: 6px 12px; /* Уменьшенные отступы */
-    font-size: 14px; /* Меньший размер шрифта */
+    padding: 8px 15px;
+    font-size: 14px;
     font-weight: bold;
     color: #333;
     display: flex;
     justify-content: space-between;
-    min-width: 100px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    align-items: center; /* Центрирует содержимое по вертикали */
+    white-space: nowrap; /* Запрещает перенос текста */
+    width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .stat span.value {

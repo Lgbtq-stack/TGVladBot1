@@ -8,127 +8,141 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
 </head>
 <body>
+
+<!-- Загрузочный экран -->
 <div id="loading-screen">
     <div id="loading-animation" style="width: 250px; height: 250px;"></div>
     <span>Loading</span>
 </div>
 
+<!-- Основной контейнер -->
 <div id="main-container" class="container">
-    <div id="header">
+    <!-- Верхняя панель (Header) -->
+    <header id="header">
         <div class="wallet-container">
             <div class="wallet-info">
                 <div class="wallet-address-title">Wallet Address:</div>
                 <div class="wallet-address"></div>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div id="content">
-        <div class="info-container">
+    <!-- Основной контент -->
+    <main id="content">
+        <!-- Панели информации (Баланс и Время) -->
+        <section class="info-container">
             <div class="info-panel balance-panel">
                 <div class="title">Balance</div>
-                <div class="child-panel">
-                    <span>$500</span>
-                </div>
+                <div class="child-panel"><span>$500</span></div>
             </div>
             <div class="info-panel time-panel">
                 <div class="title">Remaining Time</div>
-                <div class="child-panel">
-                    <span>24:00:00</span>
-                </div>
+                <div class="child-panel"><span>24:00:00</span></div>
             </div>
-        </div>
-        <div id="top-popups"></div>
+        </section>
 
-        <div class="popup-panel top-panel">
-            <span class="hashcode"></span>
-        </div>
-        <div class="mining-content">
+        <!-- Анимация майнинга -->
+        <section class="mining-content">
             <div class="mining-icon">
-                <div class="mining-animation" id="mining-animation" style="width: 450px; height: 350px;"></div>
+                <div id="mining-animation" style="width: 450px; height: 350px;"></div>
             </div>
-        </div>
-        <div id="bottom-popups"></div>
+        </section>
 
-        <div class="progress-container">
-            <div class="progress-header">
-                Progress<span id="dots"></span>
-            </div>
+        <!-- Прогресс майнинга -->
+        <section class="progress-container">
+            <div class="progress-header">Progress<span id="dots"></span></div>
             <div class="progress-body">
                 <div class="progress-background">
                     <div id="progress-bar" class="progress-bar"></div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="server-card">
-            <div class="server-image">
-                <img src="web/Content/gold-server-1.png" alt="Server">
-            </div>
-            <div class="server-details">
+        <!-- Карточка сервера -->
+        <button class="server-card">
+            <span class="server-image">
+                <img src="web/Content/gold-server.png" alt="Server">
+            </span>
+                    <span class="server-details">
                 <p class="server-text">Buy more servers to increase your mining power.</p>
                 <img src="web/Content/touch.png" alt="icon" class="server-touch-icon">
-            </div>
-            <div class="server-stats">
-                <div class="stat power">
-                    <span>Power:</span>
-                    <span class="value">500 W</span>
-                </div>
-                <div class="stat hashrate">
-                    <span>Hash:</span>
-                    <span class="value">200 H/s</span>
-                </div>
-            </div>
-        </div>
+            </span>
+                    <span class="server-stats">
+                <span class="stat power">
+                    <span>Power:</span><span class="value">500 W</span>
+                </span>
+                <span class="stat hashrate">
+                    <span>Hash:</span><span class="value">200 H/s</span>
+                </span>
+            </span>
+        </button>
 
-
+        <!-- Кнопка истории -->
         <button id="history-button" class="history-button">
             History <img src="web/Content/touch.png" alt="icon" class="history-icon">
         </button>
-    </div>
+    </main>
+</div>
 
-    <div id="popup-module" class="popup">
-        <div class="popup-content">
-            <span class="popup-close" id="popup-close">&times;</span>
-            <p>Вызываем этот попап в любое время.</p>
-            <button id="popup-refresh" class="popup-refresh">Refresh Page</button>
+<!-- Панель истории -->
+<div id="history-container" class="container history-page hidden">
+    <button id="back-button" class="back-button">
+        ← <span class="back-button-text">Back</span>
+    </button>
+    <h1 class="history-title">📑 History</h1>
+    <div id="history-body" class="history-body">
+        <div id="no-data" class="no-data">No Data</div>
+    </div>
+</div>
+
+<!-- Панель серверов -->
+<div id="my-servers" class="container my-servers hidden">
+    <div class="header">
+        <button id="back-to-main-button" class="back-to-main-button">
+            ← <span class="back-button-text">Back</span>
+        </button>
+        <h1 class="my-servers-title">My Servers</h1>
+    </div>
+    <div class="server-card">
+        <div class="server-image">
+            <img src="web/Content/server-icon.png" alt="Server">
+        </div>
+        <div class="server-details">
+            <h2>Server: #1</h2>
+            <div class="server-info">
+                <div class="progress-label">Power: 700 W</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 70%;"></div>
+                </div>
+                <div class="progress-label">Hashrate: 200 H/s</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 90%;"></div>
+                </div>
+                <div class="progress-label">Status</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 50%;"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="history-container" class="container history-page hidden">
-    <!-- Кнопка "Back" -->
-    <button id="back-button" class="back-button">
-        <img src="web/Content/arrow.png" alt="Back" class="back-arrow-icon"> <span class="back-button-text">Back</span>
-    </button>
-
-    <h1 class="history-title">📑 History</h1>
-    <div id="history-body" class="history-body">
-        <div id="no-data" class="no-data" style="display: none;">No Data</div>
-    </div>
-</div>
-
-
-<div id="my-servers" class="container my-servers hidden">
-    <button id="back-to-main-button" class="back-to-main-button">
-        <img src="web/Content/arrow.png" alt="Back" class="back-arrow-icon"> <span class="back-button-text">Back</span>
-    </button>
-    <h1 class="my-servers-title">📑 My Servers</h1>
-
-    <div id="my-servers-body" class="my-servers-body"></div>
-
-    <button id="server-shop-button" class="server-shop-button">
-        Server Shop <img src="web/Content/touch.png" alt="icon" class="server-shop-icon">
-    </button>
-</div>
-
+<!-- Магазин серверов -->
 <div id="servers-shop" class="container servers-shop hidden">
     <button id="back-to-my-servers" class="back-to-my-servers">
-        <img src="web/Content/arrow.png" alt="Back" class="back-arrow-icon"> <span class="back-button-text">Back</span>
+        ← <span class="back-button-text">Back</span>
     </button>
     <h1 class="servers-shops-title">📑 Server Shop</h1>
+    <div id="servers-shop-body"></div>
+</div>
 
-    <div id="servers-shop-body" class="servers-shop-body"></div>
+<!-- Попап -->
+<div id="popup-module" class="popup hidden">
+    <div class="popup-content">
+        <span id="popup-close" class="popup-close">&times;</span>
+        <p>Вызываем этот попап в любое время.</p>
+        <button id="popup-refresh" class="popup-refresh">Refresh Page</button>
+    </div>
 </div>
 
 <script type="module" src="web/script.js"></script>
