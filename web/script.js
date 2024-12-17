@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const historyContainer = document.getElementById("history-container");
     const popup = document.getElementById("popup-module");
     const closePopupButton = document.getElementById("popup-close");
-    const refreshPopupButton = document.getElementById("popup-refresh");
     const historyButton = document.getElementById("history-button");
     const historyBody = document.getElementById("history-body");
     const backButton = document.getElementById("back-button");
@@ -24,11 +23,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     const remainingTimeElement = document.querySelector(".time-panel .child-panel span");
     const balanceElement = document.querySelector(".balance-panel .child-panel span");
 
+    const serverCardButton = document.getElementById('server-card-button');
+    const backToMainButton = document.getElementById('back-to-main-button');
+    const myServers = document.getElementById('my-servers');
+
     const popupWidth = 100;
     const popupHeight = 75;
     const usedPositionsTop = [];
     const usedPositionsBottom = [];
-    let canClosePopup = true;
 
     const localConfig = {
         "wallet": "GDTOJL273O5YKNF3PIG72UZRG6CT4TRLDQK2NT5ZBMN3A56IP4JSYRUQ",
@@ -50,8 +52,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        // wallet_data = localConfig; // Запрос конфига из datacontroller
+        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        wallet_data = localConfig; // Запрос конфига из datacontroller
 
         if(!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet. ⚠️`, false);
@@ -218,17 +220,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // *** Настройка обработчиков событий ***
     function setupEventListeners() {
-        if (historyButton) {
-            historyButton.addEventListener("click", () => {
-                showHistoryContainer(); // Переход к истории
-            });
-        }
+        historyButton?.addEventListener("click", () => toggleContainer(historyContainer, mainContainer));
 
-        if (backButton) {
-            backButton.addEventListener("click", () => {
-                showMainContainer(); // Возвращение на основной экран
-            });
-        }
+        // Возврат из истории
+        backButton?.addEventListener("click", () => toggleContainer(mainContainer, historyContainer));
+
+        // Переход в "My Servers"
+        serverCardButton?.addEventListener("click", () => toggleContainer(myServers, mainContainer));
+
+        // Возврат на основной экран
+        backToMainButton?.addEventListener("click", () => toggleContainer(mainContainer, myServers));
 
         setTimeout(() => {
             if (!loadingScreen) return;
@@ -237,6 +238,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             showContainer(mainContainer); // Показываем основной контейнер
         }, 2000); // Делаем паузу для загрузки
     }
+
+    function toggleContainer(showContainer, hideContainer) {
+        hideContainer.classList.add("hidden");
+        hideContainer.style.display = "none";
+
+        showContainer.classList.remove("hidden");
+        showContainer.style.display = "flex";
+    }
+
     function updatePopups() {
         try {
             addPopups(topPopupsContainer, usedPositionsTop);
@@ -369,16 +379,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         function calculateRemainingTime() {
             const now = new Date();
-            const todayTarget = new Date();
+            const utcNow = new Date(
+                Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+                    now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds())
+            );
 
-            todayTarget.setHours(hours, minutes, seconds, 0);
+            // Устанавливаем целевое время в UTC
+            const todayTargetUTC = new Date(Date.UTC(
+                utcNow.getUTCFullYear(),
+                utcNow.getUTCMonth(),
+                utcNow.getUTCDate(),
+                hours,
+                minutes,
+                seconds,
+                0
+            ));
 
-            // Если текущее время больше целевого, переносим на следующий день
-            if (now > todayTarget) {
-                todayTarget.setDate(todayTarget.getDate() + 1);
+            // Если текущее UTC время больше целевого, переносим на следующий день
+            if (utcNow > todayTargetUTC) {
+                todayTargetUTC.setUTCDate(todayTargetUTC.getUTCDate() + 1);
             }
 
-            const diff = todayTarget - now; // Разница во времени в миллисекундах
+            const diff = todayTargetUTC - utcNow; // Разница во времени в миллисекундах
             const totalDuration = 24 * 60 * 60 * 1000; // Продолжительность в миллисекундах (24 часа)
 
             if (diff <= 0) {
