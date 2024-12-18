@@ -215,7 +215,40 @@
     <h1 class="servers-shop-title">📑 Server Shop</h1>
 
     <!-- Контейнер для списка серверов -->
-    <div id="servers-shop-body" class="servers-shop-body"></div>
+    <div id="servers-shop-body" class="servers-shop-body">
+        <div class="shop-server-card">
+            <div class="server-icon-and-name">
+                <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
+                <h2 class="server-name">Server #1 <span class="server-flag">🇺🇸</span></h2>
+            </div>
+
+            <div class="server-stats">
+                <div class="power-stat">
+                    <div class="power-stat-container">
+                        <span class="power-stat-name">Power:</span>
+                        <span class="power-stat-value">700 W</span>
+                    </div>
+                </div>
+
+                <div class="hashrate-stat">
+                    <div class="hashrate-stat-container">
+                        <span class="hashrate-stat-name">Hashrate:</span>
+                        <span class="hashrate-stat-value">200 H/s</span>
+                    </div>
+                </div>
+
+                <div class="gpu-stat">
+                    <div class="gpu-stat-container">
+                        <span class="gpu-stat-name">GPU:</span>
+                        <span class="gpu-stat-value">4</span>
+                    </div>
+                </div>
+
+                <button class="buy-server-button" id="buy-server-button">Buy<img src="web/Content/touch.png" alt="icon" class="server-shop-icon"></button>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script type="module" src="web/script.js"></script>
