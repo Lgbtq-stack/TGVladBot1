@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const serverShopButton = document.getElementById("server-shop-button");
     const backToMyServerButton = document.getElementById("back-to-my-servers-button");
 
+    const buyButtons = document.querySelectorAll(".buy-new-server-button");
 
     const popupWidth = 100;
     const popupHeight = 75;
@@ -231,6 +232,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Возврат в "My Servers"
         backToMyServerButton?.addEventListener("click", () => toggleContainer(myServers, serverShop));
+
+        buyButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const serverId = button.getAttribute("data-server-id"); // Получаем ID сервера
+                const message = JSON.stringify({
+                    action: "buy_server",
+                    server_id: serverId
+                }); // Формируем сообщение для Telegram бота
+
+                // Отправляем данные через Telegram WebApp API
+                if (window.Telegram.WebApp) {
+                    Telegram.WebApp.sendData(message); // Отправка данных боту
+
+                    // Закрываем мини-приложение через 1 секунду после отправки
+                    setTimeout(() => {
+                        Telegram.WebApp.close();
+                    }, 1000);
+                } else {
+                    console.error("Telegram WebApp API is not available.");
+                }
+            });
+        });
 
         setTimeout(() => {
             if (!loadingScreen) return;
