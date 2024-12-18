@@ -206,46 +206,41 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function showContainer(container) {
         container.classList.remove("hidden");
-        container.style.display = "flex"; // Показываем контейнер
+        container.style.display = "flex";
     }
 
     function hideContainer(container) {
         container.classList.add("hidden");
-        container.style.display = "none"; // Скрываем контейнер
+        container.style.display = "none";
     }
 
     // *** Настройка обработчиков событий ***
     function setupEventListeners() {
         historyButton?.addEventListener("click", () => toggleContainer(historyContainer, mainContainer));
 
-        // Возврат из истории
         backButton?.addEventListener("click", () => toggleContainer(mainContainer, historyContainer));
 
-        // Переход в "My Servers"
         serverCardButton?.addEventListener("click", () => toggleContainer(myServers, mainContainer));
 
-        // Возврат на основной экран
         backToMainButton?.addEventListener("click", () => toggleContainer(mainContainer, myServers));
 
-        //Переход в "Server Shop"
         serverShopButton?.addEventListener("click", () => toggleContainer(serverShop, myServers));
 
-        // Возврат в "My Servers"
         backToMyServerButton?.addEventListener("click", () => toggleContainer(myServers, serverShop));
 
         buyButtons.forEach(button => {
             button.addEventListener("click", () => {
-                const serverId = button.getAttribute("data-server-id"); // Получаем ID сервера
+                const serverId = button.getAttribute("data-server-id");
                 const message = JSON.stringify({
                     action: "buy_server",
                     server_id: serverId
-                }); // Формируем сообщение для Telegram бота
+                });
 
-                // Отправляем данные через Telegram WebApp API
                 if (window.Telegram.WebApp) {
-                    Telegram.WebApp.sendData(message); // Отправка данных боту
+                    Telegram.WebApp.sendData(message);
 
-                    // Закрываем мини-приложение через 1 секунду после отправки
+                    Telegram.WebApp.sendData("close");
+
                     setTimeout(() => {
                         Telegram.WebApp.close();
                     }, 1000);
