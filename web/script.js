@@ -235,17 +235,19 @@ document.addEventListener("DOMContentLoaded", async function () {
                     action: "buy_server",
                     server_id: serverId
                 });
-                if (window.Telegram.WebApp) {
-                    Telegram.WebApp.sendData(message);
 
-                    Telegram.WebApp.sendData("close");
-
-                    setTimeout(() => {
-                        Telegram.WebApp.close();
-                    }, 1000);
-                } else {
-                    console.error("Telegram WebApp API is not available.");
-                }
+                showPopup(message, false);
+                // if (window.Telegram.WebApp) {
+                //     Telegram.WebApp.sendData(message);
+                //
+                //     Telegram.WebApp.sendData("close");
+                //
+                //     setTimeout(() => {
+                //         Telegram.WebApp.close();
+                //     }, 1000);
+                // } else {
+                //     console.error("Telegram WebApp API is not available.");
+                // }
             });
         });
 
