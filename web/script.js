@@ -25,7 +25,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const serverCardButton = document.getElementById('server-card-button');
     const backToMainButton = document.getElementById('back-to-main-button');
-    const myServers = document.getElementById('my-servers');
+    const myServers = document.getElementById("my-servers");
+    const serverShop = document.getElementById("servers-shop");
+
+    const serverShopButton = document.getElementById("server-shop-button");
+    const backToMyServerButton = document.getElementById("back-to-my-servers-button");
+
 
     const popupWidth = 100;
     const popupHeight = 75;
@@ -208,17 +213,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         container.style.display = "none"; // Скрываем контейнер
     }
 
-    // *** Переключение между контейнерами ***
-    function showMainContainer() {
-        hideContainer(historyContainer); // Скрываем контейнер истории
-        showContainer(mainContainer); // Показываем основной контейнер
-    }
-
-    function showHistoryContainer() {
-        hideContainer(mainContainer); // Скрываем основной контейнер
-        showContainer(historyContainer); // Показываем контейнер истории
-    }
-
     // *** Настройка обработчиков событий ***
     function setupEventListeners() {
         historyButton?.addEventListener("click", () => toggleContainer(historyContainer, mainContainer));
@@ -232,12 +226,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Возврат на основной экран
         backToMainButton?.addEventListener("click", () => toggleContainer(mainContainer, myServers));
 
+        //Переход в "Server Shop"
+        serverShopButton?.addEventListener("click", () => toggleContainer(serverShop, myServers));
+
+        // Возврат в "My Servers"
+        backToMyServerButton?.addEventListener("click", () => toggleContainer(myServers, serverShop));
+
         setTimeout(() => {
             if (!loadingScreen) return;
 
-            hideContainer(loadingScreen); // Скрываем экран загрузки
-            showContainer(mainContainer); // Показываем основной контейнер
-        }, 2000); // Делаем паузу для загрузки
+            hideContainer(loadingScreen);
+            showContainer(mainContainer);
+            hideContainer(myServers);
+            hideContainer(serverShop);
+
+        }, 2000);
     }
 
     function toggleContainer(showContainer, hideContainer) {

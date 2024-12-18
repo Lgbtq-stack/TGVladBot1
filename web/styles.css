@@ -611,8 +611,8 @@ html, body {
     color: #333;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Центрирует содержимое по вертикали */
-    white-space: nowrap; /* Запрещает перенос текста */
+    align-items: center;
+    white-space: nowrap;
     width: 150px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -621,80 +621,69 @@ html, body {
     margin-left: 10px;
 }
 
-/* Основной контейнер */
+
+/*My server*/
 .container.my-servers-page {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(90deg, #ffdf00 0%, #fff 50%, #faf9d2 100%);
     padding: 20px;
     position: relative;
+    overflow: visible;
+}
+
+.container.my-servers-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 400px;
+    background: linear-gradient(90deg, #ffdf00 0%, #fff 50%, #faf9d2 100%);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .container.my-servers-page::after {
     content: "";
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 50%;
-    background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 1) 100%
-    );
+    height: 400px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%);
+    z-index: 2;
     pointer-events: none;
-    z-index: 1;
 }
 
-/* Кнопка Back */
-.my-server-back-button {
-    display: flex;
-    align-items: center;
-    background: none;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.my-server-back-button img {
-    width: 20px;
-    margin-right: 8px;
-}
-
-/* Заголовок */
 .my-servers-title {
     font-size: 24px;
     font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
+    color: #000000;
+    margin-top: 60px;
+    position: relative;
+    z-index: 3;
 }
 
-/* Список серверов */
 .my-servers-body {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Автоматическое заполнение */
-    gap: 15px; /* Отступы между карточками */
-    justify-items: center; /* Центрирование карточек по горизонтали */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    justify-items: center;
+    position: relative;
     z-index: 3;
 }
 
 .my-server-card {
-    display: flex;
-    gap: 10px;
     align-items: center;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #fff; /* Белый фон для карточек */
-    width: 100%; /* Заполнение ячейки сетки */
-    max-width: 300px; /* Максимальная ширина карточки */
-    box-sizing: border-box; /* Включаем padding в ширину */
-    border: 1px solid #e0e0e0;
-
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(255, 206, 0, 0.64);
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: relative;
 }
+
 
 /* Иконка и название */
 .server-icon-and-name {
@@ -793,4 +782,30 @@ html, body {
 .server-shop-icon {
     width: 25px;
     height: 25px;
+}
+
+.container.servers-shop {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: relative;
+    overflow: auto;
+}
+
+/* Заголовок */
+.servers-shop-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 60px;
+    text-align: center;
+}
+
+/* Список серверов */
+.servers-shop-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    justify-items: center;
+    margin-top: 20px;
 }
