@@ -239,8 +239,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (window.Telegram.WebApp) {
                     Telegram.WebApp.sendData(message);
 
-                    Telegram.WebApp.sendData("close");
-
                     setTimeout(() => {
                         Telegram.WebApp.close();
                     }, 1000);
