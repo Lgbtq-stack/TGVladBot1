@@ -233,10 +233,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             button.addEventListener("click", () => {
                 const serverId = button.getAttribute("data-server-id");
                 const message = JSON.stringify({
-                    action: "buy_server",
-                    server_id: serverId,
-                    wallet: wallet_data.wallet,
-                    user_id: userId
+                    type: "miner",
+                    data: {
+                        action: "buy_server",
+                        server_id: serverId,
+                        wallet: wallet_data.wallet,
+                        user_id: userId
+                    }
                 });
 
                 tg.ready();
