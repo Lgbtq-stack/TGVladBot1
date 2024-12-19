@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     user_id: userId
                 });
 
-                showPopup("Transaction in progress. Please wait... and die", true);
+                showPopup("Transaction in progress. Please wait... and wait", true);
 
                 // Telegram.WebApp.sendData(message);
                 //
