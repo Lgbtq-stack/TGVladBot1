@@ -240,7 +240,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 });
 
                 try {
-                    showPopup("Transaction in progress. Please wait... and wait x3", true);
                     tg.ready();
                     const message = JSON.stringify({
                     action: "test_action",
@@ -248,6 +247,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         });
                     tg.sendData(message);
                     console.log("Данные отправлены:", message);
+                    showPopup(`Transaction in progress. Please wait... and wait x4,data: ${message}`, true);
 
                     // setTimeout(() => {
                     //     tg.close();
