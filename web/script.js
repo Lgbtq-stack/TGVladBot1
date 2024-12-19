@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
         wallet_data = localConfig; // Запрос конфига из datacontroller
 
-        if(!wallet_data.wallet || wallet_data.wallet.trim() === "") {
+        if (!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet. ⚠️`, false);
             return null;
         }
@@ -237,15 +237,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                 });
 
                 showPopup("Transaction in progress. Please wait...", true);
-                if (window.Telegram.WebApp) {
-                    Telegram.WebApp.sendData(message);
 
-                    setTimeout(() => {
-                        Telegram.WebApp.close();
-                    }, 1000);
-                } else {
-                    console.error("Telegram WebApp API is not available.");
-                }
+                Telegram.WebApp.sendData(message);
+
+                setTimeout(() => {
+                    Telegram.WebApp.close();
+                }, 1000);
+                
             });
         });
 
@@ -351,8 +349,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         } while (isOverlapping(position, usedPositions) && attempts < 100);
 
         // if (attempts < 100) {
-            usedPositions.push(position);
-            return position;
+        usedPositions.push(position);
+        return position;
         // } else {
         //     return null;
         // }
