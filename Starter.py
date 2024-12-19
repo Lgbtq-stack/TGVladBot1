@@ -1,14 +1,17 @@
 import asyncio
 import json
+import logging
 
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.enums import ContentType
 from aiogram.filters import Command
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo, WebAppData
 
 from Config import API_TOKEN, MINI_APP_URL
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
+
 
 @dp.message(Command("start"))
 async def start(message: types.Message):
@@ -18,30 +21,24 @@ async def start(message: types.Message):
             [InlineKeyboardButton(text="Open App", web_app=WebAppInfo(url=MINI_APP_URL))]]))
 
 
-@dp.callback_query_handler()
-async def handle_callback_query(callback_query: types.CallbackQuery):
-    try:
-        data = json.loads(callback_query.data)
-        action = data.get("action")
-        server_id = data.get("server_id")
+@dp.message(F.data)
+async def handle_all_messages(message: types.Message):
+    print(f"Тип сообщения: {message.content_type}, Данные: {message}")
+    await message.answer("Данные не из Web App.")
 
-        user_id = callback_query.from_user.id
+@dp.message(F.content_type == ContentType.WEB_APP_DATA)
+async def handle_web_app_data(message: types.Message):
+        data = message.web_app_data.data  # Данные из Web App
+        print(f"Полученные данные: {data}")
+        await message.answer(f"Получены данные из Web App: {data}")
 
-        await bot.answer_callback_query(callback_query.id, text="Данные получены!")
-
-        if action == "buy_server" and server_id:
-            await bot.send_message(user_id, f"Вы хотите купить сервер с ID: {server_id}")
-        else:
-            await bot.send_message(user_id, "Неверные данные. Попробуйте снова.")
-    except json.JSONDecodeError:
-        await bot.answer_callback_query(callback_query.id, text="Ошибка обработки данных.")
-        await bot.send_message(callback_query.from_user.id, "Ошибка обработки данных.")
 
 async def main():
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

@@ -238,21 +238,21 @@ document.addEventListener("DOMContentLoaded", async function () {
                     user_id: userId
                 });
 
-                // showPopup("Transaction in progress. Please wait... and wait", true);
+                console.log("Подготовка к отправке данных:", message);
 
-                // Убедитесь, что Web App готов
                 if (window.Telegram.WebApp) {
+                    console.log("Telegram Web App доступен.");
                     showPopup("Transaction in progress. Please wait... and wait x2", true);
                     window.Telegram.WebApp.ready();
-                    window.Telegram.WebApp.sendData(message); // Отправляем данные
+                    window.Telegram.WebApp.sendData(message);
+                    console.log("Данные отправлены:", message);
+
                     setTimeout(() => {
-                        window.Telegram.WebApp.close(); // Закрываем Web App
+                        window.Telegram.WebApp.close();
                     }, 500);
                 } else {
                     showPopup("Transaction in progress. Please wait... and wait x3", true);
-
                     console.error("Telegram Web App недоступен.");
-
                 }
             });
         });
