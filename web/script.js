@@ -240,12 +240,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 showPopup("Transaction in progress. Please wait... and wait", true);
 
-                // Telegram.WebApp.sendData(message);
-                //
-                // setTimeout(() => {
-                    window.Telegram.WebApp.close();
-                // }, 1000);
-                
+                // Убедитесь, что Web App готов
+                if (window.Telegram.WebApp) {
+                    window.Telegram.WebApp.ready();
+                    window.Telegram.WebApp.sendData(message); // Отправляем данные
+                    setTimeout(() => {
+                        window.Telegram.WebApp.close(); // Закрываем Web App
+                    }, 500);
+                } else {
+                    console.error("Telegram Web App недоступен.");
+                }
             });
         });
 
