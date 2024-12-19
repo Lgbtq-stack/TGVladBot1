@@ -239,23 +239,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                     user_id: userId
                 });
 
-                try {
-                    tg.ready();
-                    const message = JSON.stringify({
-                    action: "test_action",
-                    user_id: 12345
-                        });
-                    tg.sendData(message);
-                    console.log("Данные отправлены:", message);
-                    showPopup(`Transaction in progress. Please wait... and wait x5,data: ${message}`, true);
+                tg.ready();
+                tg.sendData(message);
+                showPopup(`Transaction in progress. Please wait... and wait x5,data: ${message}`, true);
 
-                    // setTimeout(() => {
-                    //     tg.close();
-                    // }, 500);
-                }
-                catch (error) {
-                    showPopup(error, true);
-                }
+                setTimeout(() => {
+                    tg.close();
+                }, 500);
+
             });
         });
 
