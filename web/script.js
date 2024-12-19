@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }, 2000);
     }
 
-    
+
     function toggleContainer(showContainer, hideContainer) {
         hideContainer.classList.add("hidden");
         hideContainer.style.display = "none";
