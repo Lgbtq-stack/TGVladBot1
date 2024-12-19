@@ -21,11 +21,6 @@ async def start(message: types.Message):
             [InlineKeyboardButton(text="Open App", web_app=WebAppInfo(url=MINI_APP_URL))]]))
 
 
-@dp.message(F.data)
-async def handle_all_messages(message: types.Message):
-    print(f"Тип сообщения: {message.content_type}, Данные: {message}")
-    await message.answer("Данные не из Web App.")
-
 @dp.message(F.content_type == ContentType.WEB_APP_DATA)
 async def handle_web_app_data(message: types.Message):
         data = message.web_app_data.data  # Данные из Web App
