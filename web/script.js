@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     wallet: wallet_data.wallet,
                     user_id: userId
                 });
-
+к
                 showPopup("Transaction in progress. Please wait... and wait x2", true);
                 window.Telegram.WebApp.ready();
                 window.Telegram.WebApp.sendData(message);

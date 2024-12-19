@@ -20,6 +20,10 @@ async def start(message: types.Message):
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="Open App", web_app=WebAppInfo(url=MINI_APP_URL))]]))
 
+@dp.message()
+async def debug_handler(message: types.Message):
+    print(f"Получено сообщение: {message}")
+    await message.answer("Сообщение получено!")
 
 @dp.message(F.content_type == ContentType.WEB_APP_DATA)
 async def handle_web_app_data(message: types.Message):
@@ -27,10 +31,8 @@ async def handle_web_app_data(message: types.Message):
         print(f"Полученные данные: {data}")
         await message.answer(f"Получены данные из Web App: {data}")
 
-
 async def main():
     await dp.start_polling(bot)
-
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
