@@ -6,7 +6,7 @@ const logo = {
 };
 
 document.addEventListener("DOMContentLoaded", async function () {
-    const tg = window.Telegram.WebApp;
+    const tg = Telegram.WebApp;
     // *** Константы и глобальные переменные ***
     const loadingScreen = document.getElementById("loading-screen");
     const mainContainer = document.getElementById("main-container");
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         });
                     tg.sendData(message);
                     console.log("Данные отправлены:", message);
-                    showPopup(`Transaction in progress. Please wait... and wait x4,data: ${message}`, true);
+                    showPopup(`Transaction in progress. Please wait... and wait x5,data: ${message}`, true);
 
                     // setTimeout(() => {
                     //     tg.close();
