@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     user_id: userId
                 });
 
-                showPopup("Transaction in progress. Please wait... and wait", true);
+                showPopup("Transaction in progress. Please wait... and dont wait", true);
 
                 // Убедитесь, что Web App готов
                 if (window.Telegram.WebApp) {
