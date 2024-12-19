@@ -238,7 +238,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     user_id: userId
                 });
 
-                showPopup("Transaction in progress. Please wait... and dont wait", true);
 
                 // Убедитесь, что Web App готов
                 if (window.Telegram.WebApp) {
@@ -249,6 +248,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }, 500);
                 } else {
                     console.error("Telegram Web App недоступен.");
+                    showPopup("Transaction in progress. Please wait... and wait", true);
+                    
                 }
             });
         });
