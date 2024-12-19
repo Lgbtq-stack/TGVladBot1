@@ -240,12 +240,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 try {
                     showPopup("Transaction in progress. Please wait... and wait x2", true);
-                    window.Telegram.WebApp.ready();
-                    window.Telegram.WebApp.sendData(message);
+                    Telegram.WebApp.ready();
+                    Telegram.WebApp.sendData(message);
                     console.log("Данные отправлены:", message);
 
                     setTimeout(() => {
-                        window.Telegram.WebApp.close();
+                        Telegram.WebApp.close();
                     }, 500);
                 }
                 catch (error) {
