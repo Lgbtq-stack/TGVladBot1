@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 try {
                     showPopup("Transaction in progress. Please wait... and wait x2", true);
                     tg.ready();
-                    tg.sendData(message);
+                    tg.sendData("hello");
                     console.log("Данные отправлены:", message);
 
                     // setTimeout(() => {
