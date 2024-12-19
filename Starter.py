@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
@@ -17,17 +18,24 @@ async def start(message: types.Message):
             [InlineKeyboardButton(text="Open App", web_app=WebAppInfo(url=MINI_APP_URL))]]))
 
 
-@dp.callback_query()
+@dp.callback_query_handler()
 async def handle_callback_query(callback_query: types.CallbackQuery):
-    data = callback_query.data
-    user_id = callback_query.from_user.id
+    try:
+        data = json.loads(callback_query.data)
+        action = data.get("action")
+        server_id = data.get("server_id")
 
-    await bot.answer_callback_query(callback_query.id)
+        user_id = callback_query.from_user.id
 
-    print(f"Получено сообщение от {user_id}: {data}")
+        await bot.answer_callback_query(callback_query.id, text="Данные получены!")
 
-    await bot.send_message(user_id, f"Ваши данные: {data}")
-
+        if action == "buy_server" and server_id:
+            await bot.send_message(user_id, f"Вы хотите купить сервер с ID: {server_id}")
+        else:
+            await bot.send_message(user_id, "Неверные данные. Попробуйте снова.")
+    except json.JSONDecodeError:
+        await bot.answer_callback_query(callback_query.id, text="Ошибка обработки данных.")
+        await bot.send_message(callback_query.from_user.id, "Ошибка обработки данных.")
 
 async def main():
     await dp.start_polling(bot)
