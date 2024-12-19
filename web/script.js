@@ -236,6 +236,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     server_id: serverId
                 });
 
+                showPopup("Transaction in progress. Please wait...", true);
                 if (window.Telegram.WebApp) {
                     Telegram.WebApp.sendData(message);
 
