@@ -247,6 +247,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         });
 
+        
         setTimeout(() => {
             if (!loadingScreen) return;
 
