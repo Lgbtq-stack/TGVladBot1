@@ -233,16 +233,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const serverId = button.getAttribute("data-server-id");
                 const message = JSON.stringify({
                     action: "buy_server",
-                    server_id: serverId
+                    server_id: serverId,
+                    wallet: wallet_data.wallet,
+                    user_id: userId
                 });
 
                 showPopup("Transaction in progress. Please wait...", true);
 
-                Telegram.WebApp.sendData(message);
-
-                setTimeout(() => {
+                // Telegram.WebApp.sendData(message);
+                //
+                // setTimeout(() => {
                     Telegram.WebApp.close();
-                }, 1000);
+                // }, 1000);
                 
             });
         });
