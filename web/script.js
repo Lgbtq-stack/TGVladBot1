@@ -245,9 +245,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                     tg.sendData(message);
                     console.log("Данные отправлены:", message);
 
-                    setTimeout(() => {
-                        tg.close();
-                    }, 500);
+                    // setTimeout(() => {
+                    //     tg.close();
+                    // }, 500);
                 }
                 catch (error) {
                     showPopup(error, true);
