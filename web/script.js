@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 // Telegram.WebApp.sendData(message);
                 //
                 // setTimeout(() => {
-                    Telegram.WebApp.close();
+                    window.Telegram.WebApp.close();
                 // }, 1000);
                 
             });
