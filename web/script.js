@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 });
 
                 try {
-                    showPopup("Transaction in progress. Please wait... and wait x2", true);
+                    showPopup("Transaction in progress. Please wait... and wait x3", true);
                     tg.ready();
                     const message = JSON.stringify({
                     action: "test_action",
