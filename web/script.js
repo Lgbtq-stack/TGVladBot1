@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 console.log("Подготовка к отправке данных:", message);
 
-                if (window.Telegram.WebApp) {
+                // if (window.Telegram.WebApp) {
                     console.log("Telegram Web App доступен.");
                     showPopup("Transaction in progress. Please wait... and wait x2", true);
                     window.Telegram.WebApp.ready();
@@ -250,10 +250,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                     setTimeout(() => {
                         window.Telegram.WebApp.close();
                     }, 500);
-                } else {
-                    showPopup("Transaction in progress. Please wait... and wait x3", true);
-                    console.error("Telegram Web App недоступен.");
-                }
+                // } else {
+                //     showPopup("Transaction in progress. Please wait... and wait x3", true);
+                //     console.error("Telegram Web App недоступен.");
+                // }
             });
         });
 
