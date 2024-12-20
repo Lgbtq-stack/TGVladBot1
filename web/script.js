@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        wallet_data = localConfig; // Запрос конфига из datacontroller
+        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        // wallet_data = localConfig; // Запрос конфига из datacontroller
 
         if (!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet. ⚠️`, false);
@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             return null;
         }
 
-        // wallet_data = localConfig; // Запрос локального конфига
     } catch (error) {
         console.error("Ошибка при получении конфигурации:", error);
         showPopup(`Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
