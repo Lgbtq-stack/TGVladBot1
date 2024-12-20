@@ -773,7 +773,8 @@ html, body {
 .power-stat-container,
 .gpu-stat-container,
 .country-stat-container,
-.ram-stat-container{
+.ram-stat-container,
+.status-stat-container{
     background: #ffeb3b;
     padding: 10px 10px;
     /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
@@ -781,7 +782,6 @@ html, body {
 
 .hashrate-stat-container,
 .gpu-count-stat-container,
-.status-stat-container,
 .price-stat-container {
     padding: 0 10px;
 }
