@@ -506,7 +506,6 @@ html, body {
     font-size: 14px;
     color: rgba(102, 102, 102, 0.75);
     text-align: left;
-    /*white-space: nowrap;*/
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: pre-line;
@@ -622,7 +621,6 @@ html, body {
 }
 
 
-/*My server*/
 .container.my-servers-page {
     display: flex;
     flex-direction: column;
@@ -664,7 +662,6 @@ html, body {
     z-index: 3;
 }
 
-/* Dashboard контейнер */
 .dashboard-my-server {
     margin-bottom: 20px;
     padding: 15px;
@@ -674,7 +671,6 @@ html, body {
     z-index: 4;
 }
 
-/* Стиль для заголовков в Dashboard */
 .dashboard-stats div {
     margin-bottom: 15px;
 }
@@ -685,7 +681,6 @@ html, body {
     color: #333;
 }
 
-/* Прогресс-бары */
 .total-power-progress-bar,
 .total-hashrate-progress-bar,
 .total-workload-progress-bar {
@@ -704,20 +699,19 @@ html, body {
     border-radius: 4px;
 }
 
-/* Цвета прогресс-баров */
 .total-power-progress {
-    background-color: #4caf50; /* Зеленый */
-    width: 70%; /* Пример заполнения */
+    background-color: #4caf50;
+    width: 70%;
 }
 
 .total-hashrate-progress {
-    background-color: #2196f3; /* Синий */
-    width: 70%; /* Пример заполнения */
+    background-color: #2196f3;
+    width: 70%;
 }
 
 .total-workload-progress {
-    background-color: #ff9800; /* Оранжевый */
-    width: 50%; /* Пример заполнения */
+    background-color: #ff9800;
+    width: 50%;
 }
 
 .my-servers-body {
@@ -913,6 +907,7 @@ html, body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     position: relative;
+    margin-bottom: 10px;
 }
 
 .buy-new-server-button {
