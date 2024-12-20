@@ -6,6 +6,9 @@ const logo = {
 };
 
 document.addEventListener("DOMContentLoaded", async function () {
+    Telegram.WebApp.expand();
+    Telegram.WebApp.lockOrientation("portrait");
+
     const tg = Telegram.WebApp;
     // *** Константы и глобальные переменные ***
     const loadingScreen = document.getElementById("loading-screen");
