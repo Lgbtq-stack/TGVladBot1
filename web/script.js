@@ -258,9 +258,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!loadingScreen) return;
 
             hideContainer(loadingScreen);
-            hideContainer(mainContainer);
+            showContainer(mainContainer);
             hideContainer(myServers);
-            showContainer(serverShop);
+            hideContainer(serverShop);
 
         }, 2000);
     }
