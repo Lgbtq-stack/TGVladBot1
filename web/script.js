@@ -7,7 +7,6 @@ const logo = {
 
 document.addEventListener("DOMContentLoaded", async function () {
     Telegram.WebApp.expand();
-    Telegram.WebApp.lockOrientation("portrait");
 
     const tg = Telegram.WebApp;
     // *** Константы и глобальные переменные ***
@@ -102,6 +101,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     initializeLottieAnimations();
     startUpdatingProgress()
     initializeDashboardFromItems();
+    await loadServerCards();
+    await setupBuyButtons();
 
     // *** Функции ***
 
@@ -236,31 +237,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         serverShopButton?.addEventListener("click", () => toggleContainer(serverShop, myServers));
 
         backToMyServerButton?.addEventListener("click", () => toggleContainer(myServers, serverShop));
-
-        buyButtons.forEach(button => {
-            button.addEventListener("click", () => {
-                const serverId = button.getAttribute("data-server-id");
-                const message = JSON.stringify({
-                    type: "miner",
-                    data: {
-                        action: "buy_server",
-                        server_id: serverId,
-                        wallet: wallet_data.wallet,
-                        user_id: userId
-                    }
-                });
-
-                tg.ready();
-                tg.sendData(message);
-                showPopup(`Transaction in progress. Please wait... and wait x5,data: ${message}`, true);
-
-                setTimeout(() => {
-                    tg.close();
-                }, 500);
-
-            });
-        });
-
 
         setTimeout(() => {
             if (!loadingScreen) return;
@@ -574,5 +550,199 @@ document.addEventListener("DOMContentLoaded", async function () {
             updateServerCardProgress();
             updateDashboardProgress();
         }, timeToResfreshProgressBar);
+    }
+
+    async function loadServerCards() {
+        const apiUrl = "https://miniappserv.com/api/servers/data";
+
+        try {
+            const response = await fetch(apiUrl);
+            const servers = await response.json();
+
+            console.log("Полученные данные из API:", servers);
+
+            const serversShopBody = document.getElementById('servers-shop-body');
+            serversShopBody.innerHTML = '';
+
+            Object.keys(servers).forEach((serverId, index) => {
+                const server = servers[serverId];
+                const cardHtml = `
+                <div class="shop-server-card">
+                    <div class="server-icon-and-name">
+                        <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
+                        <h2 class="server-name">Server #${index + 1}</h2>
+                    </div>
+                    <div class="server-stats">
+                        <div class="power-stat">
+                            <div class="power-stat-container">
+                                <span class="power-stat-name">Power:</span>
+                                <span class="power-stat-value">${server.specs.power} W</span>
+                            </div>
+                        </div>
+                        <div class="hashrate-stat">
+                            <div class="hashrate-stat-container">
+                                <span class="hashrate-stat-name">Hashrate:</span>
+                                <span class="hashrate-stat-value">${server.specs.hashrate} H/s</span>
+                            </div>
+                        </div>
+                        <div class="gpu-stat">
+                            <div class="gpu-stat-container">
+                                <span class="gpu-stat-name">GPU:</span>
+                                <span class="gpu-stat-value">${server.specs.gpu}</span>
+                            </div>
+                        </div>
+                        <div class="gpu-count-stat">
+                            <div class="gpu-count-stat-container">
+                                <span class="gpu-count-stat-name">GPU Count:</span>
+                                <span class="gpu-count-stat-value">${server.specs.gpu_count}</span>
+                            </div>
+                        </div>
+                        <div class="ram-stat">
+                            <div class="ram-stat-container">
+                                <span class="ram-stat-name">RAM:</span>
+                                <span class="ram-stat-value">${server.specs.ram} GB</span>
+                            </div>
+                        </div>
+                        <div class="price-stat">
+                            <div class="price-stat-container">
+                                <span class="price-stat-name">Price:</span>
+                                <span class="price-stat-value">${server.price} USD</span>
+                            </div>
+                        </div>
+                        <div class="country-stat">
+                            <div class="country-stat-container">
+                                <span class="country-stat-name"> Region:</span>
+                                <span class="country-stat-value">${getFlag(server.country)}</span>
+                            </div>
+                        </div>
+                        <button class="buy-new-server-button"
+                                id="buy-new-server-button-${index + 1}"
+                                data-server-id="${serverId}">Buy<img src="web/Content/touch.png" alt="icon" class="buy-server-icon"></button>
+                    </div>
+                </div>
+            `;
+                serversShopBody.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        } catch (error) {
+            console.error("Ошибка загрузки данных с API:", error);
+        }
+    }
+
+    async function setupBuyButtons() {
+        const apiUrl = "https://miniappserv.com/api/servers/data";
+
+        try {
+            const response = await fetch(apiUrl);
+            const servers = await response.json();
+
+            const buyButtons = document.querySelectorAll(".buy-new-server-button");
+            buyButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const serverKey = button.getAttribute("data-server-id");
+
+                    if (!servers[serverKey]) {
+                        console.error(`Server ID ${serverKey} не найден в конфиге.`);
+                        showPopup("Ошибка: сервер не найден в конфигурации.", false);
+                        return;
+                    }
+
+                    const message = JSON.stringify({
+                        type: "miner",
+                        data: {
+                            server_id: serverKey,
+                            wallet: wallet_data.wallet,
+                            user_id: userId
+                        }
+                    });
+
+                    tg.ready();
+                    tg.sendData(message);
+
+                    showPopup(`Transaction in progress. Please wait... and wait x5, data: ${message}`, true);
+
+                    setTimeout(() => {
+                        tg.close();
+                    }, 500);
+                });
+            });
+        } catch (error) {
+            console.error("Ошибка загрузки данных с API:", error);
+            showPopup("Ошибка загрузки конфигурации серверов.", false);
+        }
+    }
+
+    function getFlag(countryCode) {
+        const flags = {
+            "RU": "🇷🇺", // Россия
+            "US": "🇺🇸", // США
+            "CN": "🇨🇳", // Китай
+            "JP": "🇯🇵", // Япония
+            "DE": "🇩🇪", // Германия
+            "FR": "🇫🇷", // Франция
+            "GB": "🇬🇧", // Великобритания
+            "IT": "🇮🇹", // Италия
+            "IN": "🇮🇳", // Индия
+            "BR": "🇧🇷", // Бразилия
+            "CA": "🇨🇦", // Канада
+            "AU": "🇦🇺", // Австралия
+            "KR": "🇰🇷", // Южная Корея
+            "ES": "🇪🇸", // Испания
+            "SE": "🇸🇪", // Швеция
+            "CH": "🇨🇭", // Швейцария
+            "MX": "🇲🇽", // Мексика
+            "NL": "🇳🇱", // Нидерланды
+            "AR": "🇦🇷", // Аргентина
+            "ZA": "🇿🇦", // Южная Африка
+            "PL": "🇵🇱", // Польша
+            "TR": "🇹🇷", // Турция
+            "ID": "🇮🇩", // Индонезия
+            "SG": "🇸🇬", // Сингапур
+            "MY": "🇲🇾", // Малайзия
+            "PH": "🇵🇭", // Филиппины
+            "TH": "🇹🇭", // Таиланд
+            "EG": "🇪🇬", // Египет
+            "SA": "🇸🇦", // Саудовская Аравия
+            "NG": "🇳🇬", // Нигерия
+            "KE": "🇰🇪", // Кения
+            "VN": "🇻🇳", // Вьетнам
+            "HK": "🇭🇰", // Гонконг
+            "TW": "🇹🇼", // Тайвань
+            "IL": "🇮🇱", // Израиль
+            "BE": "🇧🇪", // Бельгия
+            "AT": "🇦🇹", // Австрия
+            "NO": "🇳🇴", // Норвегия
+            "FI": "🇫🇮", // Финляндия
+            "DK": "🇩🇰", // Дания
+            "IE": "🇮🇪", // Ирландия
+            "PT": "🇵🇹", // Португалия
+            "CZ": "🇨🇿", // Чехия
+            "HU": "🇭🇺", // Венгрия
+            "RO": "🇷🇴", // Румыния
+            "GR": "🇬🇷", // Греция
+            "SK": "🇸🇰", // Словакия
+            "BG": "🇧🇬", // Болгария
+            "UA": "🇺🇦", // Украина
+            "BY": "🇧🇾", // Беларусь
+            "KZ": "🇰🇿", // Казахстан
+            "PK": "🇵🇰", // Пакистан
+            "BD": "🇧🇩", // Бангладеш
+            "IR": "🇮🇷", // Иран
+            "IQ": "🇮🇶", // Ирак
+            "SY": "🇸🇾", // Сирия
+            "AE": "🇦🇪", // ОАЭ
+            "QA": "🇶🇦", // Катар
+            "KW": "🇰🇼", // Кувейт
+            "OM": "🇴🇲", // Оман
+            "BH": "🇧🇭", // Бахрейн
+            "LB": "🇱🇧", // Ливан
+            "JO": "🇯🇴", // Иордания
+            "CL": "🇨🇱", // Чили
+            "PE": "🇵🇪", // Перу
+            "CO": "🇨🇴", // Колумбия
+            "VE": "🇻🇪", // Венесуэла
+            "UY": "🇺🇾", // Уругвай
+        };
+
+        return flags[countryCode] || "🏳️";
     }
 });
