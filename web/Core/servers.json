@@ -1,0 +1,113 @@
+{
+  "h200p700r16g8": {
+    "specs": {
+      "power": 700,
+      "hashrate": 200,
+      "ram": 16,
+      "gpu": 8,
+      "gpu_count": 1
+    },
+    "price": 1000,
+    "country": "RU"
+  },
+    "h300p800r32g16": {
+        "specs": {
+        "power": 800,
+        "hashrate": 300,
+        "ram": 32,
+        "gpu": 16,
+        "gpu_count": 2
+        },
+        "price": 1500,
+        "country": "RU"
+    },
+    "h400p900r64g32": {
+        "specs": {
+        "power": 900,
+        "hashrate": 400,
+        "ram": 64,
+        "gpu": 32,
+        "gpu_count": 4
+        },
+        "price": 2000,
+        "country": "RU"
+    },
+    "h500p1000r128g64": {
+        "specs": {
+        "power": 1000,
+        "hashrate": 500,
+        "ram": 128,
+        "gpu": 64,
+        "gpu_count": 8
+        },
+        "price": 2500,
+        "country": "RU"
+    },
+    "h600p1100r256g128": {
+        "specs": {
+        "power": 1100,
+        "hashrate": 600,
+        "ram": 256,
+        "gpu": 128,
+        "gpu_count": 16
+        },
+        "price": 3000,
+        "country": "RU"
+    },
+    "h700p1200r512g256": {
+        "specs": {
+        "power": 1200,
+        "hashrate": 700,
+        "ram": 512,
+        "gpu": 256,
+        "gpu_count": 32
+        },
+        "price": 3500,
+        "country": "RU"
+    },
+    "h800p1300r1024g512": {
+        "specs": {
+        "power": 1300,
+        "hashrate": 800,
+        "ram": 1024,
+        "gpu": 512,
+        "gpu_count": 64
+        },
+        "price": 4000,
+        "country": "RU"
+    },
+    "h900p1400r2048g1024": {
+        "specs": {
+        "power": 1400,
+        "hashrate": 900,
+        "ram": 2048,
+        "gpu": 1024,
+        "gpu_count": 128
+        },
+        "price": 4500,
+        "country": "RU"
+    },
+    "h1000p1500r4096g2048": {
+        "specs": {
+        "power": 1500,
+        "hashrate": 1000,
+        "ram": 4096,
+        "gpu": 2048,
+        "gpu_count": 256
+        },
+        "price": 5000,
+        "country": "RU"
+    },
+    "h1100p1600r8192g4096": {
+        "specs": {
+        "power": 1600,
+        "hashrate": 1100,
+        "ram": 8192,
+        "gpu": 4096,
+        "gpu_count": 512
+        },
+        "price": 5500,
+        "country": "RU"
+    },
+}
+

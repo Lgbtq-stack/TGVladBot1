@@ -15,6 +15,18 @@ app.get('/', (req, res) => {
 });
 
 
+app.get('/api/servers/data', async (req, res) => {
+    // Получаем данные серверов из фаила servers.json
+    try {
+        const servers = JSON.parse(fs.readFileSync('servers.json'));
+        res.json(servers);
+    } catch (err) {
+        console.error('Error reading servers.json:', err);
+        res.status(500).json({error: 'Server error'});
+    }
+});
+
+
 // Обработчик для получения активного кошелька по user_id
 app.get('/api/wallets/active/:user_id', async (req, res) => {
     const {user_id} = req.params;
