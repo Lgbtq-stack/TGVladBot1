@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const tg = Telegram.WebApp;
     // *** Константы и глобальные переменные ***
+
+    const timeToResfreshProgressBar = 2000;
+
     const loadingScreen = document.getElementById("loading-screen");
     const mainContainer = document.getElementById("main-container");
     const historyContainer = document.getElementById("history-container");
@@ -97,6 +100,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     animateDots();
     startDailyCountdown(targetTimeConfig);
     initializeLottieAnimations();
+    startUpdatingProgress()
+    initializeDashboardFromItems();
 
     // *** Функции ***
 
@@ -497,5 +502,77 @@ document.addEventListener("DOMContentLoaded", async function () {
                 path: "web/Content/Loading_Animation.json",
             });
         }
+    }
+
+    function getRandomValue(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function updateDashboardProgress() {
+        const totalPowerProgress = document.querySelector('.total-power-progress');
+        const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
+        const totalWorkloadProgress = document.querySelector('.total-workload-progress');
+
+        const newPowerProgress = getRandomValue(90, 100);
+        const newHashrateProgress = getRandomValue(90, 100);
+        const newWorkloadProgress = getRandomValue(90, 100);
+
+        totalPowerProgress.style.width = `${newPowerProgress}%`;
+        totalHashrateProgress.style.width = `${newHashrateProgress}%`;
+        totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+    }
+
+    function updateServerCardProgress() {
+        const serverCards = document.querySelectorAll('.my-server-card');
+
+        serverCards.forEach(card => {
+            const powerProgress = card.querySelector('.power-progress');
+            const hashrateProgress = card.querySelector('.hashrate-progress');
+            const workloadProgress = card.querySelector('.status-progress');
+
+            const newPowerProgress = getRandomValue(90, 100);
+            const newHashrateProgress = getRandomValue(90, 100);
+            const newWorkloadProgress = getRandomValue(90, 80);
+            const workloadValue = card.querySelector('.status-stat-value');
+
+            powerProgress.style.width = `${newPowerProgress}%`;
+            hashrateProgress.style.width = `${newHashrateProgress}%`;
+            workloadProgress.style.width = `${newWorkloadProgress}%`;
+
+            workloadValue.textContent = `${newWorkloadProgress.toFixed(0)} %`;
+        });
+    }
+
+    function initializeDashboardFromItems() {
+        const serverCards = document.querySelectorAll('.my-server-card');
+
+        let totalPower = 0;
+        let toalHashrate = 0;
+        let totalWorkload = 0;
+
+        serverCards.forEach(card => {
+            const powerValue = parseInt(card.querySelector('.power-stat-value').textContent);
+            const hashrateValue = parseInt(card.querySelector('.hashrate-stat-value').textContent);
+            const workloadValue = parseInt(card.querySelector('.status-stat-value').textContent);
+            totalPower += powerValue;
+            toalHashrate += hashrateValue;
+            totalWorkload += workloadValue;
+        });
+
+        const dashboardPowerValue = document.querySelector('.total-power-value');
+        const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+        const dashboardWorkloadValue = document.querySelector('.total-workload-value');
+
+        dashboardPowerValue.textContent = `${totalPower} W`;
+        dashboardHashrateValue.textContent = `${toalHashrate} H/s`;
+        dashboardWorkloadValue.textContent = `${totalWorkload} %`;
+    }
+
+
+    function startUpdatingProgress() {
+        setInterval(() => {
+            updateServerCardProgress();
+            updateDashboardProgress();
+        }, timeToResfreshProgressBar);
     }
 });

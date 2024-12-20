@@ -773,7 +773,8 @@ html, body {
 .power-stat-container,
 .hashrate-stat-container,
 .status-stat-container,
-.gpu-stat-container{
+.gpu-stat-container,
+.ram-stat-container {
     background: #ffeb3b;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -782,7 +783,8 @@ html, body {
 .power-stat-name,
 .hashrate-stat-name,
 .status-stat-name,
-.gpu-stat-name{
+.gpu-stat-name,
+.ram-stat-name {
     font-weight: bold;
     color: #333;
 }
@@ -911,10 +913,17 @@ html, body {
     border-radius: 10px;
     font-size: 18px;
     font-weight: bold;
-    text-align: center;
     color: #333;
     cursor: pointer;
     width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 3;
+    justify-content: center;
+}
+
+.buy-server-icon {
+    width: 25px;
+    height: 25px;
+    transform: translateY(25%);
+
 }
