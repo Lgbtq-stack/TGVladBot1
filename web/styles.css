@@ -771,20 +771,29 @@ html, body {
 
 /* Стиль для статов */
 .power-stat-container,
-.hashrate-stat-container,
-.status-stat-container,
 .gpu-stat-container,
-.ram-stat-container {
+.country-stat-container,
+.ram-stat-container{
     background: #ffeb3b;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 10px;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+}
+
+.hashrate-stat-container,
+.gpu-count-stat-container,
+.status-stat-container,
+.price-stat-container {
+    padding: 0 10px;
 }
 
 .power-stat-name,
 .hashrate-stat-name,
 .status-stat-name,
 .gpu-stat-name,
-.ram-stat-name {
+.gpu-count-stat-name,
+.ram-stat-name,
+.price-stat-name,
+.country-stat-name {
     font-weight: bold;
     color: #333;
 }
