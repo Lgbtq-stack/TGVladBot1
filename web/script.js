@@ -648,16 +648,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const message = JSON.stringify({
                         type: "miner",
                         data: {
+                            article: serverData[serverKey]?.name,
                             server_id: serverKey,
                             wallet: wallet_data.wallet,
-                            user_id: userId
+                            user_id: userId,
                         }
                     });
 
                     tg.ready();
                     tg.sendData(message);
 
-                    showPopup(`Transaction in progress. Please wait... and wait x5, data: ${message}`, true);
+                    showPopup(`${message} Transaction in progress. You will be redirected to Bot so your purchase can be processed! `, true);
 
                     setTimeout(() => {
                         tg.close();
