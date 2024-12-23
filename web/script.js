@@ -640,8 +640,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const serverKey = button.getAttribute("data-server-id");
 
                     if (!servers[serverKey]) {
-                        console.error(`Server ID ${serverKey} не найден в конфиге.`);
-                        showPopup("Ошибка: сервер не найден в конфигурации.", false);
+                        showPopup("Shop is busy. 🛠", false);
                         return;
                     }
 
@@ -658,7 +657,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     tg.ready();
                     tg.sendData(message);
 
-                    showPopup(`Transaction in progress. You will be redirected to Bot so your purchase can be processed!`, true);
+                    showPopup(`Transaction in progress. You will be redirected to Bot so your purchase can be processed!🔄`, true);
 
                     setTimeout(() => {
                         tg.close();
@@ -667,7 +666,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         } catch (error) {
             console.error("Ошибка загрузки данных с API:", error);
-            showPopup("Ошибка загрузки конфигурации серверов.", false);
+            showPopup("Please close your minning account and open it up again to get the your information UpToDate. 🛠", false);
         }
     }
 
