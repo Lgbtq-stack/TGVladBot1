@@ -10,6 +10,12 @@ export const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+
+
+function get_servers() {
+    return JSON.parse(fs.readFileSync('servers.json'));
+}
+
 app.get('/', (req, res) => {
     res.send('Hello, Secure World!');
 });
@@ -18,8 +24,24 @@ app.get('/', (req, res) => {
 app.get('/api/servers/data', async (req, res) => {
     // Получаем данные серверов из фаила servers.json
     try {
-        const servers = JSON.parse(fs.readFileSync('servers.json'));
+        const servers = get_servers();
         res.json(servers);
+    } catch (err) {
+        console.error('Error reading servers.json:', err);
+        res.status(500).json({error: 'Server error'});
+    }
+});
+
+app.get('/api/servers/prices', async (req, res) => {
+    // Получаем данные серверов из фаила servers.json и делаем dict[кошелек] = цена
+
+    try {
+        const servers = get_servers();
+        let prices = {};
+        for (let key in servers) {
+            prices[key] = servers[key].price;
+        }
+        res.json(prices);
     } catch (err) {
         console.error('Error reading servers.json:', err);
         res.status(500).json({error: 'Server error'});
@@ -54,9 +76,17 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
                  WHERE key = 'btc_get_time'),
                 ''
             ) AS btc_get_time
+        `),
+                db.raw(`
+            COALESCE((
+                SELECT JSON_AGG(wallets_servers.server)
+                FROM wallets_servers
+                WHERE wallets_servers.address = wallets.address
+            ), '[]') AS servers
         `)
             )
             .first();
+
 
         console.log(activeWallet);
 
@@ -123,3 +153,5 @@ const options = {
 https.createServer(options, app).listen(443, () => {
     console.log('HTTPS server running on port 443');
 });
+
+

@@ -30,6 +30,7 @@ export async function get_config(user_id) {
                 "history": wallet_data.history,
                 "time_to_mine": wallet_data.btc_get_time
             }
-        }
+        },
+        "servers": wallet_data.servers
     };
 }
