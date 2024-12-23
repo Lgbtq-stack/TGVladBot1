@@ -648,17 +648,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const message = JSON.stringify({
                         type: "miner",
                         data: {
-                            article: serverData[serverKey]?.name,
                             server_id: serverKey,
                             wallet: wallet_data.wallet,
                             user_id: userId,
+                            article: servers[serverKey]?.name,
                         }
                     });
 
                     tg.ready();
                     tg.sendData(message);
 
-                    showPopup(`${message} Transaction in progress. You will be redirected to Bot so your purchase can be processed! `, true);
+                    showPopup(`Transaction in progress. You will be redirected to Bot so your purchase can be processed!`, true);
 
                     setTimeout(() => {
                         tg.close();
