@@ -56,7 +56,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 },
                 "time_to_mine": "20:00:00"
             }
-        }
+        },
+        "servers": ["h200p700r16g8", "h300p800r32g16", "h1100p1600r8192g4096"]
     };
 
     const userId = getUserIdFromURL();
@@ -99,11 +100,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     startDailyCountdown(targetTimeConfig);
     initializeLottieAnimations();
     startUpdatingProgress()
-    initializeDashboardFromItems();
-    await loadServerCards();
+    await loadShopServerCards();
+    await loadServers();
     await setupBuyButtons();
-
-    // *** Функции ***
+    initializeDashboardFromItems();
 
     function getUserIdFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -483,19 +483,32 @@ document.addEventListener("DOMContentLoaded", async function () {
         return Math.random() * (max - min) + min;
     }
 
+
     function updateDashboardProgress() {
-        const totalPowerProgress = document.querySelector('.total-power-progress');
-        const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
-        const totalWorkloadProgress = document.querySelector('.total-workload-progress');
+    const totalPowerProgress = document.querySelector('.total-power-progress');
+    const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
+    const totalWorkloadProgress = document.querySelector('.total-workload-progress');
 
-        const newPowerProgress = getRandomValue(90, 100);
-        const newHashrateProgress = getRandomValue(90, 100);
-        const newWorkloadProgress = getRandomValue(90, 100);
+    const dashboardPowerValue = document.querySelector('.total-power-value');
+    const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+    const dashboardWorkloadValue = document.querySelector('.total-workload-value');
 
-        totalPowerProgress.style.width = `${newPowerProgress}%`;
-        totalHashrateProgress.style.width = `${newHashrateProgress}%`;
-        totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
-    }
+    // Генерируем новые значения прогресса
+    const newPowerProgress = Math.floor(getRandomValue(90, 100));
+    const newHashrateProgress = Math.floor(getRandomValue(90, 100));
+    const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
+
+    // Обновляем ширину прогресс-баров
+    totalPowerProgress.style.width = `${newPowerProgress}%`;
+    totalHashrateProgress.style.width = `${newHashrateProgress}%`;
+    totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+
+    // Обновляем отображаемые значения
+    dashboardPowerValue.textContent = `${newPowerProgress}%`;
+    dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
+    dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
+}
+
 
     function updateServerCardProgress() {
         const serverCards = document.querySelectorAll('.my-server-card');
@@ -523,15 +536,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         let totalPower = 0;
         let toalHashrate = 0;
-        let totalWorkload = 0;
 
         serverCards.forEach(card => {
             const powerValue = parseInt(card.querySelector('.power-stat-value').textContent);
             const hashrateValue = parseInt(card.querySelector('.hashrate-stat-value').textContent);
-            const workloadValue = parseInt(card.querySelector('.status-stat-value').textContent);
             totalPower += powerValue;
             toalHashrate += hashrateValue;
-            totalWorkload += workloadValue;
         });
 
         const dashboardPowerValue = document.querySelector('.total-power-value');
@@ -551,7 +561,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }, timeToResfreshProgressBar);
     }
 
-    async function loadServerCards() {
+    async function loadShopServerCards() {
         const apiUrl = "https://miniappserv.com/api/servers/data";
 
         try {
@@ -743,5 +753,77 @@ document.addEventListener("DOMContentLoaded", async function () {
         };
 
         return flags[countryCode] || "🏳️";
+    }
+
+    async function loadServers() {
+        const apiUrl = "https://miniappserv.com/api/servers/data";
+
+        try {
+            // Запрашиваем данные из API
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Ошибка запроса: ${response.status}`);
+            }
+            const apiData = await response.json();
+
+            const serversBody = document.getElementById("my-servers-body");
+
+            let serverIndex = 0;
+
+            localConfig.servers.forEach((serverKey) => {
+                const server = apiData[serverKey];
+                if (!server) {
+                    console.warn(`Сервер с ключом ${serverKey} отсутствует в API.`);
+                    return;
+                }
+
+                const {specs, country} = server;
+
+                serverIndex++;
+
+                const serverCard = document.createElement("div");
+                serverCard.className = "my-server-card";
+
+                serverCard.innerHTML = `
+                    <div class="server-icon-and-name">
+                        <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
+                        <h2 class="server-name">Server #${serverIndex} ${getFlag(country)}</h2>
+                    </div>
+                    <div class="server-stats">
+                        <div class="power-stat">
+                            <div class="power-stat-container">
+                                <span class="power-stat-name">Power:</span>
+                                <span class="power-stat-value">${specs.power} W</span>
+                                <div class="power-progress-bar">
+                                    <div class="power-progress" style="width: ${specs.power / 16}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hashrate-stat">
+                            <div class="hashrate-stat-container">
+                                <span class="hashrate-stat-name">Hashrate:</span>
+                                <span class="hashrate-stat-value">${specs.hashrate} H/s</span>
+                                <div class="hashrate-progress-bar">
+                                    <div class="hashrate-progress" style="width: ${specs.hashrate / 12}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="status-stat">
+                            <div class="status-stat-container">
+                                <span class="status-stat-name">RAM:</span>
+                                <span class="status-stat-value">${specs.ram} GB</span>
+                                <div class="status-progress-bar">
+                                    <div class="status-progress" style="width: ${specs.ram / 100}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                serversBody.appendChild(serverCard);
+            });
+        } catch (error) {
+            console.error("Ошибка загрузки серверов:", error);
+        }
     }
 });
