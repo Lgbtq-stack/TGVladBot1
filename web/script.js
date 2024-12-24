@@ -770,7 +770,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             let serverIndex = 0;
 
-            localConfig.servers.forEach((serverKey) => {
+            wallet_data.servers.forEach((serverKey) => {
                 const server = apiData[serverKey];
                 if (!server) {
                     console.warn(`Сервер с ключом ${serverKey} отсутствует в API.`);
