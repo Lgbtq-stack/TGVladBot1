@@ -66,8 +66,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        // wallet_data = localConfig; // Запрос конфига из datacontroller
+        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        wallet_data = localConfig; // Запрос конфига из datacontroller
 
         if (!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet. ⚠️`, false);
@@ -531,6 +531,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    let totalWorkload = 0;
+
     function initializeDashboardFromItems() {
         const serverCards = document.querySelectorAll('.my-server-card');
 
@@ -546,11 +548,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const dashboardPowerValue = document.querySelector('.total-power-value');
         const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
-        const dashboardWorkloadValue = document.querySelector('.total-workload-value');
 
         dashboardPowerValue.textContent = `${totalPower} W`;
         dashboardHashrateValue.textContent = `${toalHashrate} H/s`;
-        dashboardWorkloadValue.textContent = `${totalWorkload} %`;
     }
 
 
@@ -759,7 +759,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         const apiUrl = "https://miniappserv.com/api/servers/data";
 
         try {
-            // Запрашиваем данные из API
             const response = await fetch(apiUrl);
             if (!response.ok) {
                 throw new Error(`Ошибка запроса: ${response.status}`);
