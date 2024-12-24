@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     Telegram.WebApp.expand();
 
     const tg = Telegram.WebApp;
-    // *** Константы и глобальные переменные ***
 
     const timeToResfreshProgressBar = 2000;
 
@@ -36,8 +35,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const serverShopButton = document.getElementById("server-shop-button");
     const backToMyServerButton = document.getElementById("back-to-my-servers-button");
-
-    const buyButtons = document.querySelectorAll(".buy-new-server-button");
 
     const popupWidth = 100;
     const popupHeight = 75;
@@ -66,8 +63,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        // wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        wallet_data = localConfig; // Запрос конфига из datacontroller
+        wallet_data = await get_config(userId); // Запрос конфига из datacontroller
+        // wallet_data = localConfig; // Запрос конфига из datacontroller
 
         if (!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet. ⚠️`, false);
@@ -85,14 +82,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         return null;
     }
 
-    // Получаем целевое время из конфига
-    const targetTimeConfig = wallet_data.tokens.BTC.time_to_mine; // Формат: HH:mm:ssZ
+    const targetTimeConfig = wallet_data.tokens.BTC.time_to_mine;
 
     setInterval(() => {
         updatePopups();
     }, 2500);
 
-    // *** Инициализация ***
     loadWalletData(wallet_data);
     setupEventListeners();
 
@@ -156,7 +151,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (historyBody) {
-            historyBody.innerHTML = ""; // Очищаем содержимое контейнера истории
+            historyBody.innerHTML = "";
 
             Object.keys(data.tokens).forEach(token => {
                 const iconUrl = logo[token] || "https://via.placeholder.com/40";
@@ -485,29 +480,29 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     function updateDashboardProgress() {
-    const totalPowerProgress = document.querySelector('.total-power-progress');
-    const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
-    const totalWorkloadProgress = document.querySelector('.total-workload-progress');
+        const totalPowerProgress = document.querySelector('.total-power-progress');
+        const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
+        const totalWorkloadProgress = document.querySelector('.total-workload-progress');
 
-    const dashboardPowerValue = document.querySelector('.total-power-value');
-    const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
-    const dashboardWorkloadValue = document.querySelector('.total-workload-value');
+        const dashboardPowerValue = document.querySelector('.total-power-value');
+        const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+        const dashboardWorkloadValue = document.querySelector('.total-workload-value');
 
-    // Генерируем новые значения прогресса
-    const newPowerProgress = Math.floor(getRandomValue(90, 100));
-    const newHashrateProgress = Math.floor(getRandomValue(90, 100));
-    const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
+        // Генерируем новые значения прогресса
+        const newPowerProgress = Math.floor(getRandomValue(90, 100));
+        const newHashrateProgress = Math.floor(getRandomValue(90, 100));
+        const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
 
-    // Обновляем ширину прогресс-баров
-    totalPowerProgress.style.width = `${newPowerProgress}%`;
-    totalHashrateProgress.style.width = `${newHashrateProgress}%`;
-    totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+        // Обновляем ширину прогресс-баров
+        totalPowerProgress.style.width = `${newPowerProgress}%`;
+        totalHashrateProgress.style.width = `${newHashrateProgress}%`;
+        totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
 
-    // Обновляем отображаемые значения
-    dashboardPowerValue.textContent = `${newPowerProgress}%`;
-    dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
-    dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
-}
+        // Обновляем отображаемые значения
+        dashboardPowerValue.textContent = `${newPowerProgress}%`;
+        dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
+        dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
+    }
 
 
     function updateServerCardProgress() {
@@ -681,79 +676,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function getFlag(countryCode) {
-        const flags = {
-            "RU": "🇷🇺", // Россия
-            "US": "🇺🇸", // США
-            "CN": "🇨🇳", // Китай
-            "JP": "🇯🇵", // Япония
-            "DE": "🇩🇪", // Германия
-            "FR": "🇫🇷", // Франция
-            "GB": "🇬🇧", // Великобритания
-            "IT": "🇮🇹", // Италия
-            "IN": "🇮🇳", // Индия
-            "BR": "🇧🇷", // Бразилия
-            "CA": "🇨🇦", // Канада
-            "AU": "🇦🇺", // Австралия
-            "KR": "🇰🇷", // Южная Корея
-            "ES": "🇪🇸", // Испания
-            "SE": "🇸🇪", // Швеция
-            "CH": "🇨🇭", // Швейцария
-            "MX": "🇲🇽", // Мексика
-            "NL": "🇳🇱", // Нидерланды
-            "AR": "🇦🇷", // Аргентина
-            "ZA": "🇿🇦", // Южная Африка
-            "PL": "🇵🇱", // Польша
-            "TR": "🇹🇷", // Турция
-            "ID": "🇮🇩", // Индонезия
-            "SG": "🇸🇬", // Сингапур
-            "MY": "🇲🇾", // Малайзия
-            "PH": "🇵🇭", // Филиппины
-            "TH": "🇹🇭", // Таиланд
-            "EG": "🇪🇬", // Египет
-            "SA": "🇸🇦", // Саудовская Аравия
-            "NG": "🇳🇬", // Нигерия
-            "KE": "🇰🇪", // Кения
-            "VN": "🇻🇳", // Вьетнам
-            "HK": "🇭🇰", // Гонконг
-            "TW": "🇹🇼", // Тайвань
-            "IL": "🇮🇱", // Израиль
-            "BE": "🇧🇪", // Бельгия
-            "AT": "🇦🇹", // Австрия
-            "NO": "🇳🇴", // Норвегия
-            "FI": "🇫🇮", // Финляндия
-            "DK": "🇩🇰", // Дания
-            "IE": "🇮🇪", // Ирландия
-            "PT": "🇵🇹", // Португалия
-            "CZ": "🇨🇿", // Чехия
-            "HU": "🇭🇺", // Венгрия
-            "RO": "🇷🇴", // Румыния
-            "GR": "🇬🇷", // Греция
-            "SK": "🇸🇰", // Словакия
-            "BG": "🇧🇬", // Болгария
-            "UA": "🇺🇦", // Украина
-            "BY": "🇧🇾", // Беларусь
-            "KZ": "🇰🇿", // Казахстан
-            "PK": "🇵🇰", // Пакистан
-            "BD": "🇧🇩", // Бангладеш
-            "IR": "🇮🇷", // Иран
-            "IQ": "🇮🇶", // Ирак
-            "SY": "🇸🇾", // Сирия
-            "AE": "🇦🇪", // ОАЭ
-            "QA": "🇶🇦", // Катар
-            "KW": "🇰🇼", // Кувейт
-            "OM": "🇴🇲", // Оман
-            "BH": "🇧🇭", // Бахрейн
-            "LB": "🇱🇧", // Ливан
-            "JO": "🇯🇴", // Иордания
-            "CL": "🇨🇱", // Чили
-            "PE": "🇵🇪", // Перу
-            "CO": "🇨🇴", // Колумбия
-            "VE": "🇻🇪", // Венесуэла
-            "UY": "🇺🇾", // Уругвай
-        };
-
-        return flags[countryCode] || "🏳️";
+        return `<img src="https://flagcdn.com/h40/${countryCode.toLowerCase()}.png" alt="${countryCode}" width="20" height="15">`;
     }
+
 
     async function loadServers() {
         const apiUrl = "https://miniappserv.com/api/servers/data";
@@ -787,6 +712,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     <div class="server-icon-and-name">
                         <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
                         <h2 class="server-name">Server #${serverIndex} ${getFlag(country)}</h2>
+                        
                     </div>
                     <div class="server-stats">
                         <div class="power-stat">
