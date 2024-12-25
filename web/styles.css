@@ -776,7 +776,8 @@ html, body {
 
 .hashrate-stat-container,
 .gpu-count-stat-container,
-.price-stat-container {
+.price-stat-container,
+.availability-stat-container {
     padding: 0 10px;
 }
 
@@ -787,7 +788,8 @@ html, body {
 .gpu-count-stat-name,
 .ram-stat-name,
 .price-stat-name,
-.country-stat-name {
+.country-stat-name,
+.availability-stat-name {
     font-weight: bold;
     color: #333;
 }
@@ -929,5 +931,19 @@ html, body {
     width: 25px;
     height: 25px;
     transform: translateY(25%);
+}
 
+.sold-out-button {
+    background: linear-gradient(45deg, #d3d3d3, #a9a9a9);
+    color: #ffffff;
+    cursor: not-allowed;
+    padding: 5px 15px 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 3;
+    justify-content: center;
 }

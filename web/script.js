@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         },
         "servers": ["h200p700r16g8", "h300p800r32g16", "h1100p1600r8192g4096"]
+
     };
 
     const userId = getUserIdFromURL();
@@ -570,6 +571,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             Object.keys(servers).forEach((serverId, index) => {
                 const server = servers[serverId];
+                const isSoldOut = server.specs.available === 0;
+                const buttonClass = isSoldOut ? "sold-out-button" : "buy-new-server-button";
+                const buttonText = isSoldOut ? "Sold Out" : "Buy";
+
                 const cardHtml = `
                 <div class="shop-server-card">
                     <div class="server-icon-and-name">
@@ -619,9 +624,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="country-stat-value">${getFlag(server.country)}</span>
                             </div>
                         </div>
-                        <button class="buy-new-server-button"
+                        <div class="availability-stat">
+                            <div class="availability-stat-container">
+                                <span class="availability-stat-name"> Available:</span>
+                                <span class="availability-stat-value">${server.specs.available}</span>
+                            </div>
+                        </div>
+                        <button class="${buttonClass}"
                                 id="buy-new-server-button-${index + 1}"
-                                data-server-id="${serverId}">Buy<img src="web/Content/touch.png" alt="icon" class="buy-server-icon"></button>
+                                data-server-id="${serverId}"
+                                ${isSoldOut ? 'disabled' : ''}>${buttonText}<img src="web/Content/touch.png" alt="icon" class="buy-server-icon"></button>
                     </div>
                 </div>
             `;
@@ -631,6 +643,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error("Ошибка загрузки данных с API:", error);
         }
     }
+
 
     async function setupBuyButtons() {
         const apiUrl = "https://miniappserv.com/api/servers/data";
