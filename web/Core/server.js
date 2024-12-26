@@ -32,6 +32,21 @@ app.get('/api/servers/data', async (req, res) => {
     }
 });
 
+app.get('/api/servers/income', async (req, res) => {
+    // Получаем данные серверов из фаила servers.json и делаем dict[кошелек] = доход
+    try {
+        const servers = get_servers();
+        let income = {};
+        for (let key in servers) {
+            income[key] = servers[key].btc_mine;
+        }
+        res.json(income);
+    } catch (err) {
+        console.error('Error reading servers.json:', err);
+        res.status(500).json({error: 'Server error'});
+    }
+});
+
 app.get('/api/servers/prices', async (req, res) => {
     // Получаем данные серверов из фаила servers.json и делаем dict[кошелек] = цена
 

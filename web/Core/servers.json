@@ -1,123 +1,142 @@
 {
-  "h200p700r16g8": {
+  "h200p500r8g1": {
     "specs": {
-      "power": 700,
+      "power": 500,
       "hashrate": 200,
-      "ram": 16,
-      "gpu": 8,
+      "ram": 8,
+      "gpu": 1,
+      "gpu_name": "NVIDIA A2000 equivalent",
       "gpu_count": 1
     },
-    "price": 1000,
-    "name": "Server Uber",
+    "btc_mine": 0.0004,
+    "price": 100,
+    "name": "Starter Series",
     "country": "RU"
   },
-    "h300p800r32g16": {
-        "specs": {
-        "power": 800,
-        "hashrate": 300,
-        "ram": 32,
-        "gpu": 16,
-        "gpu_count": 2
-        },
-        "price": 1500,
-        "name": "Server Uber",
-        "country": "RU"
+  "h300p700r16g4": {
+    "specs": {
+      "power": 700,
+      "hashrate": 300,
+      "ram": 16,
+      "gpu": 4,
+      "gpu_name": "NVIDIA A4000 equivalent",
+      "gpu_count": 4
     },
-    "h400p900r64g32": {
-        "specs": {
-        "power": 900,
-        "hashrate": 400,
-        "ram": 64,
-        "gpu": 32,
-        "gpu_count": 4
-        },
-        "price": 2000,
-      "name": "Server Uber",
-        "country": "RU"
+    "btc_mine": 0.0008,
+    "price": 150,
+    "name": "Small Series",
+    "country": "US"
+  },
+  "h400p850r32g8": {
+    "specs": {
+      "power": 850,
+      "hashrate": 400,
+      "ram": 32,
+      "gpu": 8,
+      "gpu_name": "NVIDIA A5000 equivalent",
+      "gpu_count": 8
     },
-    "h500p1000r128g64": {
-        "specs": {
-        "power": 1000,
-        "hashrate": 500,
-        "ram": 128,
-        "gpu": 64,
-        "gpu_count": 8
-        },
-        "price": 2500,
-      "name": "Server Uber",
-        "country": "RU"
+    "btc_mine": 0.0016,
+    "price": 200,
+    "name": "Pro Series",
+    "country": "CN"
+  },
+  "h500p1000r64g16": {
+    "specs": {
+      "power": 1000,
+      "hashrate": 500,
+      "ram": 64,
+      "gpu": 16,
+      "gpu_name": "NVIDIA A6000 equivalent",
+      "gpu_count": 16
     },
-    "h600p1100r256g128": {
-        "specs": {
-        "power": 1100,
-        "hashrate": 600,
-        "ram": 256,
-        "gpu": 128,
-        "gpu_count": 16
-        },
-        "price": 3000,
-      "name": "Server Uber",
-        "country": "RU"
+    "btc_mine": 0.0025,
+    "price": 300,
+    "name": "Enterprise Series",
+    "country": "CA"
+  },
+  "h600p1200r128g32": {
+    "specs": {
+      "power": 1200,
+      "hashrate": 600,
+      "ram": 128,
+      "gpu": 32,
+      "gpu_name": "NVIDIA RTX 3090 equivalent",
+      "gpu_count": 32
     },
-    "h700p1200r512g256": {
-        "specs": {
-        "power": 1200,
-        "hashrate": 700,
-        "ram": 512,
-        "gpu": 256,
-        "gpu_count": 32
-        },
-        "price": 3500,
-      "name": "Server Uber",
-        "country": "RU"
+    "btc_mine": 0.006,
+    "price": 500,
+    "name": "Advanced Enterprise Series",
+    "country": "IS"
+  },
+  "h700p1400r256g64": {
+    "specs": {
+      "power": 1400,
+      "hashrate": 700,
+      "ram": 256,
+      "gpu": 64,
+      "gpu_name": "AMD MI250 equivalent",
+      "gpu_count": 64
     },
-    "h800p1300r1024g512": {
-        "specs": {
-        "power": 1300,
-        "hashrate": 800,
-        "ram": 1024,
-        "gpu": 512,
-        "gpu_count": 64
-        },
-        "price": 4000,
-      "name": "Server Uber",
-        "country": "RU"
+    "btc_mine": 0.01,
+    "price": 800,
+    "name": "Datacenter Series",
+    "country": "SE"
+  },
+  "h800p1600r512g128": {
+    "specs": {
+      "power": 1600,
+      "hashrate": 800,
+      "ram": 512,
+      "gpu": 128,
+      "gpu_name": "NVIDIA Hopper H100 equivalent",
+      "gpu_count": 128
     },
-    "h900p1400r2048g1024": {
-        "specs": {
-        "power": 1400,
-        "hashrate": 900,
-        "ram": 2048,
-        "gpu": 1024,
-        "gpu_count": 128
-        },
-        "price": 4500,
-      "name": "Server Uber",
-        "country": "RU"
+    "btc_mine": 0.03,
+    "price": 1200,
+    "name": "Performance Series",
+    "country": "NO"
+  },
+  "h900p1800r1024g256": {
+    "specs": {
+      "power": 1800,
+      "hashrate": 900,
+      "ram": 1024,
+      "gpu": 256,
+      "gpu_name": "Custom ASIC-based GPUs",
+      "gpu_count": 256
     },
-    "h1000p1500r4096g2048": {
-        "specs": {
-        "power": 1500,
-        "hashrate": 1000,
-        "ram": 4096,
-        "gpu": 2048,
-        "gpu_count": 256
-        },
-        "price": 5000,
-      "name": "Server Uber",
-        "country": "RU"
+    "btc_mine": 0.1,
+    "price": 2000,
+    "name": "Elite Series",
+    "country": "AU"
+  },
+  "h1000p2000r2048g512": {
+    "specs": {
+      "power": 2000,
+      "hashrate": 1000,
+      "ram": 2048,
+      "gpu": 512,
+      "gpu_name": "Custom ASIC-based GPUs",
+      "gpu_count": 512
     },
-    "h1100p1600r8192g4096": {
-        "specs": {
-        "power": 1600,
-        "hashrate": 1100,
-        "ram": 8192,
-        "gpu": 4096,
-        "gpu_count": 512
-        },
-        "price": 5500,
-      "name": "Server Uber",
-        "country": "RU"
-    }
+    "btc_mine": 0.3,
+    "price": 3000,
+    "name": "Titan Series",
+    "country": "CH"
+  },
+  "h1100p2200r4096g1024": {
+    "specs": {
+      "power": 2200,
+      "hashrate": 1100,
+      "ram": 4096,
+      "gpu": 1024,
+      "gpu_name": "Next-gen ASIC miners",
+      "gpu_count": 1024
+    },
+    "btc_mine": 0.9,
+    "price": 5000,
+    "name": "Ultra Titan Series",
+    "country": "SG"
+  }
 }
-
