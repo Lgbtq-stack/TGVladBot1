@@ -510,7 +510,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const latestBTCValue = getLatestBTCValue(wallet_data);
 
-        showPopup(`Latest BTC Value: ${latestBTCValue}`, false);
         totalBtcMine += latestBTCValue;
 
         let randomizeValue = 0;
