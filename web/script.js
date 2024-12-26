@@ -481,34 +481,40 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     function updateDashboardProgress() {
-        const totalPowerProgress = document.querySelector('.total-power-progress');
-        const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
-        const totalBTCProgress = document.querySelector('.total-btc-mine-progress');
-        const totalWorkloadProgress = document.querySelector('.total-workload-progress');
+    const totalPowerProgress = document.querySelector('.total-power-progress');
+    const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
+    const totalWorkloadProgress = document.querySelector('.total-workload-progress');
 
-        const dashboardPowerValue = document.querySelector('.total-power-value');
-        const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
-        const dashboardBTCValue = document.querySelector('.total-btc-mine-value');
-        const dashboardWorkloadValue = document.querySelector('.total-workload-value');
+    const dashboardPowerValue = document.querySelector('.total-power-value');
+    const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+    const dashboardWorkloadValue = document.querySelector('.total-workload-value');
+    const dashboardBtcMineValue = document.querySelector('.total-btc-mine-value');
 
-        // Генерируем новые значения прогресса
-        const newPowerProgress = Math.floor(getRandomValue(90, 100));
-        const newHashrateProgress = Math.floor(getRandomValue(90, 100));
-        const newBTCProgress = Math.floor(getRandomValue(90, 100));
-        const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
+    const serverCards = document.querySelectorAll('.my-server-card');
+    let totalBtcMine = 0;
 
-        // Обновляем ширину прогресс-баров
-        totalPowerProgress.style.width = `${newPowerProgress}%`;
-        totalHashrateProgress.style.width = `${newHashrateProgress}%`;
-        totalBTCProgress.style.width = `${newBTCProgress}%`;
-        totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+    serverCards.forEach(card => {
+        const btcValue = parseInt(card.querySelector('.btc-mine-stat-value').textContent);
+        totalBtcMine += btcValue;
+    });
 
-        // Обновляем отображаемые значения
-        dashboardPowerValue.textContent = `${newPowerProgress}%`;
-        dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
-        dashboardBTCValue.textContent = `${newBTCProgress} BTC`;
-        dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
-    }
+    const btcMineRandomized = totalBtcMine + getRandomValue(-5, 5);
+
+    const btcMineFormatted = btcMineRandomized.toFixed(4);
+    const newPowerProgress = Math.floor(getRandomValue(90, 100));
+    const newHashrateProgress = Math.floor(getRandomValue(90, 100));
+    const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
+
+    totalPowerProgress.style.width = `${newPowerProgress}%`;
+    totalHashrateProgress.style.width = `${newHashrateProgress}%`;
+    totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+
+    dashboardPowerValue.textContent = `${newPowerProgress}%`;
+    dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
+    dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
+
+    dashboardBtcMineValue.textContent = `${btcMineFormatted} BTC`;
+}
 
 
     function updateServerCardProgress() {
@@ -517,12 +523,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         serverCards.forEach(card => {
             const powerProgress = card.querySelector('.power-progress');
             const hashrateProgress = card.querySelector('.hashrate-progress');
-            const btcProgress = card.querySelector('.btc-mine-progress');
             const workloadProgress = card.querySelector('.status-progress');
 
             const newPowerProgress = getRandomValue(90, 100);
             const newHashrateProgress = getRandomValue(90, 100);
-            const newBtcProgress = card.querySelector('.btc-stat-value');
             const newWorkloadProgress = getRandomValue(90, 80);
             const workloadValue = card.querySelector('.status-stat-value');
 
