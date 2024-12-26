@@ -522,7 +522,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             randomizeValue = getRandomValue(-10, 0);
         }
 
-        const btcMineRandomized = totalBtcMine + randomizeValue;
+        let btcMineRandomized = totalBtcMine + randomizeValue;
+
+        if(btcMineRandomized < 0) {
+            btcMineRandomized = 0;
+        }
 
         const btcMineFormatted = btcMineRandomized.toFixed(4);
         const newPowerProgress = Math.floor(getRandomValue(90, 100));
