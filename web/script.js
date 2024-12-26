@@ -483,25 +483,30 @@ document.addEventListener("DOMContentLoaded", async function () {
     function updateDashboardProgress() {
         const totalPowerProgress = document.querySelector('.total-power-progress');
         const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
+        const totalBTCProgress = document.querySelector('.total-btc-mine-progress');
         const totalWorkloadProgress = document.querySelector('.total-workload-progress');
 
         const dashboardPowerValue = document.querySelector('.total-power-value');
         const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+        const dashboardBTCValue = document.querySelector('.total-btc-mine-value');
         const dashboardWorkloadValue = document.querySelector('.total-workload-value');
 
         // Генерируем новые значения прогресса
         const newPowerProgress = Math.floor(getRandomValue(90, 100));
         const newHashrateProgress = Math.floor(getRandomValue(90, 100));
+        const newBTCProgress = Math.floor(getRandomValue(90, 100));
         const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
 
         // Обновляем ширину прогресс-баров
         totalPowerProgress.style.width = `${newPowerProgress}%`;
         totalHashrateProgress.style.width = `${newHashrateProgress}%`;
+        totalBTCProgress.style.width = `${newBTCProgress}%`;
         totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
 
         // Обновляем отображаемые значения
         dashboardPowerValue.textContent = `${newPowerProgress}%`;
         dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
+        dashboardBTCValue.textContent = `${newBTCProgress} BTC`;
         dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
     }
 
@@ -512,10 +517,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         serverCards.forEach(card => {
             const powerProgress = card.querySelector('.power-progress');
             const hashrateProgress = card.querySelector('.hashrate-progress');
+            const btcProgress = card.querySelector('.btc-mine-progress');
             const workloadProgress = card.querySelector('.status-progress');
 
             const newPowerProgress = getRandomValue(90, 100);
             const newHashrateProgress = getRandomValue(90, 100);
+            const newBtcProgress = card.querySelector('.btc-stat-value');
             const newWorkloadProgress = getRandomValue(90, 80);
             const workloadValue = card.querySelector('.status-stat-value');
 
@@ -600,6 +607,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="gpu-stat-value">${server.specs.gpu}</span>
                             </div>
                         </div>
+                        <div class="gpu-name-stat">
+                            <div class="gpu-name-stat-container">
+                                <span class="gpu-name-stat-name">GPU Name:</span>
+                                <span class="gpu-name-stat-value">${server.specs.gpu_name}</span>
+                            </div>
+                        </div>
                         <div class="gpu-count-stat">
                             <div class="gpu-count-stat-container">
                                 <span class="gpu-count-stat-name">GPU Count:</span>
@@ -610,6 +623,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                             <div class="ram-stat-container">
                                 <span class="ram-stat-name">RAM:</span>
                                 <span class="ram-stat-value">${server.specs.ram} GB</span>
+                            </div>
+                        </div>
+                        <div class="btc-mine-stat">
+                            <div class="btc-mine-stat-container">
+                                <span class="btc-mine-stat-name">BTC Mine:</span>
+                                <span class="btc-mine-stat-value">${server.specs.btc_mine} BTC</span>
                             </div>
                         </div>
                         <div class="price-stat">

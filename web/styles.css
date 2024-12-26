@@ -683,6 +683,7 @@ html, body {
 
 .total-power-progress-bar,
 .total-hashrate-progress-bar,
+.total-btc-mine-progress-bar,
 .total-workload-progress-bar {
     width: 100%;
     height: 8px;
@@ -694,6 +695,7 @@ html, body {
 
 .total-power-progress,
 .total-hashrate-progress,
+.total-btc-mine-progress,
 .total-workload-progress {
     height: 100%;
     border-radius: 4px;
@@ -711,6 +713,11 @@ html, body {
 
 .total-workload-progress {
     background-color: #ff9800;
+    width: 50%;
+}
+
+.total-btc-mine-progress {
+    background-color: #ffeb3b;
     width: 50%;
 }
 
@@ -767,7 +774,8 @@ html, body {
 .power-stat-container,
 .gpu-stat-container,
 .country-stat-container,
-.ram-stat-container,
+.gpu-count-stat-container,
+.btc-mine-stat-container,
 .status-stat-container{
     background: #ffeb3b;
     padding: 10px 10px;
@@ -775,8 +783,10 @@ html, body {
 }
 
 .hashrate-stat-container,
-.gpu-count-stat-container,
 .price-stat-container,
+.ram-stat-container,
+.gpu-name-stat-container,
+.ram-stat-container,
 .availability-stat-container {
     padding: 0 10px;
 }
@@ -786,6 +796,8 @@ html, body {
 .status-stat-name,
 .gpu-stat-name,
 .gpu-count-stat-name,
+.btc-mine-stat-name,
+.gpu-name-stat-name,
 .ram-stat-name,
 .price-stat-name,
 .country-stat-name,
