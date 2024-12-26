@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const popupHeight = 75;
     const usedPositionsTop = [];
     const usedPositionsBottom = [];
+    let totalBtcMine = 0;
 
     const localConfig = {
         "wallet": "GDTOJL273O5YKNF3PIG72UZRG6CT4TRLDQK2NT5ZBMN3A56IP4JSYRUQ",
@@ -54,7 +55,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 "time_to_mine": "20:00:00"
             }
         },
-        "servers": ["h200p700r16g8", "h300p800r32g16", "h1100p1600r8192g4096"]
+        "servers": ["h200p500r8g1", "h600p1200r128g32", "h400p850r32g8"]
+
 
     };
 
@@ -95,7 +97,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     animateDots();
     startDailyCountdown(targetTimeConfig);
     initializeLottieAnimations();
+
     startUpdatingProgress()
+
     await loadShopServerCards();
     await loadServers();
     await setupBuyButtons();
@@ -479,38 +483,23 @@ document.addEventListener("DOMContentLoaded", async function () {
         return Math.random() * (max - min) + min;
     }
 
-    function getLatestBTCValue(config) {
-        const history = config.tokens.BTC.history;
-        const dates = Object.keys(history);
-
-        const latestDate = dates.reduce((latest, current) => {
-            return new Date(current) > new Date(latest) ? current : latest;
-        });
-
-        return history[latestDate];
-    }
 
     function updateDashboardProgress() {
         const totalPowerProgress = document.querySelector('.total-power-progress');
         const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
         const totalWorkloadProgress = document.querySelector('.total-workload-progress');
+        const totalBtcMineProgress = document.querySelector('.total-btc-mine-progress');
 
         const dashboardPowerValue = document.querySelector('.total-power-value');
         const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
         const dashboardWorkloadValue = document.querySelector('.total-workload-value');
         const dashboardBtcMineValue = document.querySelector('.total-btc-mine-value');
 
-        const serverCards = document.querySelectorAll('.my-server-card');
-        let totalBtcMine = 0;
-
-        serverCards.forEach(card => {
-            const btcValue = parseInt(card.querySelector('.btc-mine-stat-value').textContent);
-            totalBtcMine += btcValue;
-        });
-
-        const latestBTCValue = getLatestBTCValue(wallet_data);
-
-        totalBtcMine += latestBTCValue;
+        // Генерируем новые значения прогресса
+        const newPowerProgress = Math.floor(getRandomValue(90, 100));
+        const newHashrateProgress = Math.floor(getRandomValue(90, 100));
+        const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
+        const newBtcMineProgress = Math.floor(getRandomValue(90, 100));
 
         let randomizeValue = 0;
 
@@ -524,23 +513,21 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         let btcMineRandomized = totalBtcMine + randomizeValue;
 
-        if(btcMineRandomized < 0) {
+        if (btcMineRandomized < 0) {
             btcMineRandomized = 0;
         }
 
         const btcMineFormatted = btcMineRandomized.toFixed(4);
-        const newPowerProgress = Math.floor(getRandomValue(90, 100));
-        const newHashrateProgress = Math.floor(getRandomValue(90, 100));
-        const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
 
         totalPowerProgress.style.width = `${newPowerProgress}%`;
         totalHashrateProgress.style.width = `${newHashrateProgress}%`;
         totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+        totalBtcMineProgress.style.width = `${newBtcMineProgress}%`;
 
+        // Обновляем отображаемые значения
         dashboardPowerValue.textContent = `${newPowerProgress}%`;
         dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
         dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
-
         dashboardBtcMineValue.textContent = `${btcMineFormatted} BTC`;
     }
 
@@ -565,8 +552,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             workloadValue.textContent = `${newWorkloadProgress.toFixed(0)} %`;
         });
     }
-
-    let totalWorkload = 0;
 
     function initializeDashboardFromItems() {
         const serverCards = document.querySelectorAll('.my-server-card');
@@ -660,7 +645,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         <div class="btc-mine-stat">
                             <div class="btc-mine-stat-container">
                                 <span class="btc-mine-stat-name">BTC Mine:</span>
-                                <span class="btc-mine-stat-value">${server.specs.btc_mine} BTC</span>
+                                <span class="btc-mine-stat-value">${server.btc_mine} BTC</span>
                             </div>
                         </div>
                         <div class="price-stat">
@@ -678,7 +663,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         <div class="availability-stat">
                             <div class="availability-stat-container">
                                 <span class="availability-stat-name"> Available:</span>
-                                <span class="availability-stat-value">${server.specs.available}</span>
+                                <span class="availability-stat-value">${server.available}</span>
                             </div>
                         </div>
                         <button class="${buttonClass}"
@@ -810,7 +795,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                 `;
 
                 serversBody.appendChild(serverCard);
+
+                totalBtcMine += server.btc_mine;
             });
+            // const noServersElement = document.createElement("div");
+            //   noServersElement.className = "no-servers";
+            //   noServersElement.textContent = "No Active Servers";
+            //   serversBody.appendChild(noServersElement);
         } catch (error) {
             console.error("Ошибка загрузки серверов:", error);
         }
