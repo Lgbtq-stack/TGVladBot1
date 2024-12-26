@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 "time_to_mine": "20:00:00"
             }
         },
-        "servers": ["h200p500r8g1", "h600p1200r128g32", "h400p850r32g8"]
+        // "servers": ["h200p500r8g1", "h600p1200r128g32", "h400p850r32g8"]
 
 
     };
@@ -559,26 +559,50 @@ document.addEventListener("DOMContentLoaded", async function () {
         let totalPower = 0;
         let toalHashrate = 0;
 
-        serverCards.forEach(card => {
-            const powerValue = parseInt(card.querySelector('.power-stat-value').textContent);
-            const hashrateValue = parseInt(card.querySelector('.hashrate-stat-value').textContent);
-            totalPower += powerValue;
-            toalHashrate += hashrateValue;
-        });
+        if (serverCards.length > 0) {
+            serverCards.forEach(card => {
+                const powerValue = parseInt(card.querySelector('.power-stat-value').textContent);
+                const hashrateValue = parseInt(card.querySelector('.hashrate-stat-value').textContent);
+                totalPower += powerValue;
+                toalHashrate += hashrateValue;
+            });
 
-        const dashboardPowerValue = document.querySelector('.total-power-value');
-        const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+            const dashboardPowerValue = document.querySelector('.total-power-value');
+            const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
 
-        dashboardPowerValue.textContent = `${totalPower} W`;
-        dashboardHashrateValue.textContent = `${toalHashrate} H/s`;
+            dashboardPowerValue.textContent = `${totalPower} W`;
+            dashboardHashrateValue.textContent = `${toalHashrate} H/s`;
+        } else {
+
+            const totalPowerProgress = document.querySelector('.total-power-progress');
+            const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
+            const totalWorkloadProgress = document.querySelector('.total-workload-progress');
+            const totalBtcMineProgress = document.querySelector('.total-btc-mine-progress');
+
+            const dashboardPowerValue = document.querySelector('.total-power-value');
+            const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+
+            dashboardPowerValue.textContent = `0 W`;
+            dashboardHashrateValue.textContent = `0 H/s`;
+
+            totalBtcMineProgress.style.width = `0%`;
+            totalPowerProgress.style.width = `0%`;
+            totalHashrateProgress.style.width = `0%`;
+            totalWorkloadProgress.style.width = `0%`;
+        }
     }
 
 
     function startUpdatingProgress() {
-        setInterval(() => {
-            updateServerCardProgress();
-            updateDashboardProgress();
-        }, timeToResfreshProgressBar);
+
+        const serverCards = document.querySelectorAll('.my-server-card');
+
+        if (serverCards.length > 0) {
+            setInterval(() => {
+                updateServerCardProgress();
+                updateDashboardProgress();
+            }, timeToResfreshProgressBar);
+        }
     }
 
     async function loadShopServerCards() {
