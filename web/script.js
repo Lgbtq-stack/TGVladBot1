@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     Telegram.WebApp.expand();
 
     const tg = Telegram.WebApp;
-    // *** Константы и глобальные переменные ***
 
     const timeToResfreshProgressBar = 2000;
 
@@ -37,8 +36,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const serverShopButton = document.getElementById("server-shop-button");
     const backToMyServerButton = document.getElementById("back-to-my-servers-button");
 
-    const buyButtons = document.querySelectorAll(".buy-new-server-button");
-
     const popupWidth = 100;
     const popupHeight = 75;
     const usedPositionsTop = [];
@@ -56,7 +53,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 },
                 "time_to_mine": "20:00:00"
             }
-        }
+        },
+        "servers": ["h200p700r16g8", "h300p800r32g16", "h1100p1600r8192g4096"]
+
     };
 
     const userId = getUserIdFromURL();
@@ -84,14 +83,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         return null;
     }
 
-    // Получаем целевое время из конфига
-    const targetTimeConfig = wallet_data.tokens.BTC.time_to_mine; // Формат: HH:mm:ssZ
+    const targetTimeConfig = wallet_data.tokens.BTC.time_to_mine;
 
     setInterval(() => {
         updatePopups();
     }, 2500);
 
-    // *** Инициализация ***
     loadWalletData(wallet_data);
     setupEventListeners();
 
@@ -99,11 +96,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     startDailyCountdown(targetTimeConfig);
     initializeLottieAnimations();
     startUpdatingProgress()
-    initializeDashboardFromItems();
-    await loadServerCards();
+    await loadShopServerCards();
+    await loadServers();
     await setupBuyButtons();
-
-    // *** Функции ***
+    initializeDashboardFromItems();
 
     function getUserIdFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -156,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (historyBody) {
-            historyBody.innerHTML = ""; // Очищаем содержимое контейнера истории
+            historyBody.innerHTML = "";
 
             Object.keys(data.tokens).forEach(token => {
                 const iconUrl = logo[token] || "https://via.placeholder.com/40";
@@ -483,19 +479,32 @@ document.addEventListener("DOMContentLoaded", async function () {
         return Math.random() * (max - min) + min;
     }
 
+
     function updateDashboardProgress() {
         const totalPowerProgress = document.querySelector('.total-power-progress');
         const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
         const totalWorkloadProgress = document.querySelector('.total-workload-progress');
 
-        const newPowerProgress = getRandomValue(90, 100);
-        const newHashrateProgress = getRandomValue(90, 100);
-        const newWorkloadProgress = getRandomValue(90, 100);
+        const dashboardPowerValue = document.querySelector('.total-power-value');
+        const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+        const dashboardWorkloadValue = document.querySelector('.total-workload-value');
 
+        // Генерируем новые значения прогресса
+        const newPowerProgress = Math.floor(getRandomValue(90, 100));
+        const newHashrateProgress = Math.floor(getRandomValue(90, 100));
+        const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
+
+        // Обновляем ширину прогресс-баров
         totalPowerProgress.style.width = `${newPowerProgress}%`;
         totalHashrateProgress.style.width = `${newHashrateProgress}%`;
         totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+
+        // Обновляем отображаемые значения
+        dashboardPowerValue.textContent = `${newPowerProgress}%`;
+        dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
+        dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
     }
+
 
     function updateServerCardProgress() {
         const serverCards = document.querySelectorAll('.my-server-card');
@@ -518,29 +527,26 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    let totalWorkload = 0;
+
     function initializeDashboardFromItems() {
         const serverCards = document.querySelectorAll('.my-server-card');
 
         let totalPower = 0;
         let toalHashrate = 0;
-        let totalWorkload = 0;
 
         serverCards.forEach(card => {
             const powerValue = parseInt(card.querySelector('.power-stat-value').textContent);
             const hashrateValue = parseInt(card.querySelector('.hashrate-stat-value').textContent);
-            const workloadValue = parseInt(card.querySelector('.status-stat-value').textContent);
             totalPower += powerValue;
             toalHashrate += hashrateValue;
-            totalWorkload += workloadValue;
         });
 
         const dashboardPowerValue = document.querySelector('.total-power-value');
         const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
-        const dashboardWorkloadValue = document.querySelector('.total-workload-value');
 
         dashboardPowerValue.textContent = `${totalPower} W`;
         dashboardHashrateValue.textContent = `${toalHashrate} H/s`;
-        dashboardWorkloadValue.textContent = `${totalWorkload} %`;
     }
 
 
@@ -551,7 +557,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }, timeToResfreshProgressBar);
     }
 
-    async function loadServerCards() {
+    async function loadShopServerCards() {
         const apiUrl = "https://miniappserv.com/api/servers/data";
 
         try {
@@ -565,6 +571,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             Object.keys(servers).forEach((serverId, index) => {
                 const server = servers[serverId];
+                const isSoldOut = server.specs.available === 0;
+                const buttonClass = isSoldOut ? "sold-out-button" : "buy-new-server-button";
+                const buttonText = isSoldOut ? "Sold Out" : "Buy";
+
                 const cardHtml = `
                 <div class="shop-server-card">
                     <div class="server-icon-and-name">
@@ -614,9 +624,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="country-stat-value">${getFlag(server.country)}</span>
                             </div>
                         </div>
-                        <button class="buy-new-server-button"
+                        <div class="availability-stat">
+                            <div class="availability-stat-container">
+                                <span class="availability-stat-name"> Available:</span>
+                                <span class="availability-stat-value">${server.specs.available}</span>
+                            </div>
+                        </div>
+                        <button class="${buttonClass}"
                                 id="buy-new-server-button-${index + 1}"
-                                data-server-id="${serverId}">Buy<img src="web/Content/touch.png" alt="icon" class="buy-server-icon"></button>
+                                data-server-id="${serverId}"
+                                ${isSoldOut ? 'disabled' : ''}>${buttonText}<img src="web/Content/touch.png" alt="icon" class="buy-server-icon"></button>
                     </div>
                 </div>
             `;
@@ -626,6 +643,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error("Ошибка загрузки данных с API:", error);
         }
     }
+
 
     async function setupBuyButtons() {
         const apiUrl = "https://miniappserv.com/api/servers/data";
@@ -671,77 +689,79 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function getFlag(countryCode) {
-        const flags = {
-            "RU": "🇷🇺", // Россия
-            "US": "🇺🇸", // США
-            "CN": "🇨🇳", // Китай
-            "JP": "🇯🇵", // Япония
-            "DE": "🇩🇪", // Германия
-            "FR": "🇫🇷", // Франция
-            "GB": "🇬🇧", // Великобритания
-            "IT": "🇮🇹", // Италия
-            "IN": "🇮🇳", // Индия
-            "BR": "🇧🇷", // Бразилия
-            "CA": "🇨🇦", // Канада
-            "AU": "🇦🇺", // Австралия
-            "KR": "🇰🇷", // Южная Корея
-            "ES": "🇪🇸", // Испания
-            "SE": "🇸🇪", // Швеция
-            "CH": "🇨🇭", // Швейцария
-            "MX": "🇲🇽", // Мексика
-            "NL": "🇳🇱", // Нидерланды
-            "AR": "🇦🇷", // Аргентина
-            "ZA": "🇿🇦", // Южная Африка
-            "PL": "🇵🇱", // Польша
-            "TR": "🇹🇷", // Турция
-            "ID": "🇮🇩", // Индонезия
-            "SG": "🇸🇬", // Сингапур
-            "MY": "🇲🇾", // Малайзия
-            "PH": "🇵🇭", // Филиппины
-            "TH": "🇹🇭", // Таиланд
-            "EG": "🇪🇬", // Египет
-            "SA": "🇸🇦", // Саудовская Аравия
-            "NG": "🇳🇬", // Нигерия
-            "KE": "🇰🇪", // Кения
-            "VN": "🇻🇳", // Вьетнам
-            "HK": "🇭🇰", // Гонконг
-            "TW": "🇹🇼", // Тайвань
-            "IL": "🇮🇱", // Израиль
-            "BE": "🇧🇪", // Бельгия
-            "AT": "🇦🇹", // Австрия
-            "NO": "🇳🇴", // Норвегия
-            "FI": "🇫🇮", // Финляндия
-            "DK": "🇩🇰", // Дания
-            "IE": "🇮🇪", // Ирландия
-            "PT": "🇵🇹", // Португалия
-            "CZ": "🇨🇿", // Чехия
-            "HU": "🇭🇺", // Венгрия
-            "RO": "🇷🇴", // Румыния
-            "GR": "🇬🇷", // Греция
-            "SK": "🇸🇰", // Словакия
-            "BG": "🇧🇬", // Болгария
-            "UA": "🇺🇦", // Украина
-            "BY": "🇧🇾", // Беларусь
-            "KZ": "🇰🇿", // Казахстан
-            "PK": "🇵🇰", // Пакистан
-            "BD": "🇧🇩", // Бангладеш
-            "IR": "🇮🇷", // Иран
-            "IQ": "🇮🇶", // Ирак
-            "SY": "🇸🇾", // Сирия
-            "AE": "🇦🇪", // ОАЭ
-            "QA": "🇶🇦", // Катар
-            "KW": "🇰🇼", // Кувейт
-            "OM": "🇴🇲", // Оман
-            "BH": "🇧🇭", // Бахрейн
-            "LB": "🇱🇧", // Ливан
-            "JO": "🇯🇴", // Иордания
-            "CL": "🇨🇱", // Чили
-            "PE": "🇵🇪", // Перу
-            "CO": "🇨🇴", // Колумбия
-            "VE": "🇻🇪", // Венесуэла
-            "UY": "🇺🇾", // Уругвай
-        };
+        return `<img src="https://flagcdn.com/h40/${countryCode.toLowerCase()}.png" alt="${countryCode}" width="20" height="15">`;
+    }
 
-        return flags[countryCode] || "🏳️";
+
+    async function loadServers() {
+        const apiUrl = "https://miniappserv.com/api/servers/data";
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Ошибка запроса: ${response.status}`);
+            }
+            const apiData = await response.json();
+
+            const serversBody = document.getElementById("my-servers-body");
+
+            let serverIndex = 0;
+
+            wallet_data.servers.forEach((serverKey) => {
+                const server = apiData[serverKey];
+                if (!server) {
+                    console.warn(`Сервер с ключом ${serverKey} отсутствует в API.`);
+                    return;
+                }
+
+                const {specs, country} = server;
+
+                serverIndex++;
+
+                const serverCard = document.createElement("div");
+                serverCard.className = "my-server-card";
+
+                serverCard.innerHTML = `
+                    <div class="server-icon-and-name">
+                        <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
+                        <h2 class="server-name">Server #${serverIndex} ${getFlag(country)}</h2>
+                        
+                    </div>
+                    <div class="server-stats">
+                        <div class="power-stat">
+                            <div class="power-stat-container">
+                                <span class="power-stat-name">Power:</span>
+                                <span class="power-stat-value">${specs.power} W</span>
+                                <div class="power-progress-bar">
+                                    <div class="power-progress" style="width: ${specs.power / 16}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hashrate-stat">
+                            <div class="hashrate-stat-container">
+                                <span class="hashrate-stat-name">Hashrate:</span>
+                                <span class="hashrate-stat-value">${specs.hashrate} H/s</span>
+                                <div class="hashrate-progress-bar">
+                                    <div class="hashrate-progress" style="width: ${specs.hashrate / 12}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="status-stat">
+                            <div class="status-stat-container">
+                                <span class="status-stat-name">RAM:</span>
+                                <span class="status-stat-value">${specs.ram} GB</span>
+                                <div class="status-progress-bar">
+                                    <div class="status-progress" style="width: ${specs.ram / 100}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                serversBody.appendChild(serverCard);
+            });
+        } catch (error) {
+            console.error("Ошибка загрузки серверов:", error);
+        }
     }
 });
