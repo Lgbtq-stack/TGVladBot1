@@ -481,40 +481,50 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     function updateDashboardProgress() {
-    const totalPowerProgress = document.querySelector('.total-power-progress');
-    const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
-    const totalWorkloadProgress = document.querySelector('.total-workload-progress');
+        const totalPowerProgress = document.querySelector('.total-power-progress');
+        const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
+        const totalWorkloadProgress = document.querySelector('.total-workload-progress');
 
-    const dashboardPowerValue = document.querySelector('.total-power-value');
-    const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
-    const dashboardWorkloadValue = document.querySelector('.total-workload-value');
-    const dashboardBtcMineValue = document.querySelector('.total-btc-mine-value');
+        const dashboardPowerValue = document.querySelector('.total-power-value');
+        const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+        const dashboardWorkloadValue = document.querySelector('.total-workload-value');
+        const dashboardBtcMineValue = document.querySelector('.total-btc-mine-value');
 
-    const serverCards = document.querySelectorAll('.my-server-card');
-    let totalBtcMine = 0;
+        const serverCards = document.querySelectorAll('.my-server-card');
+        let totalBtcMine = 0;
 
-    serverCards.forEach(card => {
-        const btcValue = parseInt(card.querySelector('.btc-mine-stat-value').textContent);
-        totalBtcMine += btcValue;
-    });
+        serverCards.forEach(card => {
+            const btcValue = parseInt(card.querySelector('.btc-mine-stat-value').textContent);
+            totalBtcMine += btcValue;
+        });
 
-    const btcMineRandomized = totalBtcMine + getRandomValue(-5, 5);
+        let randomizeValue = 0;
 
-    const btcMineFormatted = btcMineRandomized.toFixed(4);
-    const newPowerProgress = Math.floor(getRandomValue(90, 100));
-    const newHashrateProgress = Math.floor(getRandomValue(90, 100));
-    const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
+        if (totalBtcMine < 1) {
+            randomizeValue = getRandomValue(-0.0005, 0);
+        } else if (totalBtcMine < 10) {
+            randomizeValue = getRandomValue(-2, 0);
+        } else if (totalBtcMine < 100) {
+            randomizeValue = getRandomValue(-10, 0);
+        }
 
-    totalPowerProgress.style.width = `${newPowerProgress}%`;
-    totalHashrateProgress.style.width = `${newHashrateProgress}%`;
-    totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+        const btcMineRandomized = totalBtcMine + randomizeValue;
 
-    dashboardPowerValue.textContent = `${newPowerProgress}%`;
-    dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
-    dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
+        const btcMineFormatted = btcMineRandomized.toFixed(4);
+        const newPowerProgress = Math.floor(getRandomValue(90, 100));
+        const newHashrateProgress = Math.floor(getRandomValue(90, 100));
+        const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
 
-    dashboardBtcMineValue.textContent = `${btcMineFormatted} BTC`;
-}
+        totalPowerProgress.style.width = `${newPowerProgress}%`;
+        totalHashrateProgress.style.width = `${newHashrateProgress}%`;
+        totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
+
+        dashboardPowerValue.textContent = `${newPowerProgress}%`;
+        dashboardHashrateValue.textContent = `${newHashrateProgress}%`;
+        dashboardWorkloadValue.textContent = `${newWorkloadProgress}%`;
+
+        dashboardBtcMineValue.textContent = `${btcMineFormatted} BTC`;
+    }
 
 
     function updateServerCardProgress() {
