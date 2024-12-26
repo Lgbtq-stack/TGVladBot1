@@ -508,7 +508,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             totalBtcMine += btcValue;
         });
 
-        const latestBTCValue = getLatestBTCValue(localConfig);
+        const latestBTCValue = getLatestBTCValue(wallet_data);
 
         showPopup(`Latest BTC Value: ${latestBTCValue}`, false);
         totalBtcMine += latestBTCValue;
