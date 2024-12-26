@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 "history": {
                     "2024-12-10T13:37:50.124Z": 0.25,
                     "2024-12-11T13:37:50.124Z": 0.5,
-                    "2024-12-12T13:37:50.124Z": 0.5
+                    "2024-12-12T13:37:50.124Z": 0.75
                 },
                 "time_to_mine": "20:00:00"
             }
@@ -479,6 +479,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         return Math.random() * (max - min) + min;
     }
 
+    function getLatestBTCValue(config) {
+        const history = config.tokens.BTC.history;
+        const dates = Object.keys(history);
+
+        const latestDate = dates.reduce((latest, current) => {
+            return new Date(current) > new Date(latest) ? current : latest;
+        });
+
+        return history[latestDate];
+    }
 
     function updateDashboardProgress() {
         const totalPowerProgress = document.querySelector('.total-power-progress');
@@ -497,6 +507,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             const btcValue = parseInt(card.querySelector('.btc-mine-stat-value').textContent);
             totalBtcMine += btcValue;
         });
+
+        const latestBTCValue = getLatestBTCValue(localConfig);
+
+        showPopup(`Latest BTC Value: ${latestBTCValue}`, false);
+        totalBtcMine += latestBTCValue;
 
         let randomizeValue = 0;
 
