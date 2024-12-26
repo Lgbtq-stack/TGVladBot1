@@ -594,10 +594,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     function startUpdatingProgress() {
-
-        const serverCards = document.querySelectorAll('.my-server-card');
-
-        if (serverCards.length > 0) {
+        if (wallet_data.servers?.length > 0) {
             setInterval(() => {
                 updateServerCardProgress();
                 updateDashboardProgress();
@@ -764,24 +761,27 @@ document.addEventListener("DOMContentLoaded", async function () {
             const apiData = await response.json();
 
             const serversBody = document.getElementById("my-servers-body");
+            const noServersMessage = document.getElementById("no-servers-message");
 
-            let serverIndex = 0;
+            if (wallet_data.servers?.length > 0) {
+                noServersMessage.classList.add("hidden");
 
-            wallet_data.servers.forEach((serverKey) => {
-                const server = apiData[serverKey];
-                if (!server) {
-                    console.warn(`Сервер с ключом ${serverKey} отсутствует в API.`);
-                    return;
-                }
+                let serverIndex = 0;
+                wallet_data.servers.forEach((serverKey) => {
+                    const server = apiData[serverKey];
+                    if (!server) {
+                        console.warn(`Сервер с ключом ${serverKey} отсутствует в API.`);
+                        return;
+                    }
 
-                const {specs, country} = server;
+                    const {specs, country} = server;
 
-                serverIndex++;
+                    serverIndex++;
 
-                const serverCard = document.createElement("div");
-                serverCard.className = "my-server-card";
+                    const serverCard = document.createElement("div");
+                    serverCard.className = "my-server-card";
 
-                serverCard.innerHTML = `
+                    serverCard.innerHTML = `
                     <div class="server-icon-and-name">
                         <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
                         <h2 class="server-name">Server #${serverIndex} ${getFlag(country)}</h2>
@@ -818,14 +818,15 @@ document.addEventListener("DOMContentLoaded", async function () {
                     </div>
                 `;
 
-                serversBody.appendChild(serverCard);
+                    serversBody.appendChild(serverCard);
 
-                totalBtcMine += server.btc_mine;
-            });
-            // const noServersElement = document.createElement("div");
-            //   noServersElement.className = "no-servers";
-            //   noServersElement.textContent = "No Active Servers";
-            //   serversBody.appendChild(noServersElement);
+                    totalBtcMine += server.btc_mine;
+
+
+                });
+            } else {
+                noServersMessage.classList.remove("hidden");
+            }
         } catch (error) {
             console.error("Ошибка загрузки серверов:", error);
         }
