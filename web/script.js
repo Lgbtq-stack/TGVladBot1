@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     } catch
         (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`${error} 🛠`, false);
+        showPopup(`ПОСОСИ ${error} 🛠`, false);
         return null;
     }
 
