@@ -63,58 +63,58 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         },
         "servers": {
-                "h200p500r8g1": {
-                    "specs": {
-                        "power": 500,
-                        "hashrate": 200,
-                        "ram": 8,
-                        "gpu": 1,
-                        "gpu_name": "NVIDIA A2000 equivalent",
-                        "gpu_count": 1
-                    },
-                    "btc_mine": 0.0004,
-                    "price": 100,
-                    "name": "Starter Series",
-                    "country": "US",
-                    "available": 100,
-                    "created_at": "2024-12-20T01:02:55.86199",
-                    "total_mined_days": 7
+            "h200p500r8g1": {
+                "specs": {
+                    "power": 500,
+                    "hashrate": 200,
+                    "ram": 8,
+                    "gpu": 1,
+                    "gpu_name": "NVIDIA A2000 equivalent",
+                    "gpu_count": 1
                 },
-                "h1100p2200r4096g1024": {
-                    "specs": {
-                        "power": 2200,
-                        "hashrate": 1100,
-                        "ram": 4096,
-                        "gpu": 1024,
-                        "gpu_name": "Next-gen ASIC miners",
-                        "gpu_count": 1024
-                    },
-                    "btc_mine": 0.9,
-                    "price": 5000,
-                    "name": "Ultra Titan Series",
-                    "country": "US",
-                    "available": 100,
-                    "created_at": "2024-12-27T01:13:40.956881",
-                    "total_mined_days": 0
+                "btc_mine": 0.0004,
+                "price": 100,
+                "name": "Starter Series",
+                "country": "US",
+                "available": 100,
+                "created_at": "2024-12-20T01:02:55.86199",
+                "total_mined_days": 7
+            },
+            "h1100p2200r4096g1024": {
+                "specs": {
+                    "power": 2200,
+                    "hashrate": 1100,
+                    "ram": 4096,
+                    "gpu": 1024,
+                    "gpu_name": "Next-gen ASIC miners",
+                    "gpu_count": 1024
                 },
-                "h900p1800r1024g256": {
-                    "specs": {
-                        "power": 1800,
-                        "hashrate": 900,
-                        "ram": 1024,
-                        "gpu": 256,
-                        "gpu_name": "Custom ASIC-based GPUs",
-                        "gpu_count": 256
-                    },
-                    "btc_mine": 0.1,
-                    "price": 2000,
-                    "name": "Elite Series",
-                    "country": "US",
-                    "available": 100,
-                    "created_at": "2024-12-27T01:16:10.512229",
-                    "total_mined_days": 0
-                }
+                "btc_mine": 0.9,
+                "price": 5000,
+                "name": "Ultra Titan Series",
+                "country": "US",
+                "available": 100,
+                "created_at": "2024-12-27T01:13:40.956881",
+                "total_mined_days": 0
+            },
+            "h900p1800r1024g256": {
+                "specs": {
+                    "power": 1800,
+                    "hashrate": 900,
+                    "ram": 1024,
+                    "gpu": 256,
+                    "gpu_name": "Custom ASIC-based GPUs",
+                    "gpu_count": 256
+                },
+                "btc_mine": 0.1,
+                "price": 2000,
+                "name": "Elite Series",
+                "country": "US",
+                "available": 100,
+                "created_at": "2024-12-27T01:16:10.512229",
+                "total_mined_days": 0
             }
+        }
     };
 
     const userId = getUserIdFromURL();
@@ -541,7 +541,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function startMiningProgress(localConfig) {
-        const timeToMine = localConfig.tokens.BTC.time_to_mine;
+        const timeToMine = localConfig.tokens.BTC.btc_get_time;
         const [targetHours, targetMinutes, targetSeconds] = timeToMine.split(":").map(Number);
 
         const totalBTC = totalBtcMine;
@@ -842,37 +842,37 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     async function loadServers() {
-    const apiUrl = "https://miniappserv.com/api/servers/data";
+        const apiUrl = "https://miniappserv.com/api/servers/data";
 
-    try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error(`Ошибка запроса: ${response.status}`);
-        }
-        const apiData = await response.json();
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`Ошибка запроса: ${response.status}`);
+            }
+            const apiData = await response.json();
 
-        console.log("API Data:", apiData);
+            console.log("API Data:", apiData);
 
-        const serversBody = document.getElementById("my-servers-body");
-        const noServersMessage = document.getElementById("no-servers-message");
-        const serverDetailsWrapper = document.getElementById("server-window-details-wrapper");
-        const serverDetailsContent = document.getElementById("server-window-details-content");
+            const serversBody = document.getElementById("my-servers-body");
+            const noServersMessage = document.getElementById("no-servers-message");
+            const serverDetailsWrapper = document.getElementById("server-window-details-wrapper");
+            const serverDetailsContent = document.getElementById("server-window-details-content");
 
-        if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0) {
-            noServersMessage.classList.add("hidden");
+            if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0) {
+                noServersMessage.classList.add("hidden");
 
-            Object.keys(wallet_data.servers).forEach((serverKey, index) => {
-                const server = wallet_data.servers[serverKey];
-                if (!server) {
-                    console.warn(`Сервер с ключом ${serverKey} отсутствует в данных.`);
-                    return;
-                }
+                Object.keys(wallet_data.servers).forEach((serverKey, index) => {
+                    const server = wallet_data.servers[serverKey];
+                    if (!server) {
+                        console.warn(`Сервер с ключом ${serverKey} отсутствует в данных.`);
+                        return;
+                    }
 
-                const { specs, country} = server;
+                    const {specs, country} = server;
 
-                const serverCard = document.createElement("div");
-                serverCard.className = "my-server-card";
-                serverCard.innerHTML = `
+                    const serverCard = document.createElement("div");
+                    serverCard.className = "my-server-card";
+                    serverCard.innerHTML = `
                     <div class="server-icon-and-name">
                         <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
                         <h2 class="server-name">Server #${index + 1} ${getFlag(country)}</h2>
@@ -908,19 +908,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                     </div>
                 `;
 
-                serversBody.appendChild(serverCard);
+                    serversBody.appendChild(serverCard);
+                    totalBtcMine += server.btc_mine;
 
-                serverCard.addEventListener("click", () => {
-                    showServerDetails(server, serverDetailsWrapper, serverDetailsContent);
+                    serverCard.addEventListener("click", () => {
+                        showServerDetails(server, serverDetailsWrapper, serverDetailsContent);
+                    });
                 });
-            });
-        } else {
-            noServersMessage.classList.remove("hidden");
+            } else {
+                noServersMessage.classList.remove("hidden");
+            }
+        } catch (error) {
+            console.error("Ошибка загрузки серверов:", error);
         }
-    } catch (error) {
-        console.error("Ошибка загрузки серверов:", error);
     }
-}
 
     function showServerDetails(server, detailsContainer, detailsContent) {
         const wrapper = document.getElementById("server-window-details-wrapper");
@@ -938,15 +939,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         } = server;
 
         const createdAt = new Date(created_at);
-        const currentDate = new Date();
+        const currentDate = new Date(); // Текущая дата в UTC
+
         const totalMinedDays = Math.floor((currentDate - createdAt) / (1000 * 3600 * 24));
 
-        const totalBTC = totalMinedDays * btc_mine;
+        let todayBTC = 0;
 
-        const randomVariation = (Math.random() * 0.05) - 0.025;
-        const todayBTC = btc_mine + randomVariation;
+        if (totalMinedDays === 0) {
+            const currentHour = currentDate.getUTCHours();
+            const currentMinutes = currentDate.getUTCMinutes();
 
-        const totalBTCWithToday = totalBTC + todayBTC;
+            const remainingHours = 24 - currentHour - (currentMinutes / 60);
+            todayBTC = (btc_mine / 24) * remainingHours;
+        } else {
+            todayBTC = btc_mine;
+        }
+
+        const totalBTC = totalMinedDays * btc_mine + todayBTC;
+
         detailsContent.innerHTML = `
     
     <div class="server-details-stats">
@@ -988,11 +998,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         </div>
         <div class="stat-details">
             <span class="stat-details-title">BTC Mine:</span>
-            <span class="stat-details-value">${btc_mine} BTC</span>
+            <span class="stat-details-value">${btc_mine.toFixed(4)} BTC</span>
         </div>
         <div class="stat-details">
             <span class="stat-details-title">Total Mined:</span>
-            <span class="stat-details-value">${totalBTCWithToday.toFixed(4)} BTC</span>
+            <span class="stat-details-value">${totalBTC.toFixed(4)} BTC</span>
         </div>
     </div>
 `;
