@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     try {
         wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        //wallet_data = localConfig; // Запрос конфига из datacontroller
+        // wallet_data = localConfig; // Запрос конфига из datacontroller
 
         if (!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet. ⚠️`, false);
@@ -963,31 +963,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             <img class="server-details-icon" src="web/Content/server-icon.png" alt="Server Icon">
             <h2 class="server-details-name">${name || "Server"}</h2>
         </div>
-        
+        <div class="stat-details">
+            <span class="stat-details-title">Total Mined:</span>
+            <span class="stat-details-value">${totalBTC.toFixed(4)} BTC</span>
+        </div>
         <div class="stat-details">
             <span class="stat-details-title">Purchased On:</span>
             <span class="stat-details-value">${created_at ? new Date(created_at).toLocaleDateString() : "N/A"}</span>
-        </div>
-        <div class="stat-details">
-            <span class="stat-details-title">Power:</span>
-            <span class="stat-details-value">${specs.power} W</span>
-            <div class="power-details-progress-bar">
-                <div class="power-details-progress" style="width: ${Math.min(specs.power / 16, 100)}%;"></div>
-            </div>
-        </div>
-        <div class="stat-details">
-            <span class="stat-details-title">Hashrate:</span>
-            <span class="stat-details-value">${specs.hashrate} H/s</span>
-            <div class="hashrate-details-progress-bar">
-                <div class="hashrate-details-progress" style="width: ${Math.min(specs.hashrate / 12, 100)}%;"></div>
-            </div>
-        </div>
-        <div class="stat-details">
-            <span class="stat-details-title">RAM:</span>
-            <span class="stat-details-value">${specs.ram} GB</span>
-            <div class="ram-details-progress-bar">
-                <div class="ram-details-progress" style="width: ${Math.min(specs.ram / 23, 100)}%;"></div>
-            </div>
         </div>
         <div class="stat-details">
             <span class="stat-details-title">Country:</span>
@@ -1000,8 +982,33 @@ document.addEventListener("DOMContentLoaded", async function () {
             <span class="stat-details-value">${btc_mine.toFixed(4)} BTC</span>
         </div>
         <div class="stat-details">
-            <span class="stat-details-title">Total Mined:</span>
-            <span class="stat-details-value">${totalBTC.toFixed(4)} BTC</span>
+            <span class="stat-details-title">Power:</span>
+            <span class="stat-details-value">${specs.power} W</span>
+        </div>
+        <div class="progress-bar-wrapper">
+            <div class="power-details-progress-bar">
+                <div class="power-details-progress" style="width: ${Math.min(specs.power / 16, 100)}%;"></div>
+            </div>
+        </div>
+        
+        <div class="stat-details">
+            <span class="stat-details-title">Hashrate:</span>
+            <span class="stat-details-value">${specs.hashrate} H/s</span>
+        </div>
+        <div class="progress-bar-wrapper">
+            <div class="hashrate-details-progress-bar">
+                <div class="hashrate-details-progress" style="width: ${Math.min(specs.hashrate / 12, 100)}%;"></div>
+            </div>
+        </div>
+        
+        <div class="stat-details">
+            <span class="stat-details-title">RAM:</span>
+            <span class="stat-details-value">${specs.ram} GB</span>
+        </div>
+        <div class="progress-bar-wrapper">
+            <div class="ram-details-progress-bar">
+                <div class="ram-details-progress" style="width: ${Math.min(specs.ram / 23, 100)}%;"></div>
+            </div>
         </div>
     </div>
 `;
