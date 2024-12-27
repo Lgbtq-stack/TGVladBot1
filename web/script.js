@@ -122,7 +122,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
-        showPopup("Loading...", false);
         wallet_data = await get_config(userId); // Запрос конфига из datacontroller
         // wallet_data = localConfig; // Запрос конфига из datacontroller
 
@@ -132,14 +131,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (!wallet_data.tokens.BTC.btc_get_time || wallet_data.tokens.BTC.btc_get_time.trim() === "") {
-            showPopup(`x1 Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
+            showPopup(`Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
             return null;
         }
 
     } catch
         (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`ПОСОСИ ${error} 🛠`, false);
+        showPopup(`Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
         return null;
     }
 
