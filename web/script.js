@@ -506,9 +506,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (totalBtcMine < 1) {
             randomizeValue = getRandomValue(-0.0005, 0);
         } else if (totalBtcMine < 10) {
-            randomizeValue = getRandomValue(-2, 0);
+            randomizeValue = getRandomValue(-0.5, 0);
         } else if (totalBtcMine < 100) {
-            randomizeValue = getRandomValue(-10, 0);
+            randomizeValue = getRandomValue(-2, 0);
         }
 
         let btcMineRandomized = totalBtcMine + randomizeValue;
