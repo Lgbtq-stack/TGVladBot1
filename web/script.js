@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 "time_to_mine": "20:00:00"
             }
         },
-        // "servers": ["h200p500r8g1", "h600p1200r128g32", "h400p850r32g8"]
+        "servers": ["h200p500r8g1", "h600p1200r128g32", "h400p850r32g8"]
 
 
     };
@@ -488,7 +488,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const totalPowerProgress = document.querySelector('.total-power-progress');
         const totalHashrateProgress = document.querySelector('.total-hashrate-progress');
         const totalWorkloadProgress = document.querySelector('.total-workload-progress');
-        const totalBtcMineProgress = document.querySelector('.total-btc-mine-progress');
+        // const totalBtcMineProgress = document.querySelector('.total-btc-mine-progress');
 
         const dashboardPowerValue = document.querySelector('.total-power-value');
         const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
@@ -499,17 +499,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         const newPowerProgress = Math.floor(getRandomValue(90, 100));
         const newHashrateProgress = Math.floor(getRandomValue(90, 100));
         const newWorkloadProgress = Math.floor(getRandomValue(90, 100));
-        const newBtcMineProgress = Math.floor(getRandomValue(90, 100));
 
         let randomizeValue = 0;
 
-        if (totalBtcMine < 1) {
-            randomizeValue = getRandomValue(-0.0005, 0);
-        } else if (totalBtcMine < 10) {
-            randomizeValue = getRandomValue(-0.5, 0);
-        } else if (totalBtcMine < 100) {
-            randomizeValue = getRandomValue(-2, 0);
-        }
+        // if (totalBtcMine < 1) {
+        //     randomizeValue = getRandomValue(-0.0005, 0);
+        // } else if (totalBtcMine < 10) {
+        //     randomizeValue = getRandomValue(-0.5, 0);
+        // } else if (totalBtcMine < 100) {
+        //     randomizeValue = getRandomValue(-2, 0);
+        // }
 
         let btcMineRandomized = totalBtcMine + randomizeValue;
 
@@ -522,7 +521,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         totalPowerProgress.style.width = `${newPowerProgress}%`;
         totalHashrateProgress.style.width = `${newHashrateProgress}%`;
         totalWorkloadProgress.style.width = `${newWorkloadProgress}%`;
-        totalBtcMineProgress.style.width = `${newBtcMineProgress}%`;
+        // totalBtcMineProgress.style.width = `${newBtcMineProgress}%`;
 
         // Обновляем отображаемые значения
         dashboardPowerValue.textContent = `${newPowerProgress}%`;
@@ -569,9 +568,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const dashboardPowerValue = document.querySelector('.total-power-value');
             const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
+            const mainMenuPowerValue = document.querySelector('.stat.power .value');
+            const mainMenuHashrateValue = document.querySelector('.stat.hashrate .value');
+            const totalBtcMineProgress = document.querySelector('.total-btc-mine-progress');
+
+            totalBtcMineProgress.style.width = `100%`;
 
             dashboardPowerValue.textContent = `${totalPower} W`;
             dashboardHashrateValue.textContent = `${toalHashrate} H/s`;
+            mainMenuPowerValue.textContent = `${totalPower} W`;
+            mainMenuHashrateValue.textContent = `${toalHashrate} H/s`;
         } else {
 
             const totalPowerProgress = document.querySelector('.total-power-progress');
@@ -639,12 +645,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="hashrate-stat-value">${server.specs.hashrate} H/s</span>
                             </div>
                         </div>
-                        // <div class="gpu-stat">
-                        //     <div class="gpu-stat-container">
-                        //         <span class="gpu-stat-name">GPU:</span>
-                        //         <span class="gpu-stat-value">${server.specs.gpu}</span>
-                        //     </div>
-                        // </div>
                         <div class="gpu-name-stat">
                             <div class="gpu-name-stat-container">
                                 <span class="gpu-name-stat-name">GPU Name:</span>
@@ -672,7 +672,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         <div class="price-stat">
                             <div class="price-stat-container">
                                 <span class="price-stat-name">Price:</span>
-                                <span class="price-stat-value">${server.price} USD</span>
+                                <span class="price-stat-value">${server.price} XLM</span>
                             </div>
                         </div>
                         <div class="country-stat">

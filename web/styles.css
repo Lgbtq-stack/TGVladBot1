@@ -773,21 +773,22 @@ html, body {
 /* Стиль для статов */
 .power-stat-container,
 .gpu-stat-container,
-.country-stat-container,
-.gpu-count-stat-container,
-.btc-mine-stat-container,
-.status-stat-container{
+.gpu-name-stat-container,
+.ram-stat-container,
+.price-stat-container,
+.availability-stat-container,
+.status-stat-container,
+.ram-stat-container{
     background: #ffeb3b;
     padding: 10px 10px;
     /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
 }
 
 .hashrate-stat-container,
-.price-stat-container,
-.ram-stat-container,
-.gpu-name-stat-container,
-.ram-stat-container,
-.availability-stat-container {
+.gpu-count-stat-container,
+.country-stat-container,
+.btc-mine-stat-container
+ {
     padding: 0 10px;
 }
 
