@@ -137,7 +137,7 @@
                 <span class="total-btc-mine-title">Total BTC Mine:</span>
                 <span class="total-btc-mine-value">0.0000 BTC</span>
                 <div class="total-btc-mine-progress-bar">
-                    <div class="total-btc-mine-progress" style="width: 70%;"></div>
+                    <div class="total-btc-mine-progress" style="width: 00%;"></div>
                 </div>
             </div>
         </div>
@@ -145,7 +145,7 @@
 
     <!-- Список серверов -->
     <div id="my-servers-body" class="my-servers-body">
-    <!-- Контейнер для списка моих серверов -->
+        <!-- Контейнер для списка моих серверов -->
     </div>
 
     <div id="no-servers-message" class="no-servers hidden">
@@ -175,6 +175,16 @@
         <span class="popup-close" id="popup-close">&times;</span>
         <p>Вызываем этот попап в любое время.</p>
         <button id="popup-refresh" class="popup-refresh">Refresh Page</button>
+    </div>
+</div>
+
+<div id="server-window-details-wrapper" class="server-window-details-wrapper hidden">
+    <div id="server-window-details" class="server-window-details">
+        <button id="close-server-details" class="back-button">
+            <img src="web/Content/arrow.png" alt="Close" class="back-arrow-icon">
+            <span class="back-button-text">Back</span>
+        </button>
+        <div id="server-window-details-content" class="server-window-details-content"></div>
     </div>
 </div>
 

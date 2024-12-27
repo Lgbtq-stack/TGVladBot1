@@ -43,21 +43,78 @@ document.addEventListener("DOMContentLoaded", async function () {
     let totalBtcMine = 0;
 
     const localConfig = {
+        "user_id": "350104566",
         "wallet": "GDTOJL273O5YKNF3PIG72UZRG6CT4TRLDQK2NT5ZBMN3A56IP4JSYRUQ",
         "tokens": {
             "BTC": {
                 "balance": 1.25,
                 "history": {
-                    "2024-12-10T13:37:50.124Z": 0.25,
-                    "2024-12-11T13:37:50.124Z": 0.5,
-                    "2024-12-12T13:37:50.124Z": 0.75
+                    "2024-12-18T02:00:00Z": 0.000442,
+                    "2024-12-20T02:00:00Z": 0.0004409,
+                    "2024-12-25T02:00:00Z": 0.0004409,
+                    "2024-12-19T02:00:00Z": 0.0004409,
+                    "2024-12-21T02:00:00Z": 0.0004409,
+                    "2024-12-26T02:00:00Z": 0.0004409,
+                    "2024-12-22T02:00:00Z": 0.0004409,
+                    "2024-12-23T02:00:00Z": 0.0004409,
+                    "2024-12-24T02:00:00Z": 0.0004409
                 },
-                "time_to_mine": "20:00:00"
+                "btc_get_time": "18:00:00",
             }
         },
-        "servers": ["h200p500r8g1", "h600p1200r128g32", "h400p850r32g8"]
-
-
+        "servers": {
+                "h200p500r8g1": {
+                    "specs": {
+                        "power": 500,
+                        "hashrate": 200,
+                        "ram": 8,
+                        "gpu": 1,
+                        "gpu_name": "NVIDIA A2000 equivalent",
+                        "gpu_count": 1
+                    },
+                    "btc_mine": 0.0004,
+                    "price": 100,
+                    "name": "Starter Series",
+                    "country": "US",
+                    "available": 100,
+                    "created_at": "2024-12-20T01:02:55.86199",
+                    "total_mined_days": 7
+                },
+                "h1100p2200r4096g1024": {
+                    "specs": {
+                        "power": 2200,
+                        "hashrate": 1100,
+                        "ram": 4096,
+                        "gpu": 1024,
+                        "gpu_name": "Next-gen ASIC miners",
+                        "gpu_count": 1024
+                    },
+                    "btc_mine": 0.9,
+                    "price": 5000,
+                    "name": "Ultra Titan Series",
+                    "country": "US",
+                    "available": 100,
+                    "created_at": "2024-12-27T01:13:40.956881",
+                    "total_mined_days": 0
+                },
+                "h900p1800r1024g256": {
+                    "specs": {
+                        "power": 1800,
+                        "hashrate": 900,
+                        "ram": 1024,
+                        "gpu": 256,
+                        "gpu_name": "Custom ASIC-based GPUs",
+                        "gpu_count": 256
+                    },
+                    "btc_mine": 0.1,
+                    "price": 2000,
+                    "name": "Elite Series",
+                    "country": "US",
+                    "available": 100,
+                    "created_at": "2024-12-27T01:16:10.512229",
+                    "total_mined_days": 0
+                }
+            }
     };
 
     const userId = getUserIdFromURL();
@@ -74,18 +131,19 @@ document.addEventListener("DOMContentLoaded", async function () {
             return null;
         }
 
-        if (!wallet_data.tokens.BTC.time_to_mine || wallet_data.tokens.BTC.time_to_mine.trim() === "") {
-            showPopup(`Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
+        if (!wallet_data.tokens.BTC.btc_get_time || wallet_data.tokens.BTC.btc_get_time.trim() === "") {
+            showPopup(`x1 Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
             return null;
         }
 
-    } catch (error) {
+    } catch
+        (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
+        showPopup(`x2 Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
         return null;
     }
 
-    const targetTimeConfig = wallet_data.tokens.BTC.time_to_mine;
+    const targetTimeConfig = wallet_data.tokens.BTC.btc_get_time;
 
     setInterval(() => {
         updatePopups();
@@ -105,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     await setupBuyButtons();
     initializeDashboardFromItems();
 
-    if (wallet_data.servers?.length > 0)
+    if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0)
         startMiningProgress(wallet_data);
 
     function getUserIdFromURL() {
@@ -633,7 +691,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     function startUpdatingProgress() {
-        if (wallet_data.servers?.length > 0) {
+        if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0) {
             setInterval(() => {
                 updateServerCardProgress();
                 updateDashboardProgress();
@@ -783,43 +841,41 @@ document.addEventListener("DOMContentLoaded", async function () {
         return `<img src="https://flagcdn.com/h40/${countryCode.toLowerCase()}.png" alt="${countryCode}" width="20" height="15">`;
     }
 
-
     async function loadServers() {
-        const apiUrl = "https://miniappserv.com/api/servers/data";
+    const apiUrl = "https://miniappserv.com/api/servers/data";
 
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error(`Ошибка запроса: ${response.status}`);
-            }
-            const apiData = await response.json();
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`Ошибка запроса: ${response.status}`);
+        }
+        const apiData = await response.json();
 
-            const serversBody = document.getElementById("my-servers-body");
-            const noServersMessage = document.getElementById("no-servers-message");
+        console.log("API Data:", apiData);
 
-            if (wallet_data.servers?.length > 0) {
-                noServersMessage.classList.add("hidden");
+        const serversBody = document.getElementById("my-servers-body");
+        const noServersMessage = document.getElementById("no-servers-message");
+        const serverDetailsWrapper = document.getElementById("server-window-details-wrapper");
+        const serverDetailsContent = document.getElementById("server-window-details-content");
 
-                let serverIndex = 0;
-                wallet_data.servers.forEach((serverKey) => {
-                    const server = apiData[serverKey];
-                    if (!server) {
-                        console.warn(`Сервер с ключом ${serverKey} отсутствует в API.`);
-                        return;
-                    }
+        if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0) {
+            noServersMessage.classList.add("hidden");
 
-                    const {specs, country} = server;
+            Object.keys(wallet_data.servers).forEach((serverKey, index) => {
+                const server = wallet_data.servers[serverKey];
+                if (!server) {
+                    console.warn(`Сервер с ключом ${serverKey} отсутствует в данных.`);
+                    return;
+                }
 
-                    serverIndex++;
+                const { specs, country} = server;
 
-                    const serverCard = document.createElement("div");
-                    serverCard.className = "my-server-card";
-
-                    serverCard.innerHTML = `
+                const serverCard = document.createElement("div");
+                serverCard.className = "my-server-card";
+                serverCard.innerHTML = `
                     <div class="server-icon-and-name">
                         <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
-                        <h2 class="server-name">Server #${serverIndex} ${getFlag(country)}</h2>
-                        
+                        <h2 class="server-name">Server #${index + 1} ${getFlag(country)}</h2>
                     </div>
                     <div class="server-stats">
                         <div class="power-stat">
@@ -827,7 +883,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="power-stat-name">Power:</span>
                                 <span class="power-stat-value">${specs.power} W</span>
                                 <div class="power-progress-bar">
-                                    <div class="power-progress" style="width: ${specs.power / 16}%;"></div>
+                                    <div class="power-progress" style="width: ${Math.min(specs.power / 16, 100)}%;"></div>
                                 </div>
                             </div>
                         </div>
@@ -836,7 +892,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="hashrate-stat-name">Hashrate:</span>
                                 <span class="hashrate-stat-value">${specs.hashrate} H/s</span>
                                 <div class="hashrate-progress-bar">
-                                    <div class="hashrate-progress" style="width: ${specs.hashrate / 12}%;"></div>
+                                    <div class="hashrate-progress" style="width: ${Math.min(specs.hashrate / 12, 100)}%;"></div>
                                 </div>
                             </div>
                         </div>
@@ -845,24 +901,134 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="status-stat-name">RAM:</span>
                                 <span class="status-stat-value">${specs.ram} GB</span>
                                 <div class="status-progress-bar">
-                                    <div class="status-progress" style="width: ${specs.ram / 100}%;"></div>
+                                    <div class="status-progress" style="width: ${Math.min(specs.ram / 100, 100)}%;"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
 
-                    serversBody.appendChild(serverCard);
+                serversBody.appendChild(serverCard);
 
-                    totalBtcMine += server.btc_mine;
-
-
+                serverCard.addEventListener("click", () => {
+                    showServerDetails(server, serverDetailsWrapper, serverDetailsContent);
                 });
-            } else {
-                noServersMessage.classList.remove("hidden");
-            }
-        } catch (error) {
-            console.error("Ошибка загрузки серверов:", error);
+            });
+        } else {
+            noServersMessage.classList.remove("hidden");
         }
+    } catch (error) {
+        console.error("Ошибка загрузки серверов:", error);
+    }
+}
+
+    function showServerDetails(server, detailsContainer, detailsContent) {
+        const wrapper = document.getElementById("server-window-details-wrapper");
+        if (!detailsContent || !detailsContainer || !wrapper) {
+            console.error("Missing details container or content element.");
+            return;
+        }
+
+        const {
+            specs,
+            country,
+            created_at,
+            btc_mine,
+            name,
+        } = server;
+
+        const createdAt = new Date(created_at);
+        const currentDate = new Date();
+        const totalMinedDays = Math.floor((currentDate - createdAt) / (1000 * 3600 * 24));
+
+        const totalBTC = totalMinedDays * btc_mine;
+
+        const randomVariation = (Math.random() * 0.05) - 0.025;
+        const todayBTC = btc_mine + randomVariation;
+
+        const totalBTCWithToday = totalBTC + todayBTC;
+        detailsContent.innerHTML = `
+    
+    <div class="server-details-stats">
+        <div class="server-details-header">
+            <img class="server-details-icon" src="web/Content/server-icon.png" alt="Server Icon">
+            <h2 class="server-details-name">${name || "Server"}</h2>
+        </div>
+        
+        <div class="stat-details">
+            <span class="stat-details-title">Purchased On:</span>
+            <span class="stat-details-value">${created_at ? new Date(created_at).toLocaleDateString() : "N/A"}</span>
+        </div>
+        <div class="stat-details">
+            <span class="stat-details-title">Power:</span>
+            <span class="stat-details-value">${specs.power} W</span>
+            <div class="power-details-progress-bar">
+                <div class="power-details-progress" style="width: ${Math.min(specs.power / 16, 100)}%;"></div>
+            </div>
+        </div>
+        <div class="stat-details">
+            <span class="stat-details-title">Hashrate:</span>
+            <span class="stat-details-value">${specs.hashrate} H/s</span>
+            <div class="hashrate-details-progress-bar">
+                <div class="hashrate-details-progress" style="width: ${Math.min(specs.hashrate / 12, 100)}%;"></div>
+            </div>
+        </div>
+        <div class="stat-details">
+            <span class="stat-details-title">RAM:</span>
+            <span class="stat-details-value">${specs.ram} GB</span>
+            <div class="ram-details-progress-bar">
+                <div class="ram-details-progress" style="width: ${Math.min(specs.ram / 23, 100)}%;"></div>
+            </div>
+        </div>
+        <div class="stat-details">
+            <span class="stat-details-title">Country:</span>
+            <span class="stat-details-value">
+                <img src="https://flagcdn.com/h40/${country.toLowerCase()}.png" alt="${country}" class="flag-icon">
+            </span>
+        </div>
+        <div class="stat-details">
+            <span class="stat-details-title">BTC Mine:</span>
+            <span class="stat-details-value">${btc_mine} BTC</span>
+        </div>
+        <div class="stat-details">
+            <span class="stat-details-title">Total Mined:</span>
+            <span class="stat-details-value">${totalBTCWithToday.toFixed(4)} BTC</span>
+        </div>
+    </div>
+`;
+
+        updateDetailsProgressBars();
+
+        detailsContainer.classList.remove("hidden");
+        detailsContainer.style.display = "block";
+
+        const closeButton = document.getElementById("close-server-details");
+        closeButton.addEventListener("click", () => {
+            detailsContainer.classList.add("hidden");
+            detailsContainer.style.display = "none";
+        });
+
+        function updateDetailsProgressBars() {
+            const powerProgress = detailsContent.querySelector(".power-details-progress");
+            const hashrateProgress = detailsContent.querySelector(".hashrate-details-progress");
+            const ramProgress = detailsContent.querySelector(".ram-details-progress");
+
+            function getRandomValue(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            setInterval(() => {
+                if (powerProgress) {
+                    powerProgress.style.width = `${getRandomValue(90, 100)}%`;
+                }
+                if (hashrateProgress) {
+                    hashrateProgress.style.width = `${getRandomValue(90, 100)}%`;
+                }
+                if (ramProgress) {
+                    ramProgress.style.width = `${getRandomValue(90, 100)}%`;
+                }
+            }, timeToResfreshProgressBar);
+        }
+
     }
 });
