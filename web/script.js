@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     try {
         wallet_data = await get_config(userId); // Запрос конфига из datacontroller
-        // wallet_data = localConfig; // Запрос конфига из datacontroller
+        //wallet_data = localConfig; // Запрос конфига из datacontroller
 
         if (!wallet_data.wallet || wallet_data.wallet.trim() === "") {
             showPopup(`You don't have active wallet. ⚠️`, false);
