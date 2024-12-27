@@ -639,12 +639,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="hashrate-stat-value">${server.specs.hashrate} H/s</span>
                             </div>
                         </div>
-                        <div class="gpu-stat">
-                            <div class="gpu-stat-container">
-                                <span class="gpu-stat-name">GPU:</span>
-                                <span class="gpu-stat-value">${server.specs.gpu}</span>
-                            </div>
-                        </div>
+                        // <div class="gpu-stat">
+                        //     <div class="gpu-stat-container">
+                        //         <span class="gpu-stat-name">GPU:</span>
+                        //         <span class="gpu-stat-value">${server.specs.gpu}</span>
+                        //     </div>
+                        // </div>
                         <div class="gpu-name-stat">
                             <div class="gpu-name-stat-container">
                                 <span class="gpu-name-stat-name">GPU Name:</span>
