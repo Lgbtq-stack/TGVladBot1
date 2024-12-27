@@ -131,14 +131,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (!wallet_data.tokens.BTC.btc_get_time || wallet_data.tokens.BTC.btc_get_time.trim() === "") {
-            showPopup(`x5 Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
+            showPopup(`x1 Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
             return null;
         }
 
     } catch
         (error) {
         console.error("Ошибка при получении конфигурации:", error);
-        showPopup(`x6 Please close your minning account and open it up again to get the your information UpToDate. 🛠`, false);
+        showPopup(`${error} 🛠`, false);
         return null;
     }
 
