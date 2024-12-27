@@ -122,6 +122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let wallet_data = null;
 
     try {
+        showPopup("Loading...", false);
         wallet_data = await get_config(userId); // Запрос конфига из datacontroller
         // wallet_data = localConfig; // Запрос конфига из datacontroller
 
