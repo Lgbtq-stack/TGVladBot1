@@ -540,8 +540,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         return Math.random() * (max - min) + min;
     }
 
-    function startMiningProgress(localConfig) {
-        const timeToMine = localConfig.tokens.BTC.btc_get_time;
+    function startMiningProgress(wallet_data) {
+        const timeToMine = wallet_data.tokens.BTC.btc_get_time;
         const [targetHours, targetMinutes, targetSeconds] = timeToMine.split(":").map(Number);
 
         const totalBTC = totalBtcMine;
@@ -939,7 +939,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         } = server;
 
         const createdAt = new Date(created_at);
-        const currentDate = new Date(); // Текущая дата в UTC
+        const currentDate = new Date();
 
         const totalMinedDays = Math.floor((currentDate - createdAt) / (1000 * 3600 * 24));
 
