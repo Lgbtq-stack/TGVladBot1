@@ -905,6 +905,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                             </div>
                         </div>
                     </div>
+                    <div class="server-icon-container">
+                        <img class="server-touch-icon" src="web/Content/touch.png" alt="Finger Icon">
+                    </div>
                 `;
 
                     serversBody.appendChild(serverCard);

@@ -1152,3 +1152,16 @@ html, body {
     transition: background-color 0.3s ease;
     animation: move-left 1.5s infinite ease-in-out;
 }
+
+.server-icon-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+}
+
+.server-touch-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
