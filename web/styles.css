@@ -1059,20 +1059,21 @@ html, body {
     background: #f7f7f7;
     padding: 10px 0 0 0;
     box-sizing: border-box;
-    Border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .stat-details {
     display: flex;
-    justify-content: space-between; /* Заголовки и значения на одном уровне */
-    align-items: center; /* Выравнивание по центру по вертикали */
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
 }
 
 .stat-details-title {
     font-weight: bold;
     font-size: 1rem;
-    margin-right: 10px; /* Добавляем отступ, чтобы разделить текст и значение */
+    margin-right: 10px;
 }
 
 .stat-details-container {
@@ -1085,7 +1086,7 @@ html, body {
 .stat-details-value {
     font-size: 0.9rem;
     color: #333;
-    text-align: right; /* Значения выровнены справа */
+    text-align: right;
 }
 
 .progress-bar-wrapper {
@@ -1103,13 +1104,6 @@ html, body {
 .progress-bar-wrapper .ram-details-progress-bar {
     overflow: clip;
 }
-
-/*.ram-details-progress,*/
-/*.ram-details-progress-bar,*/
-/*.progress-bar-wrapper .ram-details-progress-bar {*/
-/*    border-bottom-left-radius: 10px;*/
-/*    border-bottom-right-radius: 10px;*/
-/*}*/
 
 .power-details-progress-bar,
 .hashrate-details-progress-bar,
