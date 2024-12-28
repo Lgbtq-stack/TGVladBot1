@@ -11,7 +11,8 @@
     "btc_mine": 0.0004,
     "price": 100,
     "name": "Starter Series",
-    "country": "RU"
+    "country": "US",
+    "available": 100
   },
   "h300p700r16g4": {
     "specs": {
@@ -25,7 +26,8 @@
     "btc_mine": 0.0008,
     "price": 150,
     "name": "Small Series",
-    "country": "US"
+    "country": "US",
+    "available": 100
   },
   "h400p850r32g8": {
     "specs": {
@@ -39,7 +41,8 @@
     "btc_mine": 0.0016,
     "price": 200,
     "name": "Pro Series",
-    "country": "CN"
+    "country": "US",
+    "available": 100
   },
   "h500p1000r64g16": {
     "specs": {
@@ -53,7 +56,8 @@
     "btc_mine": 0.0025,
     "price": 300,
     "name": "Enterprise Series",
-    "country": "CA"
+    "country": "US",
+    "available": 100
   },
   "h600p1200r128g32": {
     "specs": {
@@ -67,7 +71,8 @@
     "btc_mine": 0.006,
     "price": 500,
     "name": "Advanced Enterprise Series",
-    "country": "IS"
+    "country": "US",
+    "available": 100
   },
   "h700p1400r256g64": {
     "specs": {
@@ -81,7 +86,8 @@
     "btc_mine": 0.01,
     "price": 800,
     "name": "Datacenter Series",
-    "country": "SE"
+    "country": "US",
+    "available": 100
   },
   "h800p1600r512g128": {
     "specs": {
@@ -95,7 +101,8 @@
     "btc_mine": 0.03,
     "price": 1200,
     "name": "Performance Series",
-    "country": "NO"
+    "country": "US",
+    "available": 100
   },
   "h900p1800r1024g256": {
     "specs": {
@@ -109,7 +116,8 @@
     "btc_mine": 0.1,
     "price": 2000,
     "name": "Elite Series",
-    "country": "AU"
+    "country": "US",
+    "available": 100
   },
   "h1000p2000r2048g512": {
     "specs": {
@@ -123,7 +131,8 @@
     "btc_mine": 0.3,
     "price": 3000,
     "name": "Titan Series",
-    "country": "CH"
+    "country": "US",
+    "available": 100
   },
   "h1100p2200r4096g1024": {
     "specs": {
@@ -137,6 +146,7 @@
     "btc_mine": 0.9,
     "price": 5000,
     "name": "Ultra Titan Series",
-    "country": "SG"
+    "country": "US",
+    "available": 100
   }
 }
