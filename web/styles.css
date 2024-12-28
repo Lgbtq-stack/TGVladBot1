@@ -1021,7 +1021,7 @@ html, body {
 .server-window-details-inner {
     width: 400px;
     max-width: 90%;
-    min-width: 600px;
+    min-width: 30%;
     background-color: rgba(97, 97, 97, 0.7);
     padding: 20px;
     box-sizing: border-box;
