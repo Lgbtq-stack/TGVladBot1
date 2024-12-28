@@ -179,12 +179,15 @@
 </div>
 
 <div id="server-window-details-wrapper" class="server-window-details-wrapper hidden">
-    <div id="server-window-details" class="server-window-details">
-        <button id="close-server-details" class="back-details-button" >
-            <img src="web/Content/white_arrow.png" alt="Close" class="back-details-arrow-icon" >
-            <span class="back-details-button-text">Back</span>
-        </button>
-        <div id="server-window-details-content" class="server-window-details-content"></div>
+    <div class="server-window-details">
+        <!-- Новый контейнер, который будет задавать ширину -->
+        <div class="server-window-details-inner">
+            <button id="close-server-details" class="back-details-button">
+                <img src="web/Content/white_arrow.png" alt="Close" class="back-details-arrow-icon">
+                <span class="back-details-button-text">Back</span>
+            </button>
+            <div id="server-window-details-content" class="server-window-details-content"></div>
+        </div>
     </div>
 </div>
 

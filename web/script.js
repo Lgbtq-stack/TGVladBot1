@@ -163,8 +163,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     initializeDashboardFromItems();
 
 
-    // if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0)
-    //     startMiningProgress(wallet_data);
+    if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0)
+        startMiningProgress(wallet_data);
 
     function getUserIdFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (fullWallet.length > 40) {
                 walletAddressElement.textContent = `${fullWallet.slice(0, 10)}...${fullWallet.slice(-10)}`;
             } else {
-                walletAddressElement.textContent = fullWallet; // Если адрес короче 40 символов, отображаем полностью
+                walletAddressElement.textContent = fullWallet;
             }
         }
 

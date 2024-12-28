@@ -1018,6 +1018,16 @@ html, body {
 
 }
 
+.server-window-details-inner {
+    width: 400px;
+    max-width: 90%;
+    min-width: 600px;
+    background-color: rgba(97, 97, 97, 0.7);
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 10000;
+}
+
 #close-server-details {
     position: absolute;
     top: 20px;
