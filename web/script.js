@@ -162,8 +162,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     await setupBuyButtons();
     initializeDashboardFromItems();
 
-    if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0)
-        startMiningProgress(wallet_data);
+
+    // if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0)
+    //     startMiningProgress(wallet_data);
 
     function getUserIdFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -596,6 +597,49 @@ document.addEventListener("DOMContentLoaded", async function () {
         setInterval(updateMiningProgress, 30 * 60 * 1000);
     }
 
+    function calculateTotalBTC(wallet_data) {
+        let totalBTC = 0;
+
+        // Используем Object.values для получения массива всех серверов
+        Object.values(wallet_data.servers).forEach(server => {
+            const {
+                created_at,
+                btc_mine,
+            } = server;
+
+            const createdAt = new Date(created_at);
+            const currentDate = new Date();
+
+            const totalMinedDays = Math.floor((currentDate - createdAt) / (1000 * 3600 * 24));
+
+            let todayBTC = 0;
+
+            if (totalMinedDays === 0) {
+                const currentHour = currentDate.getUTCHours();
+                const currentMinutes = currentDate.getUTCMinutes();
+
+                const remainingHours = 24 - currentHour - (currentMinutes / 60);
+                todayBTC = (btc_mine / 24) * remainingHours;
+            } else {
+                todayBTC = btc_mine;
+            }
+
+
+            const totalBTCForServer = totalMinedDays * btc_mine + todayBTC;
+
+
+            totalBTC += totalBTCForServer;
+        });
+
+
+        const dashboardBtcMineValue = document.querySelector('.total-btc-mine-value');
+
+        dashboardBtcMineValue.textContent = `${totalBTC.toFixed(4)} BTC`;
+        return totalBTC.toFixed(4);
+    }
+
+    const totalBTC = calculateTotalBTC(wallet_data);
+    console.log(`Total BTC mined from all servers: ${totalBTC} BTC`);
 
     function updateDashboardProgress() {
         const totalPowerProgress = document.querySelector('.total-power-progress');
@@ -650,7 +694,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         let totalPower = 0;
         let toalHashrate = 0;
 
-        if (serverCards.length > 0) {
+        if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0) {
             serverCards.forEach(card => {
                 const powerValue = parseInt(card.querySelector('.power-stat-value').textContent);
                 const hashrateValue = parseInt(card.querySelector('.hashrate-stat-value').textContent);
@@ -662,12 +706,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             const dashboardHashrateValue = document.querySelector('.total-hashrate-value');
             const mainMenuPowerValue = document.querySelector('.stat.power .value');
             const mainMenuHashrateValue = document.querySelector('.stat.hashrate .value');
+            const dashboardBtcMineProgress = document.querySelector('.total-btc-mine-progress');
 
 
             dashboardPowerValue.textContent = `${totalPower} W`;
             dashboardHashrateValue.textContent = `${toalHashrate} H/s`;
             mainMenuPowerValue.textContent = `${totalPower} W`;
             mainMenuHashrateValue.textContent = `${toalHashrate} H/s`;
+            dashboardBtcMineProgress.style.width = `100%`;
+
         } else {
 
             const totalPowerProgress = document.querySelector('.total-power-progress');
