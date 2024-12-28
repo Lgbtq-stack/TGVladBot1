@@ -806,7 +806,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         </div>
                         <div class="btc-mine-stat">
                             <div class="btc-mine-stat-container">
-                                <span class="btc-mine-stat-name">BTC Mine:</span>
+                                <span class="btc-mine-stat-name">Daily BTC Mine:</span>
                                 <span class="btc-mine-stat-value">${server.btc_mine} BTC</span>
                             </div>
                         </div>
@@ -1031,7 +1031,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             </span>
         </div>
         <div class="stat-details">
-            <span class="stat-details-title">BTC Mine:</span>
+            <span class="stat-details-title">Daily BTC Mine:</span>
             <span class="stat-details-value">${btc_mine.toFixed(4)} BTC</span>
         </div>
         <div class="stat-details">
