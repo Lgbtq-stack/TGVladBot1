@@ -161,6 +161,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     await loadServers();
     await setupBuyButtons();
     initializeDashboardFromItems();
+    const totalBTC = calculateTotalBTC(wallet_data);
 
 
     if (wallet_data.servers && Object.keys(wallet_data.servers).length > 0)
@@ -541,61 +542,65 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function startMiningProgress(wallet_data) {
-        const timeToMine = wallet_data.tokens.BTC.btc_get_time;
-        const [targetHours, targetMinutes, targetSeconds] = timeToMine.split(":").map(Number);
+    const timeToMine = wallet_data.tokens.BTC.btc_get_time;
+    const [targetHours, targetMinutes, targetSeconds] = timeToMine.split(":").map(Number);
 
-        const totalBTC = totalBtcMine;
-        const intervalsPerDay = 48;
-        const btcPerInterval = totalBTC / intervalsPerDay;
+    const intervalsPerDay = 48;
+    const btcPerInterval = totalBTC / intervalsPerDay;
 
-        const nowUTC = new Date();
-        const targetTimeUTC = new Date(Date.UTC(
-            nowUTC.getUTCFullYear(),
-            nowUTC.getUTCMonth(),
-            nowUTC.getUTCDate(),
-            targetHours,
-            targetMinutes,
-            targetSeconds
-        ));
+    const nowUTC = new Date();
+    const targetTimeUTC = new Date(Date.UTC(
+        nowUTC.getUTCFullYear(),
+        nowUTC.getUTCMonth(),
+        nowUTC.getUTCDate(),
+        targetHours,
+        targetMinutes,
+        targetSeconds
+    ));
 
-        if (nowUTC < targetTimeUTC) {
-            targetTimeUTC.setUTCDate(targetTimeUTC.getUTCDate() - 1);
-        }
-
-        const elapsedMilliseconds = nowUTC - targetTimeUTC;
-        const elapsedIntervals = Math.floor(elapsedMilliseconds / (30 * 60 * 1000));
-
-        let currentInterval = Math.min(elapsedIntervals, intervalsPerDay);
-        let initialBtcMine = btcPerInterval * currentInterval;
-
-        const progressPercent = (currentInterval / intervalsPerDay) * 100;
-        const totalBtcMineProgress = document.querySelector('.total-btc-mine-progress');
-        const dashboardBtcMineValue = document.querySelector('.total-btc-mine-value');
-
-        if (totalBtcMineProgress) {
-            totalBtcMineProgress.style.width = `${progressPercent}%`;
-        }
-        if (dashboardBtcMineValue) {
-            dashboardBtcMineValue.textContent = `${initialBtcMine.toFixed(4)} BTC`;
-        }
-
-        function updateMiningProgress() {
-            if (currentInterval < intervalsPerDay) {
-                initialBtcMine += btcPerInterval; // Добавляем часть BTC
-                const progressPercent = ((currentInterval + 1) / intervalsPerDay) * 100;
-
-                if (totalBtcMineProgress) {
-                    totalBtcMineProgress.style.width = `${progressPercent}%`;
-                }
-                if (dashboardBtcMineValue) {
-                    dashboardBtcMineValue.textContent = `${initialBtcMine.toFixed(4)} BTC`;
-                }
-                currentInterval++;
-            }
-        }
-
-        setInterval(updateMiningProgress, 30 * 60 * 1000);
+    // Если текущее время меньше времени добычи, откатываем на предыдущий день
+    if (nowUTC < targetTimeUTC) {
+        targetTimeUTC.setUTCDate(targetTimeUTC.getUTCDate() - 1);
     }
+
+    const elapsedMilliseconds = nowUTC - targetTimeUTC;
+    const elapsedIntervals = Math.floor(elapsedMilliseconds / (30 * 60 * 1000));  // Количество прошедших интервалов
+
+    let currentInterval = Math.min(elapsedIntervals, intervalsPerDay);  // Убедимся, что не идем дальше, чем количество интервалов за день
+    let initialBtcMine = btcPerInterval * currentInterval;  // Начальная сумма BTC, добытая на текущий момент
+
+    const progressPercent = (currentInterval / intervalsPerDay) * 100;
+    const totalBtcMineProgress = document.querySelector('.total-btc-mine-progress');
+    const dashboardBtcMineValue = document.querySelector('.total-btc-mine-value');
+
+    // Показываем полный баланс сразу
+    if (totalBtcMineProgress) {
+        totalBtcMineProgress.style.width = `100%`;
+    }
+    if (dashboardBtcMineValue) {
+        dashboardBtcMineValue.textContent = `${totalBTC.toFixed(4)} BTC`;  // Начальный баланс
+    }
+
+    // Функция для обновления прогресса в течение дня
+    function updateMiningProgress() {
+        if (currentInterval < intervalsPerDay) {
+            initialBtcMine += btcPerInterval;  // Добавляем BTC за этот интервал
+
+            // Обновляем прогресс
+            const progressPercent = ((currentInterval + 1) / intervalsPerDay) * 100;
+            if (totalBtcMineProgress) {
+                totalBtcMineProgress.style.width = `${progressPercent}%`;
+            }
+            if (dashboardBtcMineValue) {
+                dashboardBtcMineValue.textContent = `${initialBtcMine.toFixed(4)} BTC`;  // Обновляем отображение баланса
+            }
+            currentInterval++;  // Увеличиваем интервал
+        }
+    }
+
+    // Обновляем каждый полчаса (30 минут)
+    setInterval(updateMiningProgress, 30 * 60 * 1000);
+}
 
     function calculateTotalBTC(wallet_data) {
         let totalBTC = 0;
@@ -638,8 +643,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         return totalBTC.toFixed(4);
     }
 
-    const totalBTC = calculateTotalBTC(wallet_data);
-    console.log(`Total BTC mined from all servers: ${totalBTC} BTC`);
 
     function updateDashboardProgress() {
         const totalPowerProgress = document.querySelector('.total-power-progress');
