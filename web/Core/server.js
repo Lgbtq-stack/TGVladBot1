@@ -25,7 +25,40 @@ app.get('/api/servers/data', async (req, res) => {
     // Получаем данные серверов из фаила servers.json
     try {
         const servers = get_servers();
-        res.json(servers);
+        let wallets_servers_dict = {};
+        try {
+            //получить из таблцы wallets_servers все кошельки и сервера
+            const wallets_servers = await db('wallets_servers')
+                .select('address', 'server');
+            //преобразовать в словарь где ключ - название сервера, значение - количество кошельков
+            wallets_servers_dict = wallets_servers.reduce((acc, val) => {
+                if (acc[val.server]) {
+                    acc[val.server].push(val.address);
+                } else {
+                    acc[val.server] = [val.address];
+                }
+                return acc;
+            }, {});
+
+
+        } catch (err) {
+            console.error('Error reading wallets_servers:', err);
+        }
+
+
+        // нужно посмотреть сколько всего серверов есть и посчитать разницу доступных из ключа "available"
+        let changed = {};
+        for (let key in servers) {
+            changed[key] = servers[key]
+            let len_servers = wallets_servers_dict[key] ? wallets_servers_dict[key].length : 0;
+            changed[key].available = servers[key].available - len_servers;
+            // если меньше 0, то 0
+            if (changed[key].available < 0) {
+                changed[key].available = 0;
+            }
+        }
+
+        res.json(changed);
     } catch (err) {
         console.error('Error reading servers.json:', err);
         res.status(500).json({error: 'Server error'});
@@ -94,7 +127,9 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
         `),
                 db.raw(`
             COALESCE((
-                SELECT JSON_AGG(wallets_servers.server)
+                SELECT JSON_AGG(
+                    JSON_BUILD_OBJECT('server', wallets_servers.server, 'created_at', wallets_servers.created_at)
+                )
                 FROM wallets_servers
                 WHERE wallets_servers.address = wallets.address
             ), '[]') AS servers
@@ -104,6 +139,28 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
 
 
         console.log(activeWallet);
+
+        // переделать servers в массив данных о серверах из get_servers()
+        if (activeWallet) {
+            const servers_name = activeWallet.servers
+            const servers = get_servers();
+            // activeWallet.servers -> сделать массивом объектов
+            activeWallet.servers = [];
+            servers_name.forEach(({ server, created_at }) => {
+                if (servers[server]) { // Если сервер с таким именем существует в объекте servers
+                    const serv_new = servers[server];
+                    serv_new.server_name_key = server;
+                    serv_new.created_at = created_at;
+
+                    const createdAtDate = new Date(created_at); // Преобразуем created_at в дату
+                    const currentDate = new Date(); // Текущая дата
+
+                    serv_new.total_mined_days = Math.floor((currentDate - createdAtDate) / (1000 * 60 * 60 * 24));
+
+                    activeWallet.servers.push(serv_new);
+                }
+            });
+        }
 
         if (!activeWallet) {
             return res.status(404).json({error: 'Active wallet not found'});
@@ -118,7 +175,7 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
 
 app.get('/api/wallets/data/:wallet_address', async (req, res) => {
     const {wallet_address} = req.params;
-    console.log('Getting active wallet for wallet', wallet_address);
+    console.log('Getting wallet data for ', wallet_address);
     try {
         const activeWallet = await db('wallets')
             .where({'wallets.address': wallet_address})
@@ -169,4 +226,8 @@ https.createServer(options, app).listen(443, () => {
     console.log('HTTPS server running on port 443');
 });
 
+// // Запуск HTTP сервера
+// app.listen(80, () => {
+//     console.log('HTTP server running on port 80');
+// });
 
