@@ -140,12 +140,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             return null;
         }
 
-        if (userId !== "350104566") {
-            serverCard.classList.add("hidden");
-        } else {
 
-            serverCard.classList.remove("hidden");
-        }
+        serverCard.classList.remove("hidden");
+
     } catch
         (error) {
         console.error("Ошибка при получении конфигурации:", error);
