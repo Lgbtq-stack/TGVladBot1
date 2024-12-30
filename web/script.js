@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     setInterval(() => {
         calculateTotalBTC(wallet_data);
-    }, 2000);
+    }, 20 * 60 * 1000);
 
     initializeDashboardFromItems();
 
