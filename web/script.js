@@ -825,12 +825,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 <span class="btc-mine-stat-value">${server.btc_mine} BTC</span>
                             </div>
                         </div>
-                        <div class="price-stat">
-                            <div class="price-stat-container">
-                                <span class="price-stat-name">Price:</span>
-                                <span class="price-stat-value">${server.price} XLM</span>
-                            </div>
-                        </div>
                         <div class="country-stat">
                             <div class="country-stat-container">
                                 <span class="country-stat-name"> Region:</span>
@@ -841,6 +835,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                             <div class="availability-stat-container">
                                 <span class="availability-stat-name"> Available:</span>
                                 <span class="availability-stat-value">${server.available}</span>
+                            </div>
+                        </div>
+                        <div class="price-stat">
+                            <div class="price-stat-container">
+                                <span class="price-stat-name">Price:</span>
+                                <span class="price-stat-value">${server.price} XLM</span>
                             </div>
                         </div>
                         <button class="${buttonClass}"
