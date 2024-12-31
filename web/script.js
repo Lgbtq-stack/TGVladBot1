@@ -786,7 +786,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <div class="shop-server-card">
                     <div class="server-icon-and-name">
                         <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
-                        <h2 class="server-name">Server #${index + 1}</h2>
+                        <h2 class="server-name">${server.name}</h2>
                     </div>
                     <div class="server-stats">
                         <div class="power-stat">
@@ -932,14 +932,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                         return;
                     }
 
-                    const {specs, country} = server;
+                    const {specs, country, name} = server;
 
                     const serverCard = document.createElement("div");
                     serverCard.className = "my-server-card";
                     serverCard.innerHTML = `
+                    <div class="server-card-header">
+                        <span class="server-index">#${index + 1}</span>
+                       <span class="server-flag">${getFlag(country)}</span>
+                    </div>
                     <div class="server-icon-and-name">
                         <img class="server-icon" src="web/Content/server-icon.png" alt="Server Icon">
-                        <h2 class="server-name">Server #${index + 1} ${getFlag(country)}</h2>
+                        <h2 class="server-name">${name}</h2>
                     </div>
                     <div class="server-stats">
                         <div class="power-stat">

@@ -1172,3 +1172,26 @@ html, body {
     height: 20px;
     cursor: pointer;
 }
+
+.server-card-header {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.server-index {
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.server-flag {
+    width: 20px;
+    height: 15px;
+    border-radius: 2px;
+    object-fit: cover;
+}
