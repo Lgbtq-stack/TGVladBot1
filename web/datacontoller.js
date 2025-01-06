@@ -20,7 +20,7 @@ import {getActiveWallet} from './Core/database.js';
 //user-id 350104566
 export async function get_config(user_id) {
     const wallet_data = await getActiveWallet(user_id);
-    const balance = Object.values(wallet_data.history).reduce((acc, val) => acc + val, 0);
+    const balance = wallet_data.history.reduce((acc, val) => acc + val.amount, 0);
 
 // return wallet_data;
     return {

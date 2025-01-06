@@ -102,43 +102,41 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
     const {user_id} = req.params;
     console.log('Getting active wallet for user', user_id);
     try {
-        const activeWallet = await db('wallets')
-            .where({'wallets.user_id': user_id, 'wallets.active': true})
-            .select(
-                'wallets.user_id',
-                'wallets.address',
-                db.raw(`
-                COALESCE((
-            SELECT JSON_OBJECT_AGG(
-                TO_CHAR(btc_bonus.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
-                btc_bonus.amount
-            )
-            FROM btc_bonus
-            WHERE btc_bonus.wallet = wallets.address
-        ), '{}') AS history
-        `),
-                db.raw(`
-            COALESCE(
-                (SELECT TO_CHAR(value::TIME, 'HH24:MI:SS') 
-                 FROM constants 
-                 WHERE key = 'btc_get_time'),
-                ''
-            ) AS btc_get_time
-        `),
-                db.raw(`
-            COALESCE((
-                SELECT JSON_AGG(
-                    JSON_BUILD_OBJECT('server', wallets_servers.server, 'created_at', wallets_servers.created_at)
-                )
-                FROM wallets_servers
-                WHERE wallets_servers.address = wallets.address
-            ), '[]') AS servers
-        `)
-            )
-            .first();
+        const result = await db.raw(
+            `
+                SELECT wallets.user_id,
+                       wallets.address,
+                       COALESCE((
+                                    SELECT JSON_AGG(
+                                                   JSON_BUILD_OBJECT(
+                                                           'time', TO_CHAR(btc_bonus.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+                                                           'amount', btc_bonus.amount
+                                                   )
+                                           )
+                                    FROM btc_bonus
+                                    WHERE btc_bonus.wallet = wallets.address
+                                ), '[]') AS history,
+                       COALESCE(
+                               (SELECT TO_CHAR(value::TIME, 'HH24:MI:SS')
+                                FROM constants
+                                WHERE key = 'btc_get_time'),
+                   ''
+               ) AS btc_get_time,
+                       COALESCE((
+                                    SELECT JSON_AGG(
+                                                   JSON_BUILD_OBJECT('server', wallets_servers.server, 'created_at', wallets_servers.created_at)
+                                           )
+                                    FROM wallets_servers
+                                    WHERE wallets_servers.address = wallets.address
+                                ), '[]') AS servers
+                FROM get_active_wallets(?) AS wallets
+            `,
+            [user_id]
+        );
 
+        const activeWallet = result.rows[0];
 
-        console.log(activeWallet);
+        console.log("activeWallet:",activeWallet);
 
         // переделать servers в массив данных о серверах из get_servers()
         if (activeWallet) {
@@ -146,7 +144,7 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
             const servers = get_servers();
             // activeWallet.servers -> сделать массивом объектов
             activeWallet.servers = [];
-            servers_name.forEach(({ server, created_at }) => {
+            servers_name.forEach(({server, created_at}) => {
                 if (servers[server]) { // Если сервер с таким именем существует в объекте servers
                     const serv_new = servers[server];
                     serv_new.server_name_key = server;
@@ -160,11 +158,10 @@ app.get('/api/wallets/active/:user_id', async (req, res) => {
                     activeWallet.servers.push(serv_new);
                 }
             });
-        }
-
-        if (!activeWallet) {
+        } else {
             return res.status(404).json({error: 'Active wallet not found'});
         }
+
 
         res.json(activeWallet);
     } catch (err) {
@@ -215,7 +212,7 @@ app.get('/api/wallets/data/:wallet_address', async (req, res) => {
     }
 });
 
-// Загрузка SSL сертификатов
+//Загрузка SSL сертификатов
 const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/miniappserv.com/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/miniappserv.com/fullchain.pem'),
